@@ -27,3 +27,40 @@ services:
     build:
       context: ./backend
       dockerfile: docker/Dockerfile.api
+    restart: on-failure
+    environment:
+      - AUTH_PROVIDER_X509_CERT_URL=${AUTH_PROVIDER_X509_CERT_URL}
+      - CLIENT_X509_CERT_URL=${CLIENT_X509_CERT_URL}
+      - PRIVATE_KEY_ID=${PRIVATE_KEY_ID}
+      - CLIENT_EMAIL=${CLIENT_EMAIL}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - PROJECT_ID=${PROJECT_ID}
+      - TOKEN_URI=${TOKEN_URI}
+      - CLIENT_ID=${CLIENT_ID}
+      - BASE_URL=${BASE_URL}
+      - AUTH_URI=${AUTH_URI}
+      - TYPE=${TYPE}
+      - ENV=${ENV}
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 50M
+        reservations:
+          cpus: "0.1"
+          memory: 20M
+
+  load_balancer:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile.load_balancer
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - 80:80
