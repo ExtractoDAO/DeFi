@@ -35,3 +35,15 @@ run
 ```
 docker compose up
 ```
+
+
+## How to dev
+
+- ✂️ Create short branches as much as possible
+- 📝 Modify a few files per branch
+- 🔄 Make a Pull Request for each branch
+- 🤝 Ask a review for your bro
+- 🌱 Create branches like:
+    - `smartcontracts/my-feature`
+    - `frontend/my-feature`
+    - `backend/my-feature`
