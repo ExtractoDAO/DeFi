@@ -1,0 +1,53 @@
+name: CI
+
+on: [push]
+
+jobs:
+  # LINT
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: psf/black@stable
+
+  # TESTS
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Dependencies
+        run: poetry install
+
+      - name: Run Tests
+        env:
+          AUTH_PROVIDER_X509_CERT_URL: ${{secrets.AUTH_PROVIDER_X509_CERT_URL}}
+          CLIENT_X509_CERT_URL: ${{secrets.CLIENT_X509_CERT_URL}}
+          PRIVATE_KEY_ID: ${{secrets.PRIVATE_KEY_ID}}
+          CLIENT_EMAIL: ${{secrets.CLIENT_EMAIL}}
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+          PROJECT_ID: ${{secrets.PROJECT_ID}}
+          CLIENT_ID: ${{secrets.CLIENT_ID}}
+          TOKEN_URI: ${{secrets.TOKEN_URI}}
+          BASE_URL: ${{secrets.BASE_URL}}
+          AUTH_URI: ${{secrets.AUTH_URI}}
+          TYPE: ${{secrets.TYPE}}
+          ENV: ${{secrets.ENV}}
+        run: poetry run tdd
+
+  # DEPLOY
+  deploy:
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy App
+        run: echo "App DEPLOYED"

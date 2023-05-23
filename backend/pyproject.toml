@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "chain_vission"
+version = "0.3.0"
+description = ""
+authors = ["Lucas Oliveira <olivmath@protonmail.com>"]
+readme = "README.md"
+packages = [{ include = "chain_vission" }]
+
+[tool.poetry.dependencies]
+strawberry-graphql = { extras = ["fastapi"], version = "^0.155.3" }
+uvicorn = { extras = ["standard"], version = "^0.20.0" }
+python-dotenv = "^0.21.1"
+firebase-admin = "^6.0.1"
+fastapi = "^0.89.1"
+python = "~3.10"
+
+
+[tool.poetry.dev-dependencies]
+conventional-pre-commit = "^2.1.1"
+pre-commit = "^3.0.3"
+pyclean = "^2.2.0"
+pytest = "^7.2.1"
+black = "^23.1.0"
+behave = "^1.2.6"
+httpx = "^0.23.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 90
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.autopep8]
+max_line_length = 120
+ignore = ""
+in-place = true
+recursive = true
+aggressive = 3
+
+
+[tool.poetry.scripts]
+up = "scripts.poetry:run_prod"
+dev = "scripts.poetry:run_dev"
+clean = "scripts.poetry:clean"
+bdd = "scripts.poetry:behave"
+tdd = "scripts.poetry:pytest"
+lint = "scripts.poetry:lint"
