@@ -1,0 +1,126 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.16;
+
+import {UnavailableKilos} from "../../../src/extracto/commodity/Commodity.Auth.sol";
+import {Future} from "../../../src/extracto/future/Future.sol";
+import {BaseSetup} from "../../BaseSetup.sol";
+
+/*//////////////////////////////////////////////////////////////
+        Testing `yield` applied by Dao on Future
+//////////////////////////////////////////////////////////////*/
+
+contract FarmContracts is BaseSetup {
+    function setUp() public virtual override {
+        BaseSetup.setUp();
+    }
+
+    /*
+    # Scenary:
+     - Given: that the investor buy 361.398 USDC in kg
+     - AND: the price 1.91 USD/kg does not change in the period
+     - AND: the Commodity makes the yield farming of 17%
+     - When: the contract unlocked
+     - AND: the investor makes the withdrawal
+     - Then: the investor should receive 135 kg
+    */
+    function test_buy_futures_farm_and_withdraw() public {
+        uint256 amount = 361_398 * 1e15; // 361.398 USDC
+
+        vm.startPrank(investor);
+        usdc.approve(address(commodity), amount);
+        commodity.createFuture(address(usdc), amount);
+
+        future = Future(commodity.drawer(0));
+        assertEq(future.investor(), investor);
+        assertEq(future.getKg(), 189_21_361256544502617800);
+        vm.stopPrank();
+
+        vm.startPrank(deployer);
+        vm.expectRevert(abi.encodePacked("INVALID_YIELD"));
+        commodity.updateYieldFarming(101);
+        commodity.updateYieldFarming(17);
+        vm.stopPrank();
+
+        vm.roll(_135days_in_blocks_to_unlock + 1);
+
+        vm.prank(investor);
+        future.withdraw();
+        assertEq(cow.balanceOf(investor), 4228_35_6329999999999999);
+    }
+
+    /*
+    # Scenary:
+     - Given: that the investor buy 485.00 USDC in kg
+     - AND: the price 4.85 USD/kg change in the period to 5.25 USD/kg
+     - AND: the Commodity makes the yield farming of 19%
+     - When: the contract unlocked
+     - AND: the investor makes the withdrawal
+     - Then: the investor should receive 119 kg
+    */
+    function test_buy_futures_farm_change_price_of_kg_and_withdraw() public {
+        uint256 amount = 485_00 * 1e16; // 485.00 USDC
+        vm.prank(deployer);
+        commodity.updateBuyPrice(4_85 * 1e16);
+
+        vm.startPrank(investor);
+        usdc.approve(address(commodity), amount);
+        commodity.createFuture(address(usdc), amount);
+
+        future = Future(commodity.drawer(0));
+        assertEq(future.investor(), investor);
+        assertEq(
+            future.getKg(),
+            // 100.00 kg
+            100_00_000000000000000000
+        );
+        vm.stopPrank();
+
+        vm.prank(deployer);
+        commodity.updateYieldFarming(19);
+
+        vm.roll(_135days_in_blocks_to_unlock + 1);
+
+        vm.prank(deployer);
+        commodity.updateSellPrice(5_25 * 1e16);
+
+        vm.prank(investor);
+        future.withdraw();
+        assertEq(
+            cow.balanceOf(investor),
+            // 6247.5 kg
+            6247_50_0000000000000000
+        );
+    }
+
+    /*
+    # Scenary: Update status sales:
+        - Give: The contract checks whether
+        - When: The contract is active or deactivated
+        - Then: Must return a boolean true or false
+    */
+    function test_update_status_sales() public {
+        vm.startPrank(deployer);
+        commodity.updateActive(true);
+        assertEq(commodity.getActivated(), true);
+        assertEq(commodity.getTotalSupplyKG(), 1_000_000 * 1e18);
+        vm.stopPrank();
+
+        vm.prank(deployer);
+        commodity.updateActive(false);
+        assertEq(commodity.getActivated(), false);
+    }
+
+    /*
+    # Scenary: unavailable kilos
+        - Give: The suply is 1000kg
+        - When: And if you exceed this supply
+        - Then: Should return error UnavailableKilos
+    */
+    function test_unavailable_kilos() public {
+        uint256 amounthigth = 191000000 * 1e16;
+        vm.startPrank(investor);
+        usdc.approve(address(commodity), amounthigth);
+        vm.expectRevert(abi.encodeWithSelector(UnavailableKilos.selector, 1_000_000 * 1e18));
+        commodity.createFuture(address(usdc), amounthigth);
+    }
+}
