@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  frontend:
+    depends_on:
+      - anvil
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+
+  anvil:
+    build:
+      context: ./smartcontracts
+      dockerfile: Dockerfile.anvil
+    ports:
+      - 8545:8545
+
+  deploy:
+    depends_on:
+      - anvil
+    build:
+      context: ./smartcontracts
+      dockerfile: Dockerfile.deploy
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/Dockerfile.api
