@@ -35,7 +35,7 @@ const useContract = () => {
             const configs = {
                 future: {
                     address: contractAddress,
-                    contractAbi: DaoABI
+                    contractAbi: FutureABI
                 }
             }
 
@@ -110,7 +110,6 @@ const useContract = () => {
         } catch (error) {
             console.error(error)
             setLoading(false)
-            // TODO: handle error into a logger module
             alert(
                 `Error while executing function: ${functionName};
                 Params: ${args};

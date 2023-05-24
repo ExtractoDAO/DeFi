@@ -224,7 +224,7 @@ export default function ModalSell({ open, onClose, getOrders }: IModalSwap) {
                                     placeSellOrder(
                                         account,
                                         selectedContract?.address,
-                                        amount,
+                                        Number(amount),
                                         value
                                     )
                                 }

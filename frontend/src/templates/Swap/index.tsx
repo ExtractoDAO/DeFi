@@ -17,9 +17,10 @@ import useExchange from "./hooks/useExchange"
 import ModalBuy from "./ModalBuy"
 import { useEffect, useState } from "react"
 import ModalSell from "./ModalSell"
+import TradingViewWidget from "components/TradinViewWidget"
 
 export default function WalletTemplate() {
-    const { getOrders, buyOrders } = useExchange()
+    const { getOrders, buyOrders, sellOrders } = useExchange()
     const [modal, setModal] = useState("")
 
     useEffect(() => {
@@ -67,14 +68,15 @@ export default function WalletTemplate() {
 
                         <Grid
                             container
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                mt: 2
-                            }}
+                            // sx={{
+                            //     display: "flex",
+                            //     alignItems: "center",
+                            //     justifyContent: "center",
+                            //     mt: 2
+                            // }}
                         >
-                            <Grid item xs={8}>
+                            <Grid item xs={8} pr={2} pt={1}>
+                                <TradingViewWidget />
                                 {/* <Grid container>
                                     <ResponsiveContainer
                                         width="100%"
@@ -154,10 +156,10 @@ export default function WalletTemplate() {
                                 </Grid>
                                 <Grid container>
                                     <Grid item xs={6}>
-                                        {/* <OrderBook
-                                            orders={sellingOrders}
+                                        <OrderBook
+                                            orders={sellOrders}
                                             side="sell"
-                                        /> */}
+                                        />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <OrderBook

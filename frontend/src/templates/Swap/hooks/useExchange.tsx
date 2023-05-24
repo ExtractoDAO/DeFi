@@ -58,6 +58,9 @@ const useExchange = () => {
     const [fullDrawer, setFullDrawer] = useState<FutureContract[] | null>(null)
 
     const [buyOrders, setBuyOrders] = useState<Order[]>([])
+    const [sellOrders, setSellOrders] = useState<Order[]>([])
+
+    console.log(sellOrders)
 
     const getOrders = async () => {
         const response = await execFunction({
@@ -65,14 +68,13 @@ const useExchange = () => {
             functionName: "buyOrders()"
         })
 
-        const sellOrders = await execFunction({
+        const responseSell = await execFunction({
             instanceType: "dao",
             functionName: "sellOrders()"
         })
 
-        console.log("SELL ORDERS ", sellOrders)
-
         setBuyOrders(response.map((item: any) => Object.assign({}, item)))
+        setSellOrders(responseSell.map((item: any) => Object.assign({}, item)))
     }
 
     const handleApprove = async (
@@ -160,7 +162,7 @@ const useExchange = () => {
     const placeSellOrder = async (
         investor: `0x${string}`,
         futureAddress: string,
-        commodityAmount: string,
+        commodityAmount: number,
         value: string
     ) => {
         if (loading) {
@@ -179,11 +181,9 @@ const useExchange = () => {
             {
                 instanceType: "future",
                 contractAddress: futureAddress,
-                functionName: "sellOrder(address,uint256,uint256)"
+                functionName: "sell(uint256)"
             },
-            investor,
             commodityAmount,
-            formattedValue,
             {
                 gasLimit: 10000000
             }
@@ -245,7 +245,8 @@ const useExchange = () => {
         setIsApproved,
         placeSellOrder,
         getContracts,
-        fullDrawer
+        fullDrawer,
+        sellOrders
     }
 }
 

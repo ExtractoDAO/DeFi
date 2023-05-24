@@ -97,9 +97,9 @@ export default function OrderBook({ orders, side }: IOrderBook) {
         <>
             <TableContainer
                 component={Paper}
-                style={{
-                    maxHeight: "600px"
-                }}
+                // style={{
+                //     maxHeight: "600px"
+                // }}
             >
                 <Table aria-label="customized table">
                     <TableHead>
@@ -131,16 +131,26 @@ export default function OrderBook({ orders, side }: IOrderBook) {
 
                             const decimals = tokenDecimals[key]
 
+                            if (side === "sell") {
+                                console.log(row)
+                            }
+
                             return (
                                 <StyledTableRow key={index}>
                                     <StyledTableCell align="right">
-                                        {Number(row.commodityAmount)} Kg
+                                        {side === "buy"
+                                            ? Number(row.commodityAmount)
+                                            : Number(row.amount)}{" "}
+                                        Kg
                                     </StyledTableCell>
 
                                     <StyledTableCell align="right">
-                                        {formatCurrency(
-                                            Number(row.amount) / 10 ** decimals
-                                        )}
+                                        {side === "buy"
+                                            ? formatCurrency(
+                                                  Number(row.amount) /
+                                                      10 ** decimals
+                                              )
+                                            : "$55.00"}
                                     </StyledTableCell>
                                 </StyledTableRow>
                             )
