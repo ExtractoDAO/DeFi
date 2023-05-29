@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {MockToken} from "../test/MockToken.sol";
+import {MockToken} from "../test/MockToken.t.sol";
 import "../lib/forge-std/src/Script.sol";
 
 contract TOKEN is Script {
