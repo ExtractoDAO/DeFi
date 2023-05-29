@@ -2,9 +2,9 @@
 
 ```py
 test
-├── BaseSetup.sol # have all setups for tests
-├── MockToken.sol  # mock of a generic token
-├── Utils.sol # can create new users (Base inheritance of `forge-std/Tests.sol`)
+├── BaseSetup.t.sol # have all setups for tests
+├── MockToken.t.sol  # mock of a generic token
+├── Utils.t.sol # can create new users (Base inheritance of `forge-std/Tests.sol`)
 ├── commodity
 │   ├── Commodity.Auth.t.sol # e2e authentication tests
 │   ├── Commodity.Drawer.t.sol # e2e drawer test

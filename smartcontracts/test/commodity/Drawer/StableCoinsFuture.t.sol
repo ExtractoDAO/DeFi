@@ -3,8 +3,8 @@ pragma solidity ^0.8.16;
 
 import {Commodity} from "../../../src/extracto/commodity/Commodity.sol";
 import {Future} from "../../../src/extracto/future/Future.sol";
-import {BaseSetup} from "../../BaseSetup.sol";
-import {MockToken} from "../../MockToken.sol";
+import {BaseSetup} from "../../BaseSetup.t.sol";
+import {MockToken} from "../../MockToken.t.sol";
 
 /*//////////////////////////////////////////////////////////////
             Testing `pucharses` with different tokens
