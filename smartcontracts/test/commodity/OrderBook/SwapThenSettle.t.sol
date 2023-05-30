@@ -2,9 +2,9 @@
 pragma solidity ^0.8.18;
 
 import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/future/Future.sol";
-import {Commodity} from "../../../src/extracto/commodity/Commodity.sol";
-import {EStorage} from "../../../src/extracto/commodity/Commodity.Storage.sol";
+import {Future} from "../../../src/extracto/facet/future/Future.sol";
+import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
+import {EStorage} from "../../../src/extracto/facet/commodity/Commodity.Storage.sol";
 
 contract SwapThenSettle is BaseSetup {
     function setUp() public virtual override {

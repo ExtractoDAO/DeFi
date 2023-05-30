@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {UnavailableKilos} from "../../../src/extracto/commodity/Commodity.Auth.sol";
-import {Future} from "../../../src/extracto/future/Future.sol";
+import {UnavailableKilos} from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
+import {Future} from "../../../src/extracto/facet/future/Future.sol";
 import {BaseSetup} from "../../BaseSetup.t.sol";
 
 /*//////////////////////////////////////////////////////////////
