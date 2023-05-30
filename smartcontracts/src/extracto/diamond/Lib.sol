@@ -46,7 +46,7 @@ library DiamondStorageLib {
 
     struct Storage {
         address controller;
-        address token;
+        address dao;
         //
         mapping(bytes4 => AboutFacet) fnSelectorToFacet;
         mapping(address => AboutFnSelectors) facetToFnSelectors;
@@ -72,18 +72,12 @@ library DiamondStorageLib {
         }
     }
 
-    /// @notice This function is used to get the controller address from the diamond storage.
-    /// @dev This function retrieves the diamond storage struct and returns the controller property.
-    /// @return The address of the controller.
-    function getController() internal view returns (address) {
-        return getDiamondStorage().controller;
+    function getDao() internal view returns (address dao) {
+        dao = getDiamondStorage().dao;
     }
 
-    /// @notice This function retrieves the token address from the diamond storage.
-    /// @dev It retrieves the diamond storage struct and returns the token property.
-    /// @return The address of the token stored in the diamond storage.
-    function getToken() internal view returns (address) {
-        return getDiamondStorage().token;
+    function getController() internal view returns (address controller) {
+        controller = getDiamondStorage().controller;
     }
 
     /*////////////////////////////////////////////////////////////
@@ -120,12 +114,10 @@ library DiamondStorageLib {
         ds.controller = newController;
     }
 
-    /// @notice This function is used to set the token address in the diamond storage.
-    /// @dev It retrieves the diamond storage struct and sets the token property to the address provided as a parameter.
-    /// @param newToken The address of the new token to be set in the diamond storage.
-    function setToken(address newToken) public {
+    function setDao(address newDAO) external {
+        onlyController();
         Storage storage ds = getDiamondStorage();
-        ds.token = newToken;
+        ds.dao = newDAO;
     }
 
     /*////////////////////////////////////////////////////////////

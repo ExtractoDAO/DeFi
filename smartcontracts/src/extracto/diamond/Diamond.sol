@@ -8,13 +8,9 @@ import {Cutter} from "./Cutter.sol";
 /// @title Diamond Contract
 /// @dev This contract uses the Diamond pattern, allowing for modular code and multiple facets
 contract Diamond is Cutter, Louper {
-    /// @notice Creates a new diamond contract
-    /// @dev This function sets the controller of the diamond to the sender of this transaction
-    /// and sets the token of the DiamondStorageLib
-    /// @param token The address of the token to be set in the DiamondStorageLib
-    constructor(address token) {
+    constructor(address dao) {
         DiamondStorageLib.setController(msg.sender);
-        DiamondStorageLib.setToken(token);
+        DiamondStorageLib.setDao(dao);
     }
 
     /// @notice Function to receive Ether
