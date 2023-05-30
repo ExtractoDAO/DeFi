@@ -80,21 +80,74 @@ contract BaseSetup is Utils {
         createMockToken();
 
         vm.startPrank(deployer);
-        cow = new COW();
 
-        commodity = new Commodity(
-            tokens,
-            decimals,
-            _135days_in_blocks_to_unlock,
-            kgSupply,
-            kgPrice,
-            kgPrice,
-            status,
-            controller,
-            address(cow)
-        );
+        // TODO: create a setup for test
+        // - COW PROXY
+        // - deploy DIAMOND
+        // - add COMMODITY in DIAMOND
+        // - add COMMODITY_V2 in DIAMOND
+        // - add FUTURE in DIAMOND
 
-        cow.setDao(address(commodity));
+
+        ////////////////////////////////////////////////////////////////////////
+        ////// EXEMPLES EXEMPLES EXEMPLES EXEMPLES EXEMPLES EXEMPLES EXEMPLES
+        ////////////////////////////////////////////////////////////////////////
+
+
+        /////////////// ----------------
+        /////////////// DIAMOND CONTRACT
+        /////////////// ----------------
+        /////////////// vm.prank(controller);
+        /////////////// diamond = new Diamond(address(token));
+
+        /////////////// ----------------
+        /////////////// BANK CONTRACT FACET
+        /////////////// ----------------
+        /////////////// 0x520a19c0  =>  createEmployee(address,uint256)
+        /////////////// 0x5e91d8ec  =>  updateEmployee(address,uint256)
+        /////////////// 0x6e7c4ab1  =>  deleteEmployee(address)
+        /////////////// 0xe3366fed  =>  getAllEmployees() -> address[] memory
+        /////////////// 0x32648e09  =>  getEmployee(address) -> (address, uint256)
+        /////////////// 0x809e9ef5  =>  payAllEmployees()
+        /////////////// 0x12065fe0  =>  getBalance()
+        /////////////// 0x1e153139  =>  getTotalEmployeeCost()
+        /////////////// bytes4[] memory selectors = new bytes4[](8);
+        /////////////// selectors[0] = Bank.createEmployee.selector;
+        /////////////// selectors[1] = Bank.updateEmployee.selector;
+        /////////////// selectors[2] = Bank.deleteEmployee.selector;
+        /////////////// selectors[3] = Bank.getEmployee.selector;
+        /////////////// selectors[4] = Bank.getAllEmployees.selector;
+        /////////////// selectors[5] = Bank.payAllEmployees.selector;
+        /////////////// selectors[6] = Bank.getBalance.selector;
+        /////////////// selectors[7] = Bank.getTotalEmployeeCost.selector;
+        /////////////// vm.prank(controller);
+        /////////////// bank = new Bank();
+
+        /////////////// Facet memory bankFacet = Facet({facetAddress: address(bank), action: Action.Save, fnSelectors: selectors});
+        /////////////// diamondCut.push(bankFacet);
+
+        /////////////// vm.prank(controller);
+        /////////////// diamond.diamondCut(diamondCut, address(0), new bytes(0));
+
+
+        /////////////// ----------------
+        /////////////// BANK V2 CONTRACT FACET
+        /////////////// ----------------
+        /////////////// [Modify] 0x809e9ef5  =>  payAllEmployees()
+        /////////////// [Save]   0x708f29a6  =>  getTotalPayments()
+
+        /////////////// bytes4[] memory selectorsModify = new bytes4[](1);
+        /////////////// selectorsModify[0] = BankV2.payAllEmployees.selector;
+
+        /////////////// bytes4[] memory selectorsSave = new bytes4[](1);
+        /////////////// selectorsSave[0] = BankV2.getTotalPayments.selector;
+
+        /////////////// vm.prank(controller);
+        /////////////// bankv2 = new BankV2();
+
+        /////////////// bankV2FacetSave = Facet({facetAddress: address(bankv2), action: Action.Save, fnSelectors: selectorsSave});
+        /////////////// bankV2FacetModity = Facet({facetAddress: address(bankv2), action: Action.Modify, fnSelectors: selectorsModify});
+    
 
         vm.stopPrank();
     }
