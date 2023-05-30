@@ -23,45 +23,28 @@ import {
 } from "./interfaces/Types.sol";
 
 library DiamondStorageLib {
-    /// @dev This event emits when a diamond cut has been made
     event DiamondCut(Facet[] _diamondCut, address _init, bytes _calldata);
 
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.storage");
     address constant ZERO_ADDRESS = address(0x0);
-    // Approximately 200 blocks per hour, 4800 blocks per day, and 144000 blocks per month
-    uint256 constant LOCKTIME_IN_BLOCKS = 144000;
 
     /*////////////////////////////////////////////////////////////
                                                            STRUCTS
     ////////////////////////////////////////////////////////////*/
 
-    /// @dev Employee structure to hold employee details
-    struct Employee {
-        address employee;
-        uint256 budge;
-        uint256 locktime;
-        uint256 bonus;
-    }
-
-    /// @dev Information about facet
     struct AboutFacet {
         address facet;
         /// @dev index of this fnSelector (key) in the list of selectors for this facet (value).
         uint256 fnSelectorsID;
     }
 
-    /// @dev Information about function selectors
     struct AboutFnSelectors {
         bytes4[] fnSelectors;
         /// @dev index of the facet (key) that contains these selectors (value) => `address[] facets`
         uint256 facetAddressID;
     }
 
-    /// @dev Storage structure to hold state variables
     struct Storage {
-        mapping(address => Employee) employees;
-        uint256 paymentsCounter;
-        address[] employeeList;
         address controller;
         address token;
         //
