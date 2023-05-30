@@ -89,9 +89,7 @@ library DiamondStorageLib {
             return;
         }
 
-        enforceHasContractCode(
-            _init, "function: initializeDiamondCut(address _init, bytes memory _calldata), result:_init contract"
-        );
+        enforceHasContractCode(_init, "function: initializeDiamondCut()");
 
         (bool success, bytes memory error) = _init.delegatecall(_calldata);
 
@@ -211,7 +209,7 @@ library DiamondStorageLib {
     /// @param ds The instance of the contract's storage.
     /// @param _facetAddress The address of the new facet.
     function addFacet(Storage storage ds, address _facetAddress) internal {
-        enforceHasContractCode(_facetAddress, "function: addFacet(), result: New facet");
+        enforceHasContractCode(_facetAddress, "function: addFacet()");
 
         ds.facetToFnSelectors[_facetAddress].facetAddressID = ds.facets.length;
         ds.facets.push(_facetAddress);
