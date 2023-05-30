@@ -321,8 +321,10 @@ library DiamondStorageLib {
     /// @param _facetAddress The facet address that the function selectors should be removed from. This must be a non-zero address.
     /// @param _fnSelectors An array of function selectors that are to be removed. This array must not be empty.
     function removeFunctions(address _facetAddress, bytes4[] memory _fnSelectors) internal {
-        checkFacetAddress(_facetAddress, "function: removeFunctions()");
         checkFnSelectors(_fnSelectors.length);
+        if (_facetAddress != address(0)) {
+            revert FacetZeroAddress(_facetAddress, "function: removeFunctions()");
+        }
 
         Storage storage ds = getDiamondStorage();
         for (uint256 selectorIndex; selectorIndex < _fnSelectors.length; selectorIndex++) {
