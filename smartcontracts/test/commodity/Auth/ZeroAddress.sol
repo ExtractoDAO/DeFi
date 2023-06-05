@@ -9,8 +9,8 @@ import {
     UnavailableKilos
 } from "../../../src/extracto/commodity/Commodity.Auth.sol";
 import {Future} from "../../../src/extracto/future/Future.sol";
-import {BaseSetup} from "../../BaseSetup.sol";
-import {MockToken} from "../../MockToken.sol";
+import {BaseSetup} from "../../BaseSetup.t.sol";
+import {MockToken} from "../../MockToken.t.sol";
 
 contract TestingZeroAdress is BaseSetup {
     function setUp() public virtual override {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {BaseSetup} from "../../BaseSetup.sol";
+import {BaseSetup} from "../../BaseSetup.t.sol";
 import {Future} from "../../../src/extracto/future/Future.sol";
 import {Commodity} from "../../../src/extracto/commodity/Commodity.sol";
 import "../../../src/extracto/commodity/Commodity.Storage.sol";

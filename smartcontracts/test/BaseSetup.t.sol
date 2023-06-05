@@ -2,11 +2,11 @@
 pragma solidity ^0.8.16;
 
 import {Commodity} from "../src/extracto/commodity/Commodity.sol";
-import {COW} from "../src/token/ERC20.sol";
+import {COW} from "../src/token/COW.sol";
 import {Future} from "../src/extracto/future/Future.sol";
-import {BaseSetup} from "./BaseSetup.sol";
-import {MockToken} from "./MockToken.sol";
-import {Utils} from "./Utils.sol";
+import {BaseSetup} from "./BaseSetup.t.sol";
+import {MockToken} from "./MockToken.t.sol";
+import {Utils} from "./Utils.t.sol";
 
 contract BaseSetup is Utils {
     uint256 _135days_in_blocks_to_unlock = 6_415_200;

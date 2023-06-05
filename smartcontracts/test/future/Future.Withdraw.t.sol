@@ -5,7 +5,7 @@ import {BurnContract} from "../../src/extracto/commodity/Commodity.Auth.sol";
 import {ZeroAddress, Unauthorized, Locktime} from "../../src/extracto/future/Future.Auth.sol";
 import {Commodity} from "../../src/extracto/commodity/Commodity.sol";
 import {Future} from "../../src/extracto/future/Future.sol";
-import {BaseSetup} from "../BaseSetup.sol";
+import {BaseSetup} from "../BaseSetup.t.sol";
 
 /*//////////////////////////////////////////////////////////////
                 Validate the Withdraw of Future
