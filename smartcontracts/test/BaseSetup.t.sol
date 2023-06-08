@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import {Facet, Action} from "../src/extracto/diamond/interfaces/Types.sol";
 import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
-import {COW} from "../src/token/COW.sol";
 import {Future} from "../src/extracto/facet/future/Future.sol";
+import {Diamond} from "../src/extracto/diamond/Diamond.sol";
 import {BaseSetup} from "./BaseSetup.t.sol";
 import {MockToken} from "./MockToken.t.sol";
+import {COW} from "../src/token/COW.sol";
 import {Utils} from "./Utils.t.sol";
 
 contract BaseSetup is Utils {
@@ -32,6 +34,9 @@ contract BaseSetup is Utils {
     MockToken usdt;
     MockToken busd;
     MockToken dai;
+
+    Diamond diamond;
+    Facet[] diamondCut;
 
     function createMockUsers(address[] memory myUsers) private {
         controller = myUsers[0];
@@ -80,6 +85,7 @@ contract BaseSetup is Utils {
         createMockToken();
 
         vm.startPrank(deployer);
+        cow = new COW();
 
         // TODO: create a setup for test
         // - COW PROXY
@@ -94,60 +100,40 @@ contract BaseSetup is Utils {
         ////////////////////////////////////////////////////////////////////////
 
 
-        /////////////// ----------------
-        /////////////// DIAMOND CONTRACT
-        /////////////// ----------------
-        /////////////// vm.prank(controller);
-        /////////////// diamond = new Diamond(address(token));
+        // ----------------
+        // DIAMOND CONTRACT
+        // ----------------
+        diamond = new Diamond(controller);
 
-        /////////////// ----------------
-        /////////////// BANK CONTRACT FACET
-        /////////////// ----------------
-        /////////////// 0x520a19c0  =>  createEmployee(address,uint256)
-        /////////////// 0x5e91d8ec  =>  updateEmployee(address,uint256)
-        /////////////// 0x6e7c4ab1  =>  deleteEmployee(address)
-        /////////////// 0xe3366fed  =>  getAllEmployees() -> address[] memory
-        /////////////// 0x32648e09  =>  getEmployee(address) -> (address, uint256)
-        /////////////// 0x809e9ef5  =>  payAllEmployees()
-        /////////////// 0x12065fe0  =>  getBalance()
-        /////////////// 0x1e153139  =>  getTotalEmployeeCost()
-        /////////////// bytes4[] memory selectors = new bytes4[](8);
-        /////////////// selectors[0] = Bank.createEmployee.selector;
-        /////////////// selectors[1] = Bank.updateEmployee.selector;
-        /////////////// selectors[2] = Bank.deleteEmployee.selector;
-        /////////////// selectors[3] = Bank.getEmployee.selector;
-        /////////////// selectors[4] = Bank.getAllEmployees.selector;
-        /////////////// selectors[5] = Bank.payAllEmployees.selector;
-        /////////////// selectors[6] = Bank.getBalance.selector;
-        /////////////// selectors[7] = Bank.getTotalEmployeeCost.selector;
-        /////////////// vm.prank(controller);
-        /////////////// bank = new Bank();
+        // ---------------------------
+        // COMMODITY V1 CONTRACT FACET
+        // ---------------------------
+        bytes4[] memory selectors = new bytes4[](5);
+        selectors[0] = commodity.createFuture.selector;
+        selectors[1] = commodity.mintToken.selector;
+        selectors[2] = commodity.buyOrder.selector;
+        selectors[3] = commodity.sellOrder.selector;
+        selectors[4] = commodity.cancelOrder.selector;
 
-        /////////////// Facet memory bankFacet = Facet({facetAddress: address(bank), action: Action.Save, fnSelectors: selectors});
-        /////////////// diamondCut.push(bankFacet);
+        commodity = new Commodity(
+            tokens,
+            decimals,
+            _135days_in_blocks_to_unlock,
+            kgSupply,
+            kgPrice,
+            kgPrice,
+            status,
+            controller,
+            address(cow)
+        );
 
-        /////////////// vm.prank(controller);
-        /////////////// diamond.diamondCut(diamondCut, address(0), new bytes(0));
+        cow.setDao(address(commodity));
+
+        Facet memory commodityFacet = Facet({facetAddress: address(commodity), action: Action.Save, fnSelectors: selectors});
+        diamondCut.push(commodityFacet);
 
 
-        /////////////// ----------------
-        /////////////// BANK V2 CONTRACT FACET
-        /////////////// ----------------
-        /////////////// [Modify] 0x809e9ef5  =>  payAllEmployees()
-        /////////////// [Save]   0x708f29a6  =>  getTotalPayments()
-
-        /////////////// bytes4[] memory selectorsModify = new bytes4[](1);
-        /////////////// selectorsModify[0] = BankV2.payAllEmployees.selector;
-
-        /////////////// bytes4[] memory selectorsSave = new bytes4[](1);
-        /////////////// selectorsSave[0] = BankV2.getTotalPayments.selector;
-
-        /////////////// vm.prank(controller);
-        /////////////// bankv2 = new BankV2();
-
-        /////////////// bankV2FacetSave = Facet({facetAddress: address(bankv2), action: Action.Save, fnSelectors: selectorsSave});
-        /////////////// bankV2FacetModity = Facet({facetAddress: address(bankv2), action: Action.Modify, fnSelectors: selectorsModify});
-    
+        diamond.diamondCut(diamondCut, address(0), new bytes(0));
 
         vm.stopPrank();
     }
