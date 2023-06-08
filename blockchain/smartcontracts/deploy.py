@@ -2,8 +2,8 @@
 Automation for update debug section in front-end
 """
 from dataclasses import dataclass, field
+from json import dumps, load
 from typing import List
-from json import load
 
 @dataclass
 class Contract:
@@ -18,8 +18,8 @@ class Contract:
     abi: list = field(default_factory=list)
 
 
-CONTRACT_SCRIPT_NAME = "Deploy.s.sol"
-TARGET_DIR = "../nextjs/generated/deployedContracts.ts"
+CONTRACT_SCRIPT_NAME = "deploy.e2e.s.sol"
+TARGET_DIR = "../ui-interface/generated/deployedContracts.ts"
 CHAIN_ID = 31337
 TRANSACTIONS_PATH = f"./broadcast/{CONTRACT_SCRIPT_NAME}/{CHAIN_ID}/run-latest.json"
 
@@ -63,7 +63,7 @@ for contract in contracts:
     }
 
 
-typescript_content = f"const contracts = {json_config} as const; \n\n export default contracts"
+typescript_content = f"const contracts = {dumps(json_config)} as const; \n\n export default contracts"
 
 
 with open(TARGET_DIR, "w") as ts_file:

@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 
-import {Commodity} from "../src/extracto/commodity/Commodity.sol";
-import {COW} from "../src/token/ERC20.sol";
+import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
+import {COW} from "../src/token/COW.sol";
 import {MockToken} from "../test/MockToken.t.sol";
 import "../lib/forge-std/src/Script.sol";
 
