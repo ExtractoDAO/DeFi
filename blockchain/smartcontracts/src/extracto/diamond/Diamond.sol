@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {FunctionNotFound, DiamondStorageLib} from "./Lib.sol";
+
+import {CommodityStorageLib} from "./libraries/LibCommodity.sol";
+import {FunctionNotFound} from "./interfaces/Types.sol";
+import {DiamondStorageLib} from "./libraries/Lib.sol";
+import {DEXStorageLib} from "./libraries/LibDEX.sol";
 import {Louper} from "./Louper.sol";
 import {Cutter} from "./Cutter.sol";
 
@@ -14,9 +18,11 @@ contract Diamond is Cutter, Louper {
     /// @param dao .
     /// @param cow .
     constructor(address dao, address cow) {
+        CommodityStorageLib.setController(msg.sender);
         DiamondStorageLib.setController(msg.sender);
-        DiamondStorageLib.setDao(token);
-        DiamondStorageLib.setCOW(cow);
+        DEXStorageLib.setController(msg.sender);
+        CommodityStorageLib.setCOW(cow);
+        CommodityStorageLib.setDAO(dao);
     }
 
     /// @notice Function to receive Ether
