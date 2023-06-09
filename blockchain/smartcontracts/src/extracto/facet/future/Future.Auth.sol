@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {FStorage} from "./Future.Storage.sol";
-import "../../token/ERC20.sol";
+import "../../../token/ERC20.sol";
 
 error ZeroAddress(address investor);
 error BurnContract(address future);

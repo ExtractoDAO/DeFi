@@ -2,8 +2,8 @@
 pragma solidity ^0.8.18;
 
 import {ECrud} from "./Commodity.Crud.sol";
-import {div, ud60x18, unwrap, UD60x18, mul} from "../../utils/math/UD60x18.sol";
-import {UD60x18} from "../../utils/math/Type.sol";
+import {div, ud60x18, unwrap, UD60x18, mul} from "../../../utils/math/UD60x18.sol";
+import {UD60x18} from "../../../utils/math/Type.sol";
 
 abstract contract EBase is ECrud {
     /*//////////////////////////////////////////////////////////////
