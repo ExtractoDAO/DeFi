@@ -3,7 +3,7 @@ pragma solidity ^0.8.18;
 
 import {Facet} from "./interfaces/Types.sol";
 import {ICutter} from "./interfaces/ICutter.sol";
-import {DiamondStorageLib} from "./Lib.sol";
+import {DiamondStorageLib} from "./libraries/Lib.sol";
 
 contract Cutter is ICutter {
     using DiamondStorageLib for DiamondStorageLib.Storage;

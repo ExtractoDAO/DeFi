@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
+error InvalidYield();
 error NoAuthorized();
 
 /// @dev This error is thrown when the initialization function reverts
@@ -51,4 +52,31 @@ struct Facet {
     address facetAddress; // The address of the facet
     bytes4[] fnSelectors; // The function selectors associated with the facet
     Action action; // The action to be performed on the facet
+}
+
+struct Contract {
+    address investor;
+    address future;
+    uint256 kg;
+    bool burn;
+}
+
+struct TokenAndDecimals {
+    uint256 index;
+    uint8 decimals;
+    bool active;
+}
+
+enum OrderType {
+    Buy, // 1 = buy order
+    Sell // 0 = sell order
+}
+
+struct Order {
+    uint256 commodityAmount;
+    uint256 amount;
+    address tokenAddress;
+    address future;
+    address investor;
+    OrderType typed;
 }
