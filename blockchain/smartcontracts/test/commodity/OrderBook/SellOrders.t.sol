@@ -2,8 +2,8 @@
 pragma solidity ^0.8.18;
 
 import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/future/Future.sol";
-import {Commodity} from "../../../src/extracto/commodity/Commodity.sol";
+import {Future} from "../../../src/extracto/facet/future/Future.sol";
+import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
 
 contract SellOrders is BaseSetup {
     function setUp() public virtual override {
