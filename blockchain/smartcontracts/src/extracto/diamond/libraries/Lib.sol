@@ -9,7 +9,7 @@ pragma solidity ^0.8.18;
 /// @dev loupe are read operations like get facets or get selectors or get selectors by facets etc... of diamond
 /// @dev controller are a dev that have allow to deploy new facets but dont have allow to transfer founds
 /// @dev dao is a DAO that receive the founds but dont have allow to deploy new facets
-import {Facet, Action} from "./interfaces/Types.sol";
+import {Facet, Action} from "../interfaces/Types.sol";
 import {
     CannotAddFunctionToDiamondThatAlreadyExists,
     InitializationFunctionReverted,
@@ -20,7 +20,7 @@ import {
     FnSelectorsEmpty,
     IncorrectAction,
     NoAuthorized
-} from "./interfaces/Types.sol";
+} from "../interfaces/Types.sol";
 
 library DiamondStorageLib {
     event DiamondCut(Facet[] _diamondCut, address _init, bytes _calldata);
@@ -46,8 +46,6 @@ library DiamondStorageLib {
 
     struct Storage {
         address controller;
-        address dao;
-        COW cow;
         //
         mapping(bytes4 => AboutFacet) fnSelectorToFacet;
         mapping(address => AboutFnSelectors) facetToFnSelectors;
@@ -71,10 +69,6 @@ library DiamondStorageLib {
         assembly {
             ds.slot := storagePosition
         }
-    }
-
-    function getDao() internal view returns (address dao) {
-        dao = getDiamondStorage().dao;
     }
 
     function getController() internal view returns (address controller) {
@@ -111,12 +105,6 @@ library DiamondStorageLib {
     function setController(address newController) internal {
         Storage storage ds = getDiamondStorage();
         ds.controller = newController;
-    }
-
-    function setDao(address newDAO) external {
-        onlyController();
-        Storage storage ds = getDiamondStorage();
-        ds.dao = newDAO;
     }
 
     /*////////////////////////////////////////////////////////////
