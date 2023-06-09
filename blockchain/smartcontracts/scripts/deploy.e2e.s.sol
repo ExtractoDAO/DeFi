@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 
-import {Commodity} from "../src/extracto/commodity/Commodity.sol";
+import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
 import {COW} from "../src/token/COW.sol";
 import {MockToken} from "../test/MockToken.t.sol";
 import "../lib/forge-std/src/Script.sol";
@@ -41,12 +41,12 @@ contract DeployE2E is Script {
         usdt = new MockToken("USDT", supply * 1e18, 18);
         tokens.push(address(usdt));
         decimals.push(18);
-        usdc = new MockToken("USDC", supply * 1e18, 18);
-        tokens.push(address(usdc));
-        decimals.push(18);
         xusd = new MockToken("xUSD", supply * 1e6, 6);
         tokens.push(address(xusd));
         decimals.push(6);
+        usdc = new MockToken("USDC", supply * 1e18, 18);
+        tokens.push(address(usdc));
+        decimals.push(18);
 
         cow = new COW();
 

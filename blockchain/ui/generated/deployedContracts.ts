@@ -1,29 +1,17 @@
 const deployedContracts = {
-  31337: [
+  "31337": [
     {
       name: "localhost",
       chainId: "31337",
       contracts: {
-        USDC: {
-          address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        MockToken: {
+          address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
           abi: [
             {
               inputs: [
-                {
-                  internalType: "string",
-                  name: "_symbol",
-                  type: "string",
-                },
-                {
-                  internalType: "uint256",
-                  name: "initialSupply",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint8",
-                  name: "_decimals",
-                  type: "uint8",
-                },
+                { internalType: "string", name: "_symbol", type: "string" },
+                { internalType: "uint256", name: "initialSupply", type: "uint256" },
+                { internalType: "uint8", name: "_decimals", type: "uint8" },
               ],
               stateMutability: "nonpayable",
               type: "constructor",
@@ -31,24 +19,9 @@ const deployedContracts = {
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "owner",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "spender",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { indexed: true, internalType: "address", name: "owner", type: "address" },
+                { indexed: true, internalType: "address", name: "spender", type: "address" },
+                { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "Approval",
               type: "event",
@@ -56,197 +29,86 @@ const deployedContracts = {
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "from",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { indexed: true, internalType: "address", name: "from", type: "address" },
+                { indexed: true, internalType: "address", name: "to", type: "address" },
+                { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "Transfer",
               type: "event",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
+                { internalType: "address", name: "", type: "address" },
+                { internalType: "address", name: "", type: "address" },
               ],
               name: "allowance",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "spender",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "spender", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "approve",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "", type: "address" }],
               name: "balanceOf",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "decimals",
-              outputs: [
-                {
-                  internalType: "uint8",
-                  name: "",
-                  type: "uint8",
-                },
-              ],
+              outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "name",
-              outputs: [
-                {
-                  internalType: "string",
-                  name: "",
-                  type: "string",
-                },
-              ],
+              outputs: [{ internalType: "string", name: "", type: "string" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "symbol",
-              outputs: [
-                {
-                  internalType: "string",
-                  name: "",
-                  type: "string",
-                },
-              ],
+              outputs: [{ internalType: "string", name: "", type: "string" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "totalSupply",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "to", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "transfer",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "from",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "from", type: "address" },
+                { internalType: "address", name: "to", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "transferFrom",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
@@ -255,32 +117,13 @@ const deployedContracts = {
         COW: {
           address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
           abi: [
-            {
-              inputs: [],
-              stateMutability: "nonpayable",
-              type: "constructor",
-            },
+            { inputs: [], stateMutability: "nonpayable", type: "constructor" },
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "owner",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "spender",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { indexed: true, internalType: "address", name: "owner", type: "address" },
+                { indexed: true, internalType: "address", name: "spender", type: "address" },
+                { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "Approval",
               type: "event",
@@ -288,133 +131,58 @@ const deployedContracts = {
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "from",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { indexed: true, internalType: "address", name: "from", type: "address" },
+                { indexed: true, internalType: "address", name: "to", type: "address" },
+                { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "Transfer",
               type: "event",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
+                { internalType: "address", name: "", type: "address" },
+                { internalType: "address", name: "", type: "address" },
               ],
               name: "allowance",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "spender",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "spender", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "approve",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "", type: "address" }],
               name: "balanceOf",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "decimals",
-              outputs: [
-                {
-                  internalType: "uint8",
-                  name: "",
-                  type: "uint8",
-                },
-              ],
+              outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "name",
-              outputs: [
-                {
-                  internalType: "string",
-                  name: "",
-                  type: "string",
-                },
-              ],
+              outputs: [{ internalType: "string", name: "", type: "string" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "investor", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "pay",
               outputs: [],
@@ -422,13 +190,7 @@ const deployedContracts = {
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "newDao",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "newDao", type: "address" }],
               name: "setDao",
               outputs: [],
               stateMutability: "nonpayable",
@@ -437,79 +199,35 @@ const deployedContracts = {
             {
               inputs: [],
               name: "symbol",
-              outputs: [
-                {
-                  internalType: "string",
-                  name: "",
-                  type: "string",
-                },
-              ],
+              outputs: [{ internalType: "string", name: "", type: "string" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "totalSupply",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "to", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "transfer",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "from",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "to",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "from", type: "address" },
+                { internalType: "address", name: "to", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "transferFrom",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "nonpayable",
               type: "function",
             },
@@ -520,267 +238,111 @@ const deployedContracts = {
           abi: [
             {
               inputs: [
-                {
-                  internalType: "address[]",
-                  name: "_tokens",
-                  type: "address[]",
-                },
-                {
-                  internalType: "uint8[]",
-                  name: "_decimals",
-                  type: "uint8[]",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_locktime",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_kgSupply",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_buyPrice",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "_sellPrice",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bool",
-                  name: "_active",
-                  type: "bool",
-                },
-                {
-                  internalType: "address",
-                  name: "_dao",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "_cow",
-                  type: "address",
-                },
+                { internalType: "address[]", name: "_tokens", type: "address[]" },
+                { internalType: "uint8[]", name: "_decimals", type: "uint8[]" },
+                { internalType: "uint256", name: "_locktime", type: "uint256" },
+                { internalType: "uint256", name: "_kgSupply", type: "uint256" },
+                { internalType: "uint256", name: "_buyPrice", type: "uint256" },
+                { internalType: "uint256", name: "_sellPrice", type: "uint256" },
+                { internalType: "bool", name: "_active", type: "bool" },
+                { internalType: "address", name: "_dao", type: "address" },
+                { internalType: "address", name: "_cow", type: "address" },
               ],
               stateMutability: "nonpayable",
               type: "constructor",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "future", type: "address" }],
               name: "BurnContract",
               type: "error",
             },
-            {
-              inputs: [],
-              name: "InternalError",
-              type: "error",
-            },
+            { inputs: [], name: "InternalError", type: "error" },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
+                { internalType: "address", name: "future", type: "address" },
+                { internalType: "address", name: "investor", type: "address" },
               ],
               name: "InvalidOwnership",
               type: "error",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "token",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "token", type: "address" }],
               name: "InvalidToken",
               type: "error",
             },
-            {
-              inputs: [],
-              name: "NoReentrancy",
-              type: "error",
-            },
-            {
-              inputs: [],
-              name: "OrderNotFound",
-              type: "error",
-            },
+            { inputs: [], name: "NoReentrancy", type: "error" },
+            { inputs: [], name: "OrderNotFound", type: "error" },
             {
               inputs: [
-                {
-                  internalType: "uint256",
-                  name: "x",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "y",
-                  type: "uint256",
-                },
+                { internalType: "uint256", name: "x", type: "uint256" },
+                { internalType: "uint256", name: "y", type: "uint256" },
               ],
               name: "PRBMath__MulDiv18Overflow",
               type: "error",
             },
             {
               inputs: [
-                {
-                  internalType: "uint256",
-                  name: "x",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "y",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "denominator",
-                  type: "uint256",
-                },
+                { internalType: "uint256", name: "x", type: "uint256" },
+                { internalType: "uint256", name: "y", type: "uint256" },
+                { internalType: "uint256", name: "denominator", type: "uint256" },
               ],
               name: "PRBMath__MulDivOverflow",
               type: "error",
             },
-            {
-              inputs: [],
-              name: "Unauthorized",
-              type: "error",
-            },
+            { inputs: [], name: "Unauthorized", type: "error" },
             {
               inputs: [
-                {
-                  internalType: "uint256",
-                  name: "kilos",
-                  type: "uint256",
-                },
+                { internalType: "uint256", name: "kilos", type: "uint256" },
+                { internalType: "uint256", name: "yourAmount", type: "uint256" },
+                { internalType: "uint256", name: "diff", type: "uint256" },
               ],
               name: "UnavailableKilos",
               type: "error",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "investor", type: "address" }],
               name: "WithoutWhitelist",
               type: "error",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "investor", type: "address" }],
               name: "ZeroAddress",
               type: "error",
             },
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-                {
-                  indexed: true,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "locktime",
-                  type: "uint256",
-                },
+                { indexed: true, internalType: "address", name: "future", type: "address" },
+                { indexed: true, internalType: "uint256", name: "amount", type: "uint256" },
+                { indexed: true, internalType: "address", name: "investor", type: "address" },
+                { indexed: false, internalType: "uint256", name: "locktime", type: "uint256" },
               ],
               name: "FutureCreated",
               type: "event",
             },
             {
               anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "totalSupply",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ indexed: false, internalType: "uint256", name: "totalSupply", type: "uint256" }],
               name: "OnSale",
               type: "event",
             },
             {
               anonymous: false,
               inputs: [
-                {
-                  indexed: true,
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
-                {
-                  indexed: true,
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
+                { indexed: true, internalType: "uint256", name: "amount", type: "uint256" },
+                { indexed: true, internalType: "address", name: "investor", type: "address" },
               ],
               name: "TokensMinted",
               type: "event",
             },
             {
               anonymous: false,
-              inputs: [
-                {
-                  indexed: false,
-                  internalType: "uint256",
-                  name: "newPrice",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ indexed: false, internalType: "uint256", name: "newPrice", type: "uint256" }],
               name: "WeightPriceUpdated",
               type: "event",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "newVip",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "newVip", type: "address" }],
               name: "addAddressWhitelist",
               outputs: [],
               stateMutability: "nonpayable",
@@ -788,16 +350,8 @@ const deployedContracts = {
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "newToken",
-                  type: "address",
-                },
-                {
-                  internalType: "uint8",
-                  name: "decimal",
-                  type: "uint8",
-                },
+                { internalType: "address", name: "newToken", type: "address" },
+                { internalType: "uint8", name: "decimal", type: "uint8" },
               ],
               name: "addTokens",
               outputs: [],
@@ -806,21 +360,9 @@ const deployedContracts = {
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "tokenAddress",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "commodityAmount",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "tokenAddress", type: "address" },
+                { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "buyOrder",
               outputs: [],
@@ -833,36 +375,12 @@ const deployedContracts = {
               outputs: [
                 {
                   components: [
-                    {
-                      internalType: "uint256",
-                      name: "commodityAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "amount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "address",
-                      name: "tokenAddress",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "future",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "investor",
-                      type: "address",
-                    },
-                    {
-                      internalType: "enum EStorage.OrderType",
-                      name: "typed",
-                      type: "uint8",
-                    },
+                    { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                    { internalType: "uint256", name: "amount", type: "uint256" },
+                    { internalType: "address", name: "tokenAddress", type: "address" },
+                    { internalType: "address", name: "future", type: "address" },
+                    { internalType: "address", name: "investor", type: "address" },
+                    { internalType: "enum EStorage.OrderType", name: "typed", type: "uint8" },
                   ],
                   internalType: "struct EStorage.Order[]",
                   name: "",
@@ -876,36 +394,12 @@ const deployedContracts = {
               inputs: [
                 {
                   components: [
-                    {
-                      internalType: "uint256",
-                      name: "commodityAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "amount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "address",
-                      name: "tokenAddress",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "future",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "investor",
-                      type: "address",
-                    },
-                    {
-                      internalType: "enum EStorage.OrderType",
-                      name: "typed",
-                      type: "uint8",
-                    },
+                    { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                    { internalType: "uint256", name: "amount", type: "uint256" },
+                    { internalType: "address", name: "tokenAddress", type: "address" },
+                    { internalType: "address", name: "future", type: "address" },
+                    { internalType: "address", name: "investor", type: "address" },
+                    { internalType: "enum EStorage.OrderType", name: "typed", type: "uint8" },
                   ],
                   internalType: "struct EStorage.Order",
                   name: "order",
@@ -919,29 +413,13 @@ const deployedContracts = {
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "tokenAddress",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "tokenAddress", type: "address" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "createFuture",
               outputs: [
-                {
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "kg",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "future", type: "address" },
+                { internalType: "uint256", name: "kg", type: "uint256" },
               ],
               stateMutability: "nonpayable",
               type: "function",
@@ -949,153 +427,67 @@ const deployedContracts = {
             {
               inputs: [],
               name: "dao",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              outputs: [{ internalType: "address", name: "", type: "address" }],
               stateMutability: "view",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "novip",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "novip", type: "address" }],
               name: "delAddressWhitelist",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "noauth",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "noauth", type: "address" }],
               name: "delTokens",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               name: "drawer",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              outputs: [{ internalType: "address", name: "", type: "address" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getActivated",
-              outputs: [
-                {
-                  internalType: "bool",
-                  name: "",
-                  type: "bool",
-                },
-              ],
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getBuyPrice",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "", type: "address" }],
               name: "getContract",
               outputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "kg",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bool",
-                  name: "burn",
-                  type: "bool",
-                },
+                { internalType: "address", name: "investor", type: "address" },
+                { internalType: "address", name: "future", type: "address" },
+                { internalType: "uint256", name: "kg", type: "uint256" },
+                { internalType: "bool", name: "burn", type: "bool" },
               ],
               stateMutability: "view",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-              ],
+              inputs: [{ internalType: "address", name: "investor", type: "address" }],
               name: "getContractsByInvestor",
               outputs: [
                 {
                   components: [
-                    {
-                      internalType: "address",
-                      name: "investor",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "future",
-                      type: "address",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "kg",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "bool",
-                      name: "burn",
-                      type: "bool",
-                    },
+                    { internalType: "address", name: "investor", type: "address" },
+                    { internalType: "address", name: "future", type: "address" },
+                    { internalType: "uint256", name: "kg", type: "uint256" },
+                    { internalType: "bool", name: "burn", type: "bool" },
                   ],
                   internalType: "struct EStorage.Contract[]",
                   name: "",
@@ -1108,106 +500,56 @@ const deployedContracts = {
             {
               inputs: [],
               name: "getFullDrawer",
-              outputs: [
-                {
-                  internalType: "address[]",
-                  name: "",
-                  type: "address[]",
-                },
-              ],
+              outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getLockTime",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getSellPrice",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getTokens",
-              outputs: [
-                {
-                  internalType: "address[]",
-                  name: "",
-                  type: "address[]",
-                },
-              ],
+              outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getTotalSupplyKG",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getWhiteList",
-              outputs: [
-                {
-                  internalType: "address[]",
-                  name: "",
-                  type: "address[]",
-                },
-              ],
+              outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [],
               name: "getYieldFarming",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "uint256",
-                  name: "commodityAmount",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
+                { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                { internalType: "address", name: "investor", type: "address" },
               ],
               name: "mintToken",
               outputs: [],
@@ -1215,45 +557,15 @@ const deployedContracts = {
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
               name: "orderBook",
               outputs: [
-                {
-                  internalType: "uint256",
-                  name: "commodityAmount",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "tokenAddress",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "future",
-                  type: "address",
-                },
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-                {
-                  internalType: "enum EStorage.OrderType",
-                  name: "typed",
-                  type: "uint8",
-                },
+                { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
+                { internalType: "address", name: "tokenAddress", type: "address" },
+                { internalType: "address", name: "future", type: "address" },
+                { internalType: "address", name: "investor", type: "address" },
+                { internalType: "enum EStorage.OrderType", name: "typed", type: "uint8" },
               ],
               stateMutability: "view",
               type: "function",
@@ -1261,33 +573,15 @@ const deployedContracts = {
             {
               inputs: [],
               name: "owner",
-              outputs: [
-                {
-                  internalType: "address",
-                  name: "",
-                  type: "address",
-                },
-              ],
+              outputs: [{ internalType: "address", name: "", type: "address" }],
               stateMutability: "view",
               type: "function",
             },
             {
               inputs: [
-                {
-                  internalType: "address",
-                  name: "investor",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "rawCommodityAmount",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "amount",
-                  type: "uint256",
-                },
+                { internalType: "address", name: "investor", type: "address" },
+                { internalType: "uint256", name: "rawCommodityAmount", type: "uint256" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
               ],
               name: "sellOrder",
               outputs: [],
@@ -1300,36 +594,12 @@ const deployedContracts = {
               outputs: [
                 {
                   components: [
-                    {
-                      internalType: "uint256",
-                      name: "commodityAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "amount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "address",
-                      name: "tokenAddress",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "future",
-                      type: "address",
-                    },
-                    {
-                      internalType: "address",
-                      name: "investor",
-                      type: "address",
-                    },
-                    {
-                      internalType: "enum EStorage.OrderType",
-                      name: "typed",
-                      type: "uint8",
-                    },
+                    { internalType: "uint256", name: "commodityAmount", type: "uint256" },
+                    { internalType: "uint256", name: "amount", type: "uint256" },
+                    { internalType: "address", name: "tokenAddress", type: "address" },
+                    { internalType: "address", name: "future", type: "address" },
+                    { internalType: "address", name: "investor", type: "address" },
+                    { internalType: "enum EStorage.OrderType", name: "typed", type: "uint8" },
                   ],
                   internalType: "struct EStorage.Order[]",
                   name: "",
@@ -1340,65 +610,35 @@ const deployedContracts = {
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "bool",
-                  name: "state",
-                  type: "bool",
-                },
-              ],
+              inputs: [{ internalType: "bool", name: "state", type: "bool" }],
               name: "updateActive",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "newBuyPrice",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "newBuyPrice", type: "uint256" }],
               name: "updateBuyPrice",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "newLockTime",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "newLockTime", type: "uint256" }],
               name: "updateLockTime",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "newSellPrice",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "newSellPrice", type: "uint256" }],
               name: "updateSellPrice",
               outputs: [],
               stateMutability: "nonpayable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "newYieldFarming",
-                  type: "uint256",
-                },
-              ],
+              inputs: [{ internalType: "uint256", name: "newYieldFarming", type: "uint256" }],
               name: "updateYieldFarming",
               outputs: [],
               stateMutability: "nonpayable",
@@ -1406,9 +646,98 @@ const deployedContracts = {
             },
           ],
         },
+        Future: {
+          address: "0x61c36a8d610163660E21a8b7359e1Cac0C9133e1",
+          abi: [
+            {
+              inputs: [
+                { internalType: "uint256", name: "_kg", type: "uint256" },
+                { internalType: "address", name: "_investor", type: "address" },
+                { internalType: "uint256", name: "_locktime", type: "uint256" },
+              ],
+              stateMutability: "nonpayable",
+              type: "constructor",
+            },
+            {
+              inputs: [{ internalType: "address", name: "future", type: "address" }],
+              name: "BurnContract",
+              type: "error",
+            },
+            {
+              inputs: [{ internalType: "uint256", name: "locktime", type: "uint256" }],
+              name: "Locktime",
+              type: "error",
+            },
+            { inputs: [], name: "Unauthorized", type: "error" },
+            {
+              inputs: [{ internalType: "address", name: "investor", type: "address" }],
+              name: "ZeroAddress",
+              type: "error",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                { indexed: true, internalType: "uint256", name: "kg", type: "uint256" },
+                { indexed: true, internalType: "address", name: "investor", type: "address" },
+              ],
+              name: "Withdraw",
+              type: "event",
+            },
+            {
+              inputs: [],
+              name: "burn",
+              outputs: [{ internalType: "bool", name: "", type: "bool" }],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "dao",
+              outputs: [{ internalType: "address", name: "", type: "address" }],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "getKg",
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "getLockTime",
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "investor",
+              outputs: [{ internalType: "address", name: "", type: "address" }],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [{ internalType: "uint256", name: "amount", type: "uint256" }],
+              name: "sell",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [{ internalType: "address", name: "newInvestor", type: "address" }],
+              name: "swap",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            { inputs: [], name: "withdraw", outputs: [], stateMutability: "nonpayable", type: "function" },
+          ],
+        },
       },
     },
   ],
-};
+} as const;
 
 export default deployedContracts;
