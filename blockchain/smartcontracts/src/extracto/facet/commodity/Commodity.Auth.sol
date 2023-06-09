@@ -2,13 +2,12 @@
 pragma solidity ^0.8.18;
 
 import {EStorage} from "./Commodity.Storage.sol";
-// 'Custom Error 0656b9e8:(0x00000000000000000000000000000000000F4240)
-
 
 error InvalidOwnership(address future, address investor);
 
-error WithoutWhitelist(address investor);
 error UnavailableKilos(uint256 kilos, uint256 yourAmount, uint256 diff);
+error InsufficientAmount(uint256 yourAmount, uint256 minimumAmount);
+error WithoutWhitelist(address investor);
 error ZeroAddress(address investor);
 error BurnContract(address future);
 error InvalidToken(address token);
@@ -124,5 +123,11 @@ abstract contract EAuth is EStorage {
 
     function revertInternalError() internal pure {
         revert InternalError();
+    }
+
+    function minimumAmount(uint256 amount, address tokenAddress) internal view {
+        if (amount < 10 * 10 ** tokenList[tokenAddress].decimals) {
+            revert InsufficientAmount(amount, 10 * 10 ** tokenList[tokenAddress].decimals);
+        }
     }
 }
