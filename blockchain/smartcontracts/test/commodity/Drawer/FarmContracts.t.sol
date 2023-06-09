@@ -120,7 +120,11 @@ contract FarmContracts is BaseSetup {
         uint256 amountHigth = 191000000 * 1e16;
         vm.startPrank(investor);
         usdc.approve(address(commodity), amountHigth);
-        vm.expectRevert(abi.encodeWithSelector(UnavailableKilos.selector, 1_000_000 * 1e18, amountHigth, amountHigth - 1_000_000 * 1e18));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                UnavailableKilos.selector, 1_000_000 * 1e18, amountHigth, amountHigth - 1_000_000 * 1e18
+            )
+        );
         commodity.createFuture(address(usdc), amountHigth);
     }
 }
