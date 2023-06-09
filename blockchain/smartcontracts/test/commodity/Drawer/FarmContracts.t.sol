@@ -117,10 +117,10 @@ contract FarmContracts is BaseSetup {
         - Then: Should return error UnavailableKilos
     */
     function test_unavailable_kilos() public {
-        uint256 amounthigth = 191000000 * 1e16;
+        uint256 amountHigth = 191000000 * 1e16;
         vm.startPrank(investor);
-        usdc.approve(address(commodity), amounthigth);
-        vm.expectRevert(abi.encodeWithSelector(UnavailableKilos.selector, 1_000_000 * 1e18));
-        commodity.createFuture(address(usdc), amounthigth);
+        usdc.approve(address(commodity), amountHigth);
+        vm.expectRevert(abi.encodeWithSelector(UnavailableKilos.selector, 1_000_000 * 1e18, amountHigth, amountHigth - 1_000_000 * 1e18));
+        commodity.createFuture(address(usdc), amountHigth);
     }
 }
