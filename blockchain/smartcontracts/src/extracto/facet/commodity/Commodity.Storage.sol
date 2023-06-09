@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {EEvents} from "./Commodity.Events.sol";
-import {COW} from "../../token/COW.sol";
+import {COW} from "../../../token/COW.sol";
 
 abstract contract EStorage is EEvents {
     /*//////////////////////////////////////////////////////////////
