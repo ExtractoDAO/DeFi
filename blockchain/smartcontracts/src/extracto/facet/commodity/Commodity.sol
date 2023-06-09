@@ -68,7 +68,7 @@ contract Commodity is EBase {
         nonReentrant
         returns (address future, uint256 kg)
     {
-        require(amount >= 10 * 10 ** tokenList[tokenAddress].decimals, "INSUFFICIENT_AMOUNT");
+        minimumAmount(amount, tokenAddress);
         onlyStableCoins(tokenAddress);
         onlyKgSupply(amount);
         onlyActive(msg.sender);
