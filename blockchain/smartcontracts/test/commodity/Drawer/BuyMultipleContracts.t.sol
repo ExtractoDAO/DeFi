@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import {InsufficientAmount} from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
 import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
 import {BaseSetup} from "../../BaseSetup.t.sol";
@@ -55,7 +56,7 @@ contract BuyContractsDrawer is BaseSetup {
         vm.startPrank(investor);
         xusd.approve(address(commodity), amount);
 
-        vm.expectRevert("INSUFFICIENT_AMOUNT");
+        vm.expectRevert(abi.encodeWithSelector(InsufficientAmount.selector, amount, 10 * 10 **  xusd.decimals()));
         (address _future,) = commodity.createFuture(address(xusd), amount);
 
         future = Future(_future);
