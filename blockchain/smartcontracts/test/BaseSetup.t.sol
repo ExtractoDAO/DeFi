@@ -4,7 +4,6 @@ pragma solidity ^0.8.16;
 import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
 import {COW} from "../src/token/COW.sol";
 import {Future} from "../src/extracto/facet/future/Future.sol";
-import {BaseSetup} from "./BaseSetup.t.sol";
 import {MockToken} from "./MockToken.t.sol";
 import {Utils} from "./Utils.t.sol";
 

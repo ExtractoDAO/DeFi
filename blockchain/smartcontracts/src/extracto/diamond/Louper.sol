@@ -6,8 +6,6 @@ import {Facet} from "./interfaces/Types.sol";
 import {DiamondStorageLib} from "./libraries/Lib.sol";
 
 contract Louper is ILouper {
-    using DiamondStorageLib for DiamondStorageLib.Storage;
-
     function facetAddress(bytes4 fnSelector) external view override returns (address facetAddress_) {
         DiamondStorageLib.Storage storage ds = DiamondStorageLib.getDiamondStorage();
 
