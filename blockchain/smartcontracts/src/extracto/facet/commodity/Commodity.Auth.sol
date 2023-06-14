@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {EStorage} from "./Commodity.Storage.sol";
+import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
 
-error InvalidOwnership(address future, address investor);
-
+error TokensDecimalsLengthError(uint256 tokensLength, uint256 decimalsLength);
 error UnavailableKilos(uint256 kilos, uint256 yourAmount, uint256 diff);
 error InsufficientAmount(uint256 yourAmount, uint256 minimumAmount);
-error WithoutWhitelist(address investor);
+error InvalidOwnership(address future, address investor);
+error InvalidYield(uint8 minimum, uint8 maximum);
+
 error ZeroAddress(address investor);
 error BurnContract(address future);
 error InvalidToken(address token);
@@ -17,24 +18,15 @@ error OrderNotFound();
 error InternalError();
 error Unauthorized();
 error NoReentrancy();
+error Deactivated();
 
-abstract contract EAuth is EStorage {
+abstract contract Auth {
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     bool private locked;
 
-    constructor(
-        address[] memory _tokens,
-        uint8[] memory _decimals,
-        uint256 _locktime,
-        uint256 _kgSupply,
-        uint256 _buyPrice,
-        uint256 _sellPrice,
-        bool _active,
-        address _dao,
-        address _cow
-    ) EStorage(_tokens, _decimals, _locktime, _kgSupply, _buyPrice, _sellPrice, _active, _dao, _cow) {}
+    constructor() {}
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -55,33 +47,13 @@ abstract contract EAuth is EStorage {
         }
     }
 
-    function onlyOwner() internal view {
-        zeroAddr(msg.sender);
-        if (msg.sender != owner) {
-            revert Unauthorized();
-        }
-    }
-
-    function onlyFutures(address investor, address future) internal view {
-        zeroAddr(getContract[future].investor);
-        zeroAddr(msg.sender);
-        zeroAddr(investor);
-        zeroAddr(future);
-
-        if (getContract[future].burn == true) {
-            revert BurnContract(future);
-        }
-        if (getContract[future].investor != investor) {
-            revert InvalidOwnership(future, investor);
-        }
-    }
-
     function onlyStableCoins(address token) internal view {
         zeroAddr(token);
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
 
         bool condition = true;
-        for (uint256 i = 0; i < tokens.length; i++) {
-            if (tokens[i] == token) {
+        for (uint256 i = 0; i < ds.allowedTokens.length; i++) {
+            if (ds.allowedTokens[i] == token) {
                 condition = false;
             }
         }
@@ -91,18 +63,19 @@ abstract contract EAuth is EStorage {
     }
 
     function onlyKgSupply(uint256 amount) internal view {
-        if (getTotalSupplyKG < amount) {
-            revert UnavailableKilos(getTotalSupplyKG, amount, amount - getTotalSupplyKG);
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        if (ds.totalSupplyKg < amount) {
+            revert UnavailableKilos(ds.totalSupplyKg, amount, amount - ds.totalSupplyKg);
         }
     }
 
     function onlyActive(address investor) internal view {
         zeroAddr(investor);
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
 
-        if (getActivated == false) {
-            if (whitelist[investor].active == false) {
-                revert WithoutWhitelist(investor);
-            }
+        if (ds.activated == false) {
+            revert Deactivated();
         }
     }
 
@@ -126,8 +99,52 @@ abstract contract EAuth is EStorage {
     }
 
     function minimumAmount(uint256 amount, address tokenAddress) internal view {
-        if (amount < 10 * 10 ** tokenList[tokenAddress].decimals) {
-            revert InsufficientAmount(amount, 10 * 10 ** tokenList[tokenAddress].decimals);
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        if (amount < 10 * 10 ** ds.listAllowedTokens[tokenAddress].decimals) {
+            revert InsufficientAmount(amount, 10 * 10 ** ds.listAllowedTokens[tokenAddress].decimals);
+        }
+    }
+
+    function onlyController() internal view {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        if (ds.controller != msg.sender) {
+            revert Unauthorized();
+        }
+    }
+
+    function validateYield(uint8 newYieldFarming) internal pure {
+        // input 1 for yield 1%, if you want to return nothing %, input 0
+        if (!(0 <= newYieldFarming && newYieldFarming <= 100)) {
+            revert InvalidYield(0, 100);
+        }
+    }
+
+    function validateTokensDecimalsLength(uint256 tokensLength, uint256 decimalsLength) internal pure {
+        if (tokensLength != decimalsLength) {
+            revert TokensDecimalsLengthError(tokensLength, decimalsLength);
+        }
+    }
+
+    function initController(address controller) internal {
+        zeroAddr(controller);
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        ds.controller = controller;
+    }
+
+    function onlyFutures(address investor, address future) internal view {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        zeroAddr(ds.contracts[future].investor);
+        zeroAddr(msg.sender);
+        zeroAddr(investor);
+        zeroAddr(future);
+
+        if (ds.contracts[future].burn == true) {
+            revert BurnContract(future);
+        }
+        if (ds.contracts[future].investor != investor) {
+            revert InvalidOwnership(future, investor);
         }
     }
 }
