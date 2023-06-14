@@ -30,7 +30,7 @@ contract Future is FBase {
     function sell(uint256 amount) external {
         onlyInvestor();
 
-        extracto.sellOrder(investor, getKg, amount);
+        // extracto.sellOrder(investor, getKg, amount);
     }
 
     function swap(address newInvestor) external {
