@@ -9,10 +9,10 @@ import {Diamond} from "../src/extracto/diamond/Diamond.sol";
 
 contract Helper is Test {
     Diamond diamond;
-    bytes4 fn;
     bytes payload;
-    bool ok;
     bytes data;
+    bytes4 fn;
+    bool ok;
 
     constructor(Diamond _diamond) {
         diamond = _diamond;
