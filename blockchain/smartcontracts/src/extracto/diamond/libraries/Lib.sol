@@ -24,6 +24,7 @@ import {
 
 library DiamondStorageLib {
     event DiamondCut(Facet[] _diamondCut, address _init, bytes _calldata);
+    event NoInitializationContract();
 
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.storage");
     address constant ZERO_ADDRESS = address(0x0);
@@ -81,11 +82,11 @@ library DiamondStorageLib {
 
     function initializeDiamondCut(address _init, bytes memory _calldata) internal {
         if (_init == ZERO_ADDRESS) {
+            emit NoInitializationContract();
             return;
         }
 
         enforceHasContractCode(_init, "function: initializeDiamondCut()");
-
         (bool success, bytes memory error) = _init.delegatecall(_calldata);
 
         if (!success) {
