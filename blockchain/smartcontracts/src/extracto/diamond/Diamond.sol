@@ -12,14 +12,11 @@ contract Diamond is Cutter, Louper {
     /// @notice Creates a new diamond contract
     /// @dev This function sets the controller of the diamond to the sender of this transaction
     /// and sets the token of the DiamondStorageLib
-    /// @param dao .
-    /// @param cow .
-    constructor(address dao, address cow) {
-        CommodityStorageLib.setController(msg.sender);
+    constructor() Cutter() Louper() {
+        if (msg.sender == address(0x0)) {
+            revert ZeroAddress();
+        }
         DiamondStorageLib.setController(msg.sender);
-        DEXStorageLib.setController(msg.sender);
-        CommodityStorageLib.setCOW(cow);
-        CommodityStorageLib.setDAO(dao);
     }
 
     /// @notice Function to receive Ether
