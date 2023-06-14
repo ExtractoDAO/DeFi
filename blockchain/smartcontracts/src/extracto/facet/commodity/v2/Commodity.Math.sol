@@ -30,4 +30,29 @@ abstract contract Math is Crud {
         // getTotalSupplyKG - amount
         ds.totalSupplyKg = unwrap(ud60x18(ds.totalSupplyKg).sub(ud60x18(amount)));
     }
+
+    function calculateSellAmountYielded(uint256 kg) internal view returns (uint256) {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        // yieldedKg = (kg * (1 + yieldFarming/100))
+        // betterPrecisionYieldKd = yieldedKg / 1^18
+        // kgInDolar = betterPrecisionYieldKd * weightPrice
+        // kgInCow = kgInDolar / 0.1
+
+        UD60x18 COW_TOKEN_PRICE_IN_DOLAR = div(ud60x18(1), ud60x18(10));
+        uint256 BETTER_PRECISION = 1e18;
+        uint256 PERCENTAGE = 100;
+        return unwrap(
+            mul(
+                mul(
+                    div(
+                        div(mul(ud60x18(kg), ud60x18(ds.yieldFarming)), ud60x18(PERCENTAGE)).add(ud60x18(kg)),
+                        ud60x18(BETTER_PRECISION)
+                    ),
+                    ud60x18(ds.sellPrice)
+                ),
+                COW_TOKEN_PRICE_IN_DOLAR
+            )
+        );
+    }
 }

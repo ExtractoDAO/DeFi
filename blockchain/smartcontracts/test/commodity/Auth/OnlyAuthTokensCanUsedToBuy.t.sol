@@ -9,12 +9,12 @@ import {
     UnavailableKilos
 } from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {BaseSetup} from "../../BaseSetup.t.sol";
+import {BaseSetupV2} from "../../BaseSetupV2.t.sol";
 import {MockToken} from "../../MockToken.t.sol";
 
-contract OnlyAuthTokensCanUsedToBuy is BaseSetup {
+contract OnlyAuthTokensCanUsedToBuy is BaseSetupV2 {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        BaseSetupV2.setUp();
     }
 
     /*
@@ -25,14 +25,14 @@ contract OnlyAuthTokensCanUsedToBuy is BaseSetup {
     */
     function test_token_is_not_vip() public {
         uint256 amount = 498 * 1e18; // 498.00 NOAUTH
+        vm.startPrank(investor);
         MockToken noauth = new MockToken("NOAUTH", amount * 2, 18);
 
-        noauth.approve(address(commodity), amount);
-
-        noauth.approve(address(commodity), amount);
+        noauth.approve(address(diamond), amount);
+        vm.stopPrank();
 
         vm.expectRevert(abi.encodeWithSelector(InvalidToken.selector, address(noauth)));
-        commodity.createFuture(address(noauth), amount);
+        h.createFuture(investor, address(noauth), amount);
     }
 
     /*
@@ -48,23 +48,19 @@ contract OnlyAuthTokensCanUsedToBuy is BaseSetup {
         vm.prank(investor);
         MockToken noauth = new MockToken("NOAUTH", amount * 2, 18);
 
-        address[] memory _tokens = commodity.getTokens();
+        address[] memory _tokens = h.getTokens();
         for (uint256 i = 0; i < _tokens.length; i++) {
             require(_tokens[i] != address(noauth));
         }
 
-        vm.startPrank(deployer);
-        commodity.addTokens(address(noauth), 18);
+        h.addTokens(deployer, address(noauth), 18);
         vm.roll(100);
-        commodity.delTokens(address(noauth));
+        h.delTokens(deployer, address(noauth));
 
-        vm.stopPrank();
-        vm.startPrank(investor);
+        vm.prank(investor);
+        noauth.approve(address(diamond), amount);
 
-        noauth.approve(address(commodity), amount);
         vm.expectRevert(abi.encodeWithSelector(InvalidToken.selector, address(noauth)));
-        commodity.createFuture(address(noauth), amount);
-
-        vm.stopPrank();
+        h.createFuture(investor, address(noauth), amount);
     }
 }

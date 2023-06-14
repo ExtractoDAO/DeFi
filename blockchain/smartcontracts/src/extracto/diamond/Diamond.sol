@@ -16,7 +16,7 @@ contract Diamond is Cutter, Louper {
         if (msg.sender == address(0x0)) {
             revert ZeroAddress();
         }
-        DiamondStorageLib.setController(msg.sender); 
+        DiamondStorageLib.setController(msg.sender);
     }
 
     /// @notice Function to receive Ether

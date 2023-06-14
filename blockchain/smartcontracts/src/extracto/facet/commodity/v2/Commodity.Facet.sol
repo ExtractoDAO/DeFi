@@ -8,12 +8,13 @@ import "../../../../utils/math/UD60x18.sol";
 import {Math} from "./Commodity.Math.sol";
 
 contract CommodityFacet is Math {
+    event TokensMinted(uint256 amount, address investor);
+
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
     constructor() Math() {}
-
 
     function init(
         address[] memory tokens,
@@ -78,5 +79,19 @@ contract CommodityFacet is Math {
         ERC20 token = ERC20(tokenAddress);
         bool sent = token.transferFrom(msg.sender, ds.dao, amount);
         require(sent, "PAYMENT_FAILED");
+    }
+
+    function mintToken(uint256 commodityAmount, address investor) external nonReentrant {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        onlyFutures(investor, msg.sender);
+        ds.contracts[msg.sender].burn = true;
+
+        uint256 amount = calculateSellAmountYielded(commodityAmount);
+
+        // TODO: update to ProxyCOW
+        ds.cow.pay(investor, amount);
+
+        emit TokensMinted(amount, investor);
     }
 }

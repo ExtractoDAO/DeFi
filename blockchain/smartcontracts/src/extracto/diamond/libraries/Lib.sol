@@ -83,6 +83,7 @@ library DiamondStorageLib {
     function initializeDiamondCut(address _init, bytes memory _calldata) internal {
         if (_init == ZERO_ADDRESS) {
             emit NoInitializationContract();
+            return;
         }
 
         enforceHasContractCode(_init, "function: initializeDiamondCut()");

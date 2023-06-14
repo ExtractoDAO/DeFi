@@ -47,9 +47,6 @@ abstract contract Auth {
         }
     }
 
-
-
-
     function onlyStableCoins(address token) internal view {
         zeroAddr(token);
         CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
@@ -133,5 +130,21 @@ abstract contract Auth {
         zeroAddr(controller);
         CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
         ds.controller = controller;
+    }
+
+    function onlyFutures(address investor, address future) internal view {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+
+        zeroAddr(ds.contracts[future].investor);
+        zeroAddr(msg.sender);
+        zeroAddr(investor);
+        zeroAddr(future);
+
+        if (ds.contracts[future].burn == true) {
+            revert BurnContract(future);
+        }
+        if (ds.contracts[future].investor != investor) {
+            revert InvalidOwnership(future, investor);
+        }
     }
 }

@@ -1,18 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {Facet, Action} from "../../src/extracto/diamond/interfaces/Types.sol";
-import {Diamond} from "../../src/extracto/diamond/Diamond.sol";
-import {CommodityFacet} from "../../src/extracto/facet/commodity/facet/Commodity.Facet.sol";
-import {Commodity} from "../../src/extracto/facet/commodity/Commodity.sol";
-import {Future} from "../../src/extracto/facet/future/Future.sol";
-import {BaseSetup} from "../BaseSetup.t.sol";
-import {MockToken} from "../MockToken.t.sol";
-import {COW} from "../../src/token/COW.sol";
-import {Utils} from "../Utils.t.sol";
+import {CommodityFacet} from "../src/extracto/facet/commodity/v2/Commodity.Facet.sol";
+import {Facet, Action} from "../src/extracto/diamond/interfaces/Types.sol";
+import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
+import {Future} from "../src/extracto/facet/future/Future.sol";
+import {Diamond} from "../src/extracto/diamond/Diamond.sol";
+import {BaseSetup} from "./BaseSetup.t.sol";
+import {MockToken} from "./MockToken.t.sol";
+import {COW} from "../src/token/COW.sol";
+import {Utils} from "./Utils.t.sol";
+import {Helper} from "./Helper.t.sol";
 
-contract DiamondBaseSetup is Utils {
-    uint256 _135days_in_blocks_to_unlock = 6_415_200;
+contract BaseSetupV2 is Utils {
+    uint256 locktime = 10;
     uint256 tokenSupply = 1_000_000_000_000 * 1e18;
     uint256 initialCapital = 100_000 * 1e18;
     uint256 kgSupply = 1_000_000 * 1e18;
@@ -29,6 +30,8 @@ contract DiamondBaseSetup is Utils {
     Diamond diamond;
     CommodityFacet commodityFacet;
     Future future;
+    Future futureV1;
+    Helper h;
     COW cow;
     Facet[] diamondCut;
 
@@ -61,8 +64,10 @@ contract DiamondBaseSetup is Utils {
 
         vm.startPrank(deployer);
 
+        cow = new COW();
         diamond = new Diamond();
         commodityFacet = new CommodityFacet();
+        cow.setDao(address(diamond));
 
         bytes4[] memory selectors = new bytes4[](25);
 
@@ -97,11 +102,21 @@ contract DiamondBaseSetup is Utils {
 
         bytes memory init = abi.encodeWithSelector(
             bytes4(keccak256(bytes("init(address[],uint8[],uint256,uint256,uint256,uint256,bool,address,address)"))),
-            tokens, decimals, _135days_in_blocks_to_unlock, kgSupply, kgPrice, kgPrice, status, controller, address(cow)
+            tokens,
+            decimals,
+            locktime,
+            kgSupply,
+            kgPrice,
+            kgPrice,
+            status,
+            controller,
+            address(cow)
         );
         diamondCut.push(commodityFacets);
         diamond.diamondCut(diamondCut, address(commodityFacet), init);
 
         vm.stopPrank();
+
+        h = new Helper(diamond);
     }
 }
