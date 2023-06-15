@@ -10,26 +10,22 @@ import {Vm} from "forge-std/Vm.sol";
 contract Helper is Test {
     Diamond diamond;
     bytes payload;
-    bytes data;
     bytes4 fn;
-    bool ok;
 
     constructor(Diamond _diamond) {
         diamond = _diamond;
     }
 
-    function createFuture(
-        address owner,
-        address token,
-        uint256 amount
-    ) public returns (address _future, uint256 kg) {
+    function createFuture(address caller, address token, uint256 amount) public returns (address _future, uint256 kg) {
         fn = bytes4(keccak256(bytes("createFuture(address,uint256)")));
         payload = abi.encodeWithSelector(fn, token, amount);
 
-        vm.prank(owner);
-        (ok, data) = address(diamond).call(payload);
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
         if (!ok) {
-            revert(string(data));
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
         } else {
             (_future, kg) = abi.decode(data, (address, uint256));
         }
@@ -38,9 +34,11 @@ contract Helper is Test {
     function fullDrawer() public returns (address[] memory futures) {
         fn = bytes4(keccak256(bytes("getFullDrawer()")));
         payload = abi.encodeWithSelector(fn);
-        (ok, data) = address(diamond).call(payload);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
         if (!ok) {
-            revert(string(data));
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
         } else {
             futures = abi.decode(data, (address[]));
         }
@@ -49,42 +47,162 @@ contract Helper is Test {
     function getTokens() public returns (address[] memory tokens) {
         fn = bytes4(keccak256(bytes("getAllowedTokens()")));
         payload = abi.encodeWithSelector(fn);
-        (ok, data) = address(diamond).call(payload);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
         if (!ok) {
-            revert(string(data));
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
         } else {
             tokens = abi.decode(data, (address[]));
         }
     }
 
-    function addTokens(
-        address owner,
-        address token,
-        uint8 decimals
-    ) external returns (bool) {
+    function addTokens(address caller, address token, uint8 decimals) external returns (bool) {
         fn = bytes4(keccak256(bytes("addTokens(address,uint8)")));
         payload = abi.encodeWithSelector(fn, token, decimals);
 
-        vm.prank(owner);
-        (ok, data) = address(diamond).call(payload);
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
         if (!ok) {
-            revert(string(data));
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
         } else {
             return ok;
         }
     }
 
-    function delTokens(address owner, address token) external returns (bool) {
+    function delTokens(address caller, address token) external returns (bool) {
         fn = bytes4(keccak256(bytes("delTokens(address)")));
         payload = abi.encodeWithSelector(fn, token);
 
-        vm.prank(owner);
-        (ok, data) = address(diamond).call(payload);
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
 
         if (!ok) {
-            revert(string(data));
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
         } else {
             return ok;
+        }
+    }
+
+    function updateActive(address caller, bool status) external {
+        fn = bytes4(keccak256(bytes("updateActive(bool)")));
+        payload = abi.encodeWithSelector(fn, status);
+
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function getContractByAddress(address future)
+        external
+        returns (address investor, address _future, uint256 kg, bool burn)
+    {
+        fn = bytes4(keccak256(bytes("getContractByAddress(address)")));
+        payload = abi.encodeWithSelector(fn, future);
+
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            (investor, _future, kg, burn) = abi.decode(data, (address, address, uint256, bool));
+        }
+    }
+
+    function updateYieldFarming(address caller, uint8 newYield) external {
+        fn = bytes4(keccak256(bytes("updateYieldFarming(uint8)")));
+        payload = abi.encodeWithSelector(fn, newYield);
+
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function updateSellPrice(address caller, uint256 price) external {
+        fn = bytes4(keccak256(bytes("updateSellPrice(uint256)")));
+        payload = abi.encodeWithSelector(fn, price);
+
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function updateBuyPrice(address caller, uint256 price) external {
+        fn = bytes4(keccak256(bytes("updateBuyPrice(uint256)")));
+        payload = abi.encodeWithSelector(fn, price);
+
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function updateLocktime(address caller, uint256 newLoctime) external {
+        fn = bytes4(keccak256(bytes("updateLockTime(uint256)")));
+        payload = abi.encodeWithSelector(fn, newLoctime);
+
+        vm.prank(caller);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function getActivated() external returns (bool status) {
+        fn = bytes4(keccak256(bytes("getActivated()")));
+        payload = abi.encodeWithSelector(fn);
+
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            status = abi.decode(data, (bool));
+        }
+    }
+
+    function getTotalSupplyKG() external returns (uint256 supply) {
+        fn = bytes4(keccak256(bytes("getTotalSupplyKG()")));
+        payload = abi.encodeWithSelector(fn);
+
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            supply = abi.decode(data, (uint256));
         }
     }
 }
