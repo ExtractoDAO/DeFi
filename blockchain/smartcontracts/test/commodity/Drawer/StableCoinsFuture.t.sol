@@ -3,16 +3,16 @@ pragma solidity ^0.8.16;
 
 import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {BaseSetupV2} from "../../BaseSetupV2.t.sol";
+import {BaseSetup} from "../../BaseSetup.t.sol";
 import {MockToken} from "../../MockToken.t.sol";
 
 /*//////////////////////////////////////////////////////////////
             Testing `pucharses` with different tokens
 //////////////////////////////////////////////////////////////*/
 
-contract StableCoinsFuture is BaseSetupV2 {
+contract StableCoinsFuture is BaseSetup {
     function setUp() public virtual override {
-        BaseSetupV2.setUp();
+        BaseSetup.setUp();
     }
 
     /*
