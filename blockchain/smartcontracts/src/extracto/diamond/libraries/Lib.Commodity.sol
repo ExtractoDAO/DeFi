@@ -10,7 +10,7 @@ library CommodityStorageLib {
     struct Contract {
         address investor;
         address future;
-        uint256 kg;
+        uint256 commodityAmount;
         bool burn;
     }
 

@@ -25,26 +25,21 @@ contract FutureWithdrawTest is BaseSetup {
         uint256 amount = 499_23 * 1e16; // 499.23 USDC
         assertEq(cow.balanceOf(investor), 0);
 
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
-        vm.stopPrank();
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        address _future = commodity.drawer(0);
         future = Future(_future);
-
         assertEq(future.getKg(), 261_37_696335078534031400);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
 
         vm.prank(investor);
         future.withdraw();
 
         assertEq(cow.balanceOf(investor), 4992_29_9999999999999997);
-
         assertEq(future.investor(), investor);
-
-        assertEq(future.dao(), address(commodity));
+        assertEq(future.dao(), address(diamond));
         assertEq(future.burn(), true);
     }
 
@@ -54,23 +49,21 @@ contract FutureWithdrawTest is BaseSetup {
     // then: the new investor should be able to withdraw 155.56 Kg + 35% Yield == 210.00 COW
 
     function test_withdraw_with_yield() public {
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), 10 * 1e18);
-        (address addr,) = commodity.createFuture(address(usdc), 10 * 1e18);
-        vm.stopPrank();
+        vm.prank(investor);
+        usdc.approve(address(diamond), 10 * 1e18);
+        (address _future,) = h.createFuture(investor, address(usdc), 10 * 1e18);
 
-        future = Future(addr);
+        future = Future(_future);
         assertEq(future.investor(), investor);
         assertEq(future.getKg(), 5_23_560209424083769600);
 
-        (address _investor,, uint256 _kg,) = commodity.getContract(address(future));
+        (address _investor,, uint256 _kg,) = h.getContractByAddress(_future);
         assertEq(future.investor(), _investor);
         assertEq(future.getKg(), _kg);
 
-        vm.prank(deployer);
-        commodity.updateYieldFarming(35);
+        h.updateYieldFarming(deployer, 35);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
 
         vm.prank(investor);
         future.withdraw();
@@ -85,23 +78,21 @@ contract FutureWithdrawTest is BaseSetup {
     // then: the new investor should be able to withdraw  Kg + 35% Yield == 210.00 COW
 
     function test_withdraw_with_yield_decimals() public {
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), 10 * 1e18);
-        (address addr,) = commodity.createFuture(address(usdc), 10 * 1e18);
-        vm.stopPrank();
+        vm.prank(investor);
+        usdc.approve(address(diamond), 10 * 1e18);
+        (address _future,) = h.createFuture(investor, address(usdc), 10 * 1e18);
 
-        future = Future(addr);
+        future = Future(_future);
         assertEq(future.investor(), investor);
         assertEq(future.getKg(), 5_23_560209424083769600);
 
-        (address _investor,, uint256 _kg,) = commodity.getContract(address(future));
+        (address _investor,, uint256 _kg,) = h.getContractByAddress(_future);
         assertEq(future.investor(), _investor);
         assertEq(future.getKg(), _kg);
 
-        vm.prank(deployer);
-        commodity.updateYieldFarming(35);
+        h.updateYieldFarming(deployer, 35);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
 
         vm.prank(investor);
         future.withdraw();
@@ -110,67 +101,64 @@ contract FutureWithdrawTest is BaseSetup {
 
     function test_burning_the_same_contract_twice() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
+
+        vm.prank(investor);
         future.withdraw();
 
+        vm.prank(investor);
         vm.expectRevert(abi.encodeWithSelector(BurnContract.selector, future));
         future.withdraw();
-
-        vm.stopPrank();
     }
 
     function test_withdraw_zeroaddress() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
-        vm.stopPrank();
 
-        address zeroaddress = address(0x000);
-        vm.startPrank(zeroaddress);
-        vm.expectRevert(abi.encodeWithSelector(ZeroAddress.selector, zeroaddress));
+        vm.prank(address(0x000));
+        vm.expectRevert(abi.encodeWithSelector(ZeroAddress.selector, address(0x000)));
         future.withdraw();
-        vm.stopPrank();
     }
 
     function test_withdraw_unauthorized() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
-        vm.stopPrank();
 
         address noOwner = address(0x1234);
-        vm.startPrank(noOwner);
+        vm.prank(noOwner);
         vm.expectRevert(abi.encodeWithSelector(Unauthorized.selector));
         future.withdraw();
-        vm.stopPrank();
     }
 
     function test_withdraw_locktime() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
 
-        vm.expectRevert(abi.encodeWithSelector(Locktime.selector, future.getLockTime()));
+        uint256 _locktime = future.getLockTime();
+        vm.prank(investor);
+        vm.expectRevert(abi.encodeWithSelector(Locktime.selector, _locktime));
         future.withdraw();
-        vm.stopPrank();
     }
 }
