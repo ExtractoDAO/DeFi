@@ -56,6 +56,20 @@ abstract contract Crud is Auth {
         contractsInvestor = ds.contractsByInvestor[investor];
     }
 
+    function getContractByAddress(address future)
+        public
+        view
+        returns (address investor, address _future, uint256 kg, bool burn)
+    {
+        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Contract memory _contract = ds.contracts[future];
+
+        investor = _contract.investor;
+        _future = _contract.future;
+        kg = _contract.commodityAmount;
+        burn = _contract.burn;
+    }
+
     function getAllowedTokens() public view returns (address[] memory tokens) {
         CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
         tokens = ds.allowedTokens;
