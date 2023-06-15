@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {UnavailableKilos} from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
+import {UnavailableKilos, InvalidYield} from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {BaseSetup} from "../../BaseSetup.t.sol";
+import {BaseSetupV2} from "../../BaseSetupV2.t.sol";
 
 /*//////////////////////////////////////////////////////////////
         Testing `yield` applied by Dao on Future
 //////////////////////////////////////////////////////////////*/
 
-contract FarmContracts is BaseSetup {
+contract FarmContracts is BaseSetupV2 {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        BaseSetupV2.setUp();
     }
 
     /*
@@ -26,22 +26,19 @@ contract FarmContracts is BaseSetup {
     function test_buy_futures_farm_and_withdraw() public {
         uint256 amount = 361_398 * 1e15; // 361.398 USDC
 
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
         assertEq(future.getKg(), 189_21_361256544502617800);
-        vm.stopPrank();
 
-        vm.startPrank(deployer);
-        vm.expectRevert(abi.encodePacked("INVALID_YIELD"));
-        commodity.updateYieldFarming(101);
-        commodity.updateYieldFarming(17);
-        vm.stopPrank();
+        vm.expectRevert(abi.encodeWithSelector(InvalidYield.selector, 0, 100));
+        h.updateYieldFarming(deployer, 101);
+        h.updateYieldFarming(deployer, 17);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
 
         vm.prank(investor);
         future.withdraw();
@@ -59,29 +56,25 @@ contract FarmContracts is BaseSetup {
     */
     function test_buy_futures_farm_change_price_of_kg_and_withdraw() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
-        vm.prank(deployer);
-        commodity.updateBuyPrice(4_85 * 1e16);
+        h.updateBuyPrice(deployer, 4_85 * 1e16);
 
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
         assertEq(
             future.getKg(),
             // 100.00 kg
             100_00_000000000000000000
         );
-        vm.stopPrank();
 
-        vm.prank(deployer);
-        commodity.updateYieldFarming(19);
+        h.updateYieldFarming(deployer, 19);
 
-        vm.roll(_135days_in_blocks_to_unlock + 1);
+        vm.roll(locktime + 1);
 
-        vm.prank(deployer);
-        commodity.updateSellPrice(5_25 * 1e16);
+        h.updateSellPrice(deployer, 5_25 * 1e16);
 
         vm.prank(investor);
         future.withdraw();
@@ -99,15 +92,12 @@ contract FarmContracts is BaseSetup {
         - Then: Must return a boolean true or false
     */
     function test_update_status_sales() public {
-        vm.startPrank(deployer);
-        commodity.updateActive(true);
-        assertEq(commodity.getActivated(), true);
-        assertEq(commodity.getTotalSupplyKG(), 1_000_000 * 1e18);
-        vm.stopPrank();
+        h.updateActive(deployer, true);
+        assertEq(h.getActivated(), true);
+        assertEq(h.getTotalSupplyKG(), 1_000_000 * 1e18);
 
-        vm.prank(deployer);
-        commodity.updateActive(false);
-        assertEq(commodity.getActivated(), false);
+        h.updateActive(deployer, false);
+        assertEq(h.getActivated(), false);
     }
 
     /*
@@ -118,13 +108,13 @@ contract FarmContracts is BaseSetup {
     */
     function test_unavailable_kilos() public {
         uint256 amountHigth = 191000000 * 1e16;
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amountHigth);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amountHigth);
         vm.expectRevert(
             abi.encodeWithSelector(
                 UnavailableKilos.selector, 1_000_000 * 1e18, amountHigth, amountHigth - 1_000_000 * 1e18
             )
         );
-        commodity.createFuture(address(usdc), amountHigth);
+        h.createFuture(investor, address(usdc), amountHigth);
     }
 }
