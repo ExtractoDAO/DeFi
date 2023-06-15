@@ -8,12 +8,12 @@ import {
     UnavailableKilos
 } from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {BaseSetup} from "../../BaseSetup.t.sol";
+import {BaseSetupV2} from "../../BaseSetupV2.t.sol";
 import {MockToken} from "../../MockToken.t.sol";
 
-contract TestingZeroAdress is BaseSetup {
+contract TestingZeroAdress is BaseSetupV2 {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        BaseSetupV2.setUp();
     }
 
     /*
@@ -25,18 +25,16 @@ contract TestingZeroAdress is BaseSetup {
     function test_if_owner_zero_address_withdraw() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
         address zeroAddress = address(0x0);
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        future = Future(_future);
         assertEq(future.investor(), investor);
-        vm.stopPrank();
 
-        vm.startPrank(zeroAddress);
+        vm.prank(zeroAddress);
         vm.expectRevert(abi.encodeWithSelector(ZeroAddress.selector, zeroAddress));
         future.withdraw();
-        vm.stopPrank();
     }
 
     /*
@@ -48,10 +46,10 @@ contract TestingZeroAdress is BaseSetup {
     function test_buy_zero_address() public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
         address zeroaddress = address(0x0);
-        vm.startPrank(zeroaddress);
-        usdc.approve(address(commodity), amount);
+        vm.prank(zeroaddress);
+        usdc.approve(address(diamond), amount);
+
         vm.expectRevert(abi.encodeWithSelector(ZeroAddress.selector, zeroaddress));
-        commodity.createFuture(address(usdc), amount);
-        vm.stopPrank();
+        h.createFuture(zeroaddress, address(usdc), amount);
     }
 }
