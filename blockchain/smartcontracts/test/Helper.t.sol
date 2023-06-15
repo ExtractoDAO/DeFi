@@ -232,4 +232,39 @@ contract Helper is Test {
             bids = abi.decode(data, (DexStorageLib.Order[]));
         }
     }
+
+    function sellOrders() external returns (DexStorageLib.Order[] memory asks) {
+        payload = abi.encodeWithSignature("sellOrders()");
+
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            asks = abi.decode(data, (DexStorageLib.Order[]));
+        }
+    }
+
+    function cancelOrder(address investor, DexStorageLib.Order memory sell) external {
+        payload = abi.encodeWithSignature(
+            "cancelOrder((uint256,uint256,address,address,address,uint8))",
+            sell.commodityAmount,
+            sell.amount,
+            sell.tokenAddress,
+            sell.future,
+            sell.investor,
+            uint8(sell.typed)
+        );
+
+        vm.prank(investor);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
 }
