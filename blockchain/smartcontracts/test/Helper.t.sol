@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
+import {DexStorageLib} from "../src/extracto/diamond/libraries/Lib.DEX.sol";
 import {Diamond} from "../src/extracto/diamond/Diamond.sol";
 import {console2} from "forge-std/console2.sol";
 import {Test} from "forge-std/Test.sol";
@@ -203,6 +203,33 @@ contract Helper is Test {
             }
         } else {
             supply = abi.decode(data, (uint256));
+        }
+    }
+
+    function buyOrder(address investor, address token, uint256 commodityAmount, uint256 amount) external {
+        payload = abi.encodeWithSignature("buyOrder(address,uint256,uint256)", token, commodityAmount, amount);
+
+        vm.prank(investor);
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
+
+    function buyOrders() external returns (DexStorageLib.Order[] memory bids) {
+        payload = abi.encodeWithSignature("buyOrders()");
+
+        (bool ok, bytes memory data) = address(diamond).call(payload);
+
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            bids = abi.decode(data, (DexStorageLib.Order[]));
         }
     }
 }

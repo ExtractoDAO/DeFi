@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {DEXStorageLib} from "../../diamond/libraries/Lib.DEX.sol";
+import {DexStorageLib} from "../../diamond/libraries/Lib.DEX.sol";
+import {Auth} from "../commodity/Commodity.Auth.sol";
 
-abstract contract Utils {
-    constructor() {}
+abstract contract Utils is Auth {
+    constructor() Auth() {}
 
     /**
      * @notice Finds an order in the order book that matches the specified order.
@@ -13,15 +14,15 @@ abstract contract Utils {
      * @return result True if the order is found, false otherwise.
      * @return index The index of the order in the order book, or 0 if the order is not found.
      */
-    function findOrder(DEXStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
-        DEXStorageLib.Storage storage lib = DEXStorageLib.getDEXStorage();
+    function findOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         for (index = 0; index < lib.orderBook.length; index++) {
             //
             if (lib.orderBook[index].typed != order.typed) {
                 continue;
             } else {
-                DEXStorageLib.Order storage _order = lib.orderBook[index];
+                DexStorageLib.Order storage _order = lib.orderBook[index];
                 //
                 result = true;
                 result = result && _order.commodityAmount == order.commodityAmount;
@@ -49,19 +50,19 @@ abstract contract Utils {
      * @return value Whether an order was found or not.
      * @return index The index of the found order in the order book.
      */
-    function findOrder(uint256 commodityAmount, uint256 amount, DEXStorageLib.OrderType typed)
+    function findOrder(uint256 commodityAmount, uint256 amount, DexStorageLib.OrderType typed)
         internal
         view
         returns (bool value, uint256 index)
     {
-        DEXStorageLib.Storage storage lib = DEXStorageLib.getDEXStorage();
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         for (index = 0; index < lib.orderBook.length; index++) {
             //
             if (lib.orderBook[index].typed != typed) {
                 continue;
             } else {
-                DEXStorageLib.Order storage order = lib.orderBook[index];
+                DexStorageLib.Order storage order = lib.orderBook[index];
                 value = order.commodityAmount == commodityAmount && order.amount == amount;
 
                 if (value) {
@@ -74,8 +75,8 @@ abstract contract Utils {
         index = 0;
     }
 
-     function filterOrderBy(DEXStorageLib.OrderType typed) internal view returns (DEXStorageLib.Order[] memory) {
-        DEXStorageLib.Storage storage lib = DEXStorageLib.getDEXStorage();
+    function filterOrderBy(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         uint256 count;
         for (uint256 j = 0; j < lib.orderBook.length; j++) {
@@ -84,7 +85,7 @@ abstract contract Utils {
             }
         }
 
-        DEXStorageLib.Order[] memory orders = new DEXStorageLib.Order[](count);
+        DexStorageLib.Order[] memory orders = new DexStorageLib.Order[](count);
         uint256 i;
 
         for (uint256 j = 0; j < lib.orderBook.length; j++) {

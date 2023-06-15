@@ -4,7 +4,7 @@ pragma solidity ^0.8.18;
 import {COW} from "../../../token/COW.sol";
 import {NoAuthorized} from "../interfaces/Types.sol";
 
-library DEXStorageLib {
+library DexStorageLib {
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.dex.storage");
     address constant ZERO_ADDRESS = address(0x0);
 

@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {DEXStorageLib} from "../../diamond/libraries/Lib.DEX.sol";
 import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
+import {DexStorageLib} from "../../diamond/libraries/Lib.DEX.sol";
 import {ERC20} from "../../../token/ERC20.sol";
 import {Future} from "../future/Future.sol";
 import "../../../utils/math/UD60x18.sol";
 import {Crud} from "./DEX.Crud.sol";
 
-contract Commodity is Crud {
+contract Dex is Crud {
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
@@ -30,19 +30,19 @@ contract Commodity is Crud {
      */
     function sellOrder(address investor, uint256 rawCommodityAmount, uint256 amount) external {
         onlyFutures(investor, msg.sender);
-        DEXStorageLib.Storage lib = DEXStorageLib.getDEXStorage();
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         uint256 commodityAmount = unwrap(floor(ud60x18(rawCommodityAmount)));
 
-        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DEXStorageLib.OrderType.Buy);
+        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DexStorageLib.OrderType.Buy);
 
-        DEXStorageLib.Order memory sell;
+        DexStorageLib.Order memory sell;
         sell.commodityAmount = commodityAmount;
         sell.tokenAddress = address(0x0);
         sell.future = msg.sender;
         sell.investor = investor;
         sell.amount = amount;
-        sell.typed = DEXStorageLib.OrderType.Sell;
+        sell.typed = DexStorageLib.OrderType.Sell;
 
         if (_match) {
             swap(lib.orderBook[index], sell);
@@ -63,18 +63,17 @@ contract Commodity is Crud {
      */
     function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount) external {
         onlyStableCoins(tokenAddress);
-        DEXStorageLib.Storage lib = DEXStorageLib.getDEXStorage();
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
+        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DexStorageLib.OrderType.Sell);
 
-        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DEXStorageLib.OrderType.Sell);
-
-        DEXStorageLib.Order memory buy;
+        DexStorageLib.Order memory buy;
         buy.commodityAmount = commodityAmount;
         buy.tokenAddress = tokenAddress;
         buy.future = address(0x0);
         buy.investor = msg.sender;
         buy.amount = amount;
-        buy.typed = DEXStorageLib.OrderType.Buy;
+        buy.typed = DexStorageLib.OrderType.Buy;
 
         if (_match) {
             swap(buy, lib.orderBook[index]);
@@ -91,10 +90,9 @@ contract Commodity is Crud {
      * @dev 4. If the order is found, the function removes the order from the order book.
      * @param order The order to be cancelled.
      */
-    function cancelOrder(DEXStorageLib.Order calldata order) external {
+    function cancelOrder(DexStorageLib.Order calldata order) external {
         onlyOrderOwner(order.investor);
-        DEXStorageLib.Storage lib = DEXStorageLib.getDEXStorage();
-
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         (bool match_, uint256 index) = findOrder(order);
 
@@ -115,15 +113,15 @@ contract Commodity is Crud {
      * @param order The order to be removed from the order book.
      * @return A boolean indicating whether the order was successfully removed.
      */
-    function removeOrder(DEXStorageLib.Order memory order) private returns (bool) {
-        DEXStorageLib.Storage storage lib = DEXStorageLib.getDEXStorage();
+    function removeOrder(DexStorageLib.Order memory order) private returns (bool) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
 
         for (uint256 index = 0; index < lib.orderBook.length; index++) {
             //
             if (lib.orderBook[index].typed != order.typed) {
                 continue;
             } else {
-                DEXStorageLib.Order storage _order = lib.orderBook[index];
+                DexStorageLib.Order storage _order = lib.orderBook[index];
                 //
                 bool result = true;
                 result = result && _order.commodityAmount == order.commodityAmount;
@@ -157,7 +155,7 @@ contract Commodity is Crud {
      * @param buy The buy order.
      * @param sell The sell order.
      */
-    function swap(DEXStorageLib.Order memory buy, DEXStorageLib.Order memory sell) internal {
+    function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
         // remove buy/sell orders from orderbook
         bool buyrm = removeOrder(buy);
