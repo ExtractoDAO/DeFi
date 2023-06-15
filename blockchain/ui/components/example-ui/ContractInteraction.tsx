@@ -4,6 +4,7 @@ import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { Buy } from "./Buy";
 
 export const ContractInteraction = () => {
   const [visible, setVisible] = useState(true);
@@ -83,6 +84,7 @@ export const ContractInteraction = () => {
             <div className="badge badge-warning">0.01 ETH + Gas</div>
           </div>
         </div>
+        <Buy/>
       </div>
     </div>
   );
