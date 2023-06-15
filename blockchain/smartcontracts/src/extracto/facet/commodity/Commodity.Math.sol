@@ -18,21 +18,21 @@ abstract contract Math is Crud {
     //////////////////////////////////////////////////////////////*/
 
     function calculateBuyKg(uint256 amount, uint8 precision) internal view returns (uint256) {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         // (amount / weightPrice) / precision
-        return unwrap(div(div(ud60x18(amount), ud60x18(ds.buyPrice)), ud60x18(10 ** (precision - 2))));
+        return unwrap(div(div(ud60x18(amount), ud60x18(lib.buyPrice)), ud60x18(10 ** (precision - 2))));
     }
 
     function calculateNewSupply(uint256 amount) internal {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         // getTotalSupplyKG - amount
-        ds.totalSupplyKg = unwrap(ud60x18(ds.totalSupplyKg).sub(ud60x18(amount)));
+        lib.totalSupplyKg = unwrap(ud60x18(lib.totalSupplyKg).sub(ud60x18(amount)));
     }
 
     function calculateSellAmountYielded(uint256 kg) internal view returns (uint256) {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         // yieldedKg = (kg * (1 + yieldFarming/100))
         // betterPrecisionYieldKd = yieldedKg / 1^18
@@ -46,10 +46,10 @@ abstract contract Math is Crud {
             mul(
                 mul(
                     div(
-                        div(mul(ud60x18(kg), ud60x18(ds.yieldFarming)), ud60x18(PERCENTAGE)).add(ud60x18(kg)),
+                        div(mul(ud60x18(kg), ud60x18(lib.yieldFarming)), ud60x18(PERCENTAGE)).add(ud60x18(kg)),
                         ud60x18(BETTER_PRECISION)
                     ),
-                    ud60x18(ds.sellPrice)
+                    ud60x18(lib.sellPrice)
                 ),
                 COW_TOKEN_PRICE_IN_DOLAR
             )

@@ -49,11 +49,11 @@ abstract contract Auth {
 
     function onlyStableCoins(address token) internal view {
         zeroAddr(token);
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         bool condition = true;
-        for (uint256 i = 0; i < ds.allowedTokens.length; i++) {
-            if (ds.allowedTokens[i] == token) {
+        for (uint256 i = 0; i < lib.allowedTokens.length; i++) {
+            if (lib.allowedTokens[i] == token) {
                 condition = false;
             }
         }
@@ -63,18 +63,18 @@ abstract contract Auth {
     }
 
     function onlyKgSupply(uint256 amount) internal view {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        if (ds.totalSupplyKg < amount) {
-            revert UnavailableKilos(ds.totalSupplyKg, amount, amount - ds.totalSupplyKg);
+        if (lib.totalSupplyKg < amount) {
+            revert UnavailableKilos(lib.totalSupplyKg, amount, amount - lib.totalSupplyKg);
         }
     }
 
     function onlyActive(address investor) internal view {
         zeroAddr(investor);
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        if (ds.activated == false) {
+        if (lib.activated == false) {
             revert Deactivated();
         }
     }
@@ -99,16 +99,16 @@ abstract contract Auth {
     }
 
     function minimumAmount(uint256 amount, address tokenAddress) internal view {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        if (amount < 10 * 10 ** ds.listAllowedTokens[tokenAddress].decimals) {
-            revert InsufficientAmount(amount, 10 * 10 ** ds.listAllowedTokens[tokenAddress].decimals);
+        if (amount < 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals) {
+            revert InsufficientAmount(amount, 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals);
         }
     }
 
     function onlyController() internal view {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
-        if (ds.controller != msg.sender) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        if (lib.controller != msg.sender) {
             revert Unauthorized();
         }
     }
@@ -128,22 +128,22 @@ abstract contract Auth {
 
     function initController(address controller) internal {
         zeroAddr(controller);
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
-        ds.controller = controller;
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        lib.controller = controller;
     }
 
     function onlyFutures(address investor, address future) internal view {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        zeroAddr(ds.contracts[future].investor);
+        zeroAddr(lib.contracts[future].investor);
         zeroAddr(msg.sender);
         zeroAddr(investor);
         zeroAddr(future);
 
-        if (ds.contracts[future].burn == true) {
+        if (lib.contracts[future].burn == true) {
             revert BurnContract(future);
         }
-        if (ds.contracts[future].investor != investor) {
+        if (lib.contracts[future].investor != investor) {
             revert InvalidOwnership(future, investor);
         }
     }

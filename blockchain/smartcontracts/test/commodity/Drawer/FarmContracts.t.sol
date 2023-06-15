@@ -3,15 +3,15 @@ pragma solidity ^0.8.16;
 
 import {UnavailableKilos, InvalidYield} from "../../../src/extracto/facet/commodity/Commodity.Auth.sol";
 import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {BaseSetupV2} from "../../BaseSetupV2.t.sol";
+import {BaseSetup} from "../../BaseSetup.t.sol";
 
 /*//////////////////////////////////////////////////////////////
         Testing `yield` applied by Dao on Future
 //////////////////////////////////////////////////////////////*/
 
-contract FarmContracts is BaseSetupV2 {
+contract FarmContracts is BaseSetup {
     function setUp() public virtual override {
-        BaseSetupV2.setUp();
+        BaseSetup.setUp();
     }
 
     /*

@@ -26,10 +26,10 @@ contract Diamond is Cutter, Louper {
     /// @notice Fallback function
     /// @dev This function is executed if the contract was called with data but without a matching function
     fallback() external payable {
-        DiamondStorageLib.Storage storage ds = DiamondStorageLib.getDiamondStorage();
+        DiamondStorageLib.Storage storage lib = DiamondStorageLib.getDiamondStorage();
 
         // Get the facet address corresponding to the function selector of the call
-        address facet = ds.fnSelectorToFacet[msg.sig].facet;
+        address facet = lib.fnSelectorToFacet[msg.sig].facet;
         if (facet == DiamondStorageLib.ZERO_ADDRESS) {
             revert FunctionNotFound(msg.sig);
         }

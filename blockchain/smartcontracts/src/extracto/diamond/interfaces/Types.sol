@@ -54,17 +54,3 @@ struct Facet {
     bytes4[] fnSelectors; // The function selectors associated with the facet
     Action action; // The action to be performed on the facet
 }
-
-enum OrderType {
-    Buy, // 1 = buy order
-    Sell // 0 = sell order
-}
-
-struct Order {
-    uint256 commodityAmount;
-    uint256 amount;
-    address tokenAddress;
-    address future;
-    address investor;
-    OrderType typed;
-}

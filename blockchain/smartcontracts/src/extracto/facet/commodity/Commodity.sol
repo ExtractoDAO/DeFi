@@ -34,17 +34,17 @@ contract Commodity is Math {
         setCOW(cow);
         setDAO(dao);
 
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        ds.totalSupplyKg = kgSupply;
-        ds.sellPrice = sellPrice;
-        ds.buyPrice = buyPrice;
-        ds.locktime = locktime;
-        ds.activated = active;
+        lib.totalSupplyKg = kgSupply;
+        lib.sellPrice = sellPrice;
+        lib.buyPrice = buyPrice;
+        lib.locktime = locktime;
+        lib.activated = active;
 
         for (uint256 i = 0; i < tokens.length; i++) {
-            ds.listAllowedTokens[tokens[i]] = CommodityStorageLib.TokenAndDecimals(i, decimals[i], true);
-            ds.allowedTokens.push(tokens[i]);
+            lib.listAllowedTokens[tokens[i]] = CommodityStorageLib.TokenAndDecimals(i, decimals[i], true);
+            lib.allowedTokens.push(tokens[i]);
         }
 
         result = true;
@@ -54,6 +54,21 @@ contract Commodity is Math {
                                Commodity LOGIC
     //////////////////////////////////////////////////////////////*/
 
+    /**
+     * @notice Creates a new Future contract with the specified parameters.
+     * @dev 1. The `msg.sender` must have sufficient balance of the specified token.
+     * @dev 2. The specified token must be a stablecoin.
+     * @dev 3. The specified amount of KG must be available in the system.
+     * @dev 4. The `msg.sender` must be a VIP investor if Commodity off sales mode is enabled.
+     * @dev 5. Calculates the amount of KG to be minted based on the token amount and its decimals.
+     * @dev 6. Creates a new Future contract with the specified KG and `msg.sender` as the owner.
+     * @dev 7. Adds the new Future contract to the list of contracts by investor and drawer.
+     * @dev 8. Transfers the specified token amount from `msg.sender` to the DAO.
+     * @param tokenAddress The address of the token to be used to create the Future contract.
+     * @param amount The amount of tokens to be used to create the Future contract.
+     * @return future The address of the newly created Future contract.
+     * @return kg The amount of KG minted for the new Future contract.
+     */
     function createFuture(address tokenAddress, uint256 amount)
         external
         nonReentrant
@@ -64,33 +79,42 @@ contract Commodity is Math {
         onlyKgSupply(amount);
         onlyActive(msg.sender);
 
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         calculateNewSupply(amount);
-        kg = calculateBuyKg(amount, ds.listAllowedTokens[tokenAddress].decimals);
+        kg = calculateBuyKg(amount, lib.listAllowedTokens[tokenAddress].decimals);
 
-        Future futureContract = new Future(kg, msg.sender, ds.locktime);
+        Future futureContract = new Future(kg, msg.sender, lib.locktime);
         future = address(futureContract);
 
-        ds.contractsByInvestor[msg.sender].push(CommodityStorageLib.Contract(msg.sender, future, kg, false));
-        ds.contracts[future] = CommodityStorageLib.Contract(msg.sender, future, kg, false);
-        ds.drawer.push(future);
+        lib.contractsByInvestor[msg.sender].push(CommodityStorageLib.Contract(msg.sender, future, kg, false));
+        lib.contracts[future] = CommodityStorageLib.Contract(msg.sender, future, kg, false);
+        lib.drawer.push(future);
 
         ERC20 token = ERC20(tokenAddress);
-        bool sent = token.transferFrom(msg.sender, ds.dao, amount);
+        bool sent = token.transferFrom(msg.sender, lib.dao, amount);
         require(sent, "PAYMENT_FAILED");
     }
 
+    /**
+     * @notice Mints COW tokens for the investor based on a futures contract.
+     * @dev 1. onlyFutures: Only a futures contract issued by the Commodity can call this function.
+     * @dev 2. The futures contract (msg.sender) will marked as burned.
+     * @dev 3. The total number of COW tokens to be sent to the owner of the futures contract is calculated using `calculateSellAmountYielded`.
+     * @dev 4. The COW Contract sends the tokens to the investor.
+     * @param commodityAmount The amount of commodity used as the basis for calculating the investor's payout.
+     * @param investor The address of the owner of the futures contract who will receive the tokens. The tokens will be received by the investor, not by the contract.
+     */
     function mintToken(uint256 commodityAmount, address investor) external nonReentrant {
-        CommodityStorageLib.Storage storage ds = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         onlyFutures(investor, msg.sender);
-        ds.contracts[msg.sender].burn = true;
+        lib.contracts[msg.sender].burn = true;
 
         uint256 amount = calculateSellAmountYielded(commodityAmount);
 
         // TODO: update to ProxyCOW
-        ds.cow.pay(investor, amount);
+        lib.cow.pay(investor, amount);
 
         emit TokensMinted(amount, investor);
     }

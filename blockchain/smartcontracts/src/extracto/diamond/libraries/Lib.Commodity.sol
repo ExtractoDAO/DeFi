@@ -43,11 +43,11 @@ library CommodityStorageLib {
 
     /// @notice This function retrieves the diamond storage struct which is declared in a specific storage slot.
     /// @dev The diamond storage struct is stored at a specific storage slot to prevent clashes with other state variables in the contract.
-    /// @return ds Returns an instance of the Storage struct (representing the diamond storage).
-    function getCommodityStorage() internal pure returns (Storage storage ds) {
+    /// @return lib Returns an instance of the Storage struct (representing the diamond storage).
+    function getCommodityStorage() internal pure returns (Storage storage lib) {
         bytes32 storagePosition = DIAMOND_STORAGE_POSITION;
         assembly {
-            ds.slot := storagePosition
+            lib.slot := storagePosition
         }
     }
 }
