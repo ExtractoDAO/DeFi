@@ -31,36 +31,32 @@ contract BuyContractsDrawer is BaseSetup {
             usdc.transfer(newInvestor, amount);
             uint256 balanceBefore = usdc.balanceOf(newInvestor);
 
-            vm.startPrank(newInvestor);
-            usdc.approve(address(commodity), amount);
-            commodity.createFuture(address(usdc), amount);
-            vm.stopPrank();
+            vm.prank(newInvestor);
+            usdc.approve(address(diamond), amount);
+            h.createFuture(newInvestor, address(usdc), amount);
+
             assertEq(balanceBefore - amount, usdc.balanceOf(newInvestor));
         }
 
-        address[] memory futures = commodity.getFullDrawer();
+        address[] memory futures = h.fullDrawer();
         assertEq(futures.length, total_test);
 
         for (uint256 i = 0; i < total_test; i++) {
-            (address _investor,, uint256 _kg,) = commodity.getContract(futures[i]);
+            (address _investor,, uint256 _kg,) = h.getContractByAddress(futures[i]);
             future = Future(futures[i]);
             assertEq(future.getKg(), _kg);
             assertEq(future.investor(), _investor);
-            assertEq(future.dao(), address(commodity));
+            assertEq(future.dao(), address(diamond));
         }
     }
 
     // TODO: docs
     function test_buy_futures_insufficient_amount() public {
         uint256 amount = 0; // 197.123456 xUSD
-        vm.startPrank(investor);
-        xusd.approve(address(commodity), amount);
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
 
-        vm.expectRevert(abi.encodeWithSelector(InsufficientAmount.selector, amount, 10 * 10 **  xusd.decimals()));
-        (address _future,) = commodity.createFuture(address(xusd), amount);
-
-        future = Future(_future);
-
-        vm.stopPrank();
+        vm.expectRevert(abi.encodeWithSelector(InsufficientAmount.selector, amount, 10 * 10 ** usdc.decimals()));
+        h.createFuture(investor, address(usdc), amount);
     }
 }
