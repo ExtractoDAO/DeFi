@@ -6,13 +6,12 @@ import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
 import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
 import {Future} from "../src/extracto/facet/future/Future.sol";
 import {Diamond} from "../src/extracto/diamond/Diamond.sol";
-import {BaseSetup} from "./BaseSetup.t.sol";
 import {MockToken} from "./MockToken.t.sol";
 import {COW} from "../src/token/COW.sol";
 import {Helper} from "./Helper.t.sol";
 import {Utils} from "./Utils.t.sol";
 
-contract BaseSetupV2 is Utils {
+contract BaseSetup is Utils {
     uint256 locktime = 10;
     uint256 tokenSupply = 1_000_000_000_000 * 1e18;
     uint256 initialCapital = 100_000 * 1e18;
@@ -69,7 +68,7 @@ contract BaseSetupV2 is Utils {
         commodityFacet = new Commodity();
         cow.setDao(address(diamond));
 
-        bytes4[] memory selectors = new bytes4[](25);
+        bytes4[] memory selectors = new bytes4[](27);
 
         selectors[0] = commodityFacet.getTotalSupplyKG.selector;
         selectors[1] = commodityFacet.getYieldFarming.selector;
@@ -79,23 +78,25 @@ contract BaseSetupV2 is Utils {
         selectors[5] = commodityFacet.getActivated.selector;
         selectors[6] = commodityFacet.getFullDrawer.selector;
         selectors[7] = commodityFacet.getContractsByInvestor.selector;
-        selectors[8] = commodityFacet.getAllowedTokens.selector;
-        selectors[9] = commodityFacet.getAllowedTokensLength.selector;
-        selectors[10] = commodityFacet.getDao.selector;
-        selectors[11] = commodityFacet.getController.selector;
-        selectors[12] = commodityFacet.getCOW.selector;
-        selectors[13] = commodityFacet.setController.selector;
-        selectors[14] = commodityFacet.setDAO.selector;
-        selectors[15] = commodityFacet.setCOW.selector;
-        selectors[16] = commodityFacet.addTokens.selector;
-        selectors[17] = commodityFacet.updateActive.selector;
-        selectors[18] = commodityFacet.updateBuyPrice.selector;
-        selectors[19] = commodityFacet.updateLockTime.selector;
-        selectors[20] = commodityFacet.updateSellPrice.selector;
-        selectors[21] = commodityFacet.updateYieldFarming.selector;
-        selectors[22] = commodityFacet.delTokens.selector;
-        selectors[23] = commodityFacet.init.selector;
-        selectors[24] = commodityFacet.createFuture.selector;
+        selectors[8] = commodityFacet.getContractByAddress.selector;
+        selectors[9] = commodityFacet.getAllowedTokens.selector;
+        selectors[10] = commodityFacet.getAllowedTokensLength.selector;
+        selectors[11] = commodityFacet.getDao.selector;
+        selectors[12] = commodityFacet.getController.selector;
+        selectors[13] = commodityFacet.getCOW.selector;
+        selectors[14] = commodityFacet.setController.selector;
+        selectors[15] = commodityFacet.setDAO.selector;
+        selectors[16] = commodityFacet.setCOW.selector;
+        selectors[17] = commodityFacet.addTokens.selector;
+        selectors[18] = commodityFacet.updateActive.selector;
+        selectors[19] = commodityFacet.updateBuyPrice.selector;
+        selectors[20] = commodityFacet.updateLockTime.selector;
+        selectors[21] = commodityFacet.updateSellPrice.selector;
+        selectors[22] = commodityFacet.updateYieldFarming.selector;
+        selectors[23] = commodityFacet.delTokens.selector;
+        selectors[24] = commodityFacet.init.selector;
+        selectors[25] = commodityFacet.createFuture.selector;
+        selectors[26] = commodityFacet.mintToken.selector;
 
         Facet memory commodityFacets =
             Facet({facetAddress: address(commodityFacet), action: Action.Save, fnSelectors: selectors});

@@ -3,7 +3,6 @@ pragma solidity ^0.8.16;
 
 import {
     InvalidToken,
-    WithoutWhitelist,
     Unauthorized,
     ZeroAddress,
     UnavailableKilos
@@ -25,9 +24,9 @@ contract OnlyOwnerCanAccess is BaseSetup {
     */
     function test_only_owner_can_activate_sales(address nonOwner) public {
         vm.assume(nonOwner != address(0x0));
-        vm.prank(nonOwner);
+
         vm.expectRevert(abi.encodeWithSelector(Unauthorized.selector));
-        commodity.updateActive(false);
+        h.updateActive(nonOwner, false);
     }
 
     /*
@@ -39,17 +38,16 @@ contract OnlyOwnerCanAccess is BaseSetup {
     function test_Address_not_owner_of_the_contract_tries_to_withdraw(address noOwner) public {
         uint256 amount = 485_00 * 1e16; // 485.00 USDC
         vm.assume(noOwner != address(0x0) && noOwner != investor);
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        commodity.createFuture(address(usdc), amount);
 
-        future = Future(commodity.drawer(0));
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor, address(usdc), amount);
+
+        future = Future(_future);
         assertEq(future.investor(), investor);
-        vm.stopPrank();
 
-        vm.startPrank(noOwner);
+        vm.prank(noOwner);
         vm.expectRevert(abi.encodeWithSelector(Unauthorized.selector));
         future.withdraw();
-        vm.stopPrank();
     }
 }
