@@ -3,7 +3,7 @@ pragma solidity ^0.8.18;
 
 import "../../src/extracto/facet/future/Future.sol";
 import {DexBaseSetup} from "./DexBaseSetup.t.sol";
-import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.DEX.sol";
+import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.Dex.sol";
 
 contract SellOrders is DexBaseSetup {
     function setUp() public virtual override {

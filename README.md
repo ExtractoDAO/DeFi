@@ -44,6 +44,6 @@ docker compose up
 - 🔄 Make a Pull Request for each branch
 - 🤝 Ask a review for your bro
 - 🌱 Create branches like:
-    - `smartcontracts/my-feature`
+    - `blockchain/my-feature`
     - `frontend/my-feature`
     - `backend/my-feature`
