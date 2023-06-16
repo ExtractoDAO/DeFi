@@ -18,11 +18,13 @@ class Contract:
     abi: list = field(default_factory=list)
 
 
-CONTRACT_SCRIPT_NAME = "deploy.e2e.s.sol"
-TARGET_DIR = "../ui/generated/deployedContracts.ts"
 CHAIN_ID = 31337
-TRANSACTIONS_PATH = f"./broadcast/{CONTRACT_SCRIPT_NAME}/{CHAIN_ID}/run-latest.json"
-
+CONTRACT_SCRIPT_NAME = "deploy.s.sol"
+TRANSACTIONS_PATH = f"broadcast/{CONTRACT_SCRIPT_NAME}/{CHAIN_ID}/run-latest.json"
+TARGET_DIR = "../ui/generated/deployedContracts.ts"
+TOKENS = ["USDT", "USDC"]
+DIAMOND_ADDRESS = ""
+ 
 def abi_path(name) -> str:
     if(name == "MockToken"):
         return f"artifacts/{name}.t.sol/{name}.json"
@@ -32,19 +34,32 @@ def abi_path(name) -> str:
 with open(TRANSACTIONS_PATH) as deployed_contracts:
     json_file = load(deployed_contracts)
     transactions = json_file["transactions"]
+    transactions.append({
+        "transactionType":"CREATE",
+        "contractName": "Future",
+        "contractAddress": "0x3E69aeCb6a5abAc2D87d6707649E2fB0173ee2Da"
+    })
+    contracts: List[Contract] = []
+
+    for contract in transactions:
+        if contract["transactionType"] == "CREATE":
+            name, address = contract["contractName"], contract["contractAddress"]
+            if name == "Diamond":
+                DIAMOND_ADDRESS = address
+            with open(abi_path(name)) as full_abi_json:
+                abi = load(full_abi_json)["abi"]
+
+                if name == "MockToken":
+                    name = TOKENS[0]
+                    TOKENS.remove(TOKENS[0])
+                
+                contracts.append(Contract(name, address, abi))
+
+    for contract in contracts:
+        if contract.name in ["Commodity", "Dex"]:
+            contract.address = DIAMOND_ADDRESS
 
 
-    contracts: List[Contract] = [
-        Contract(contract["contractName"], contract["contractAddress"])
-        for contract in transactions
-        if contract["transactionType"] == "CREATE"
-    ]
-
-contracts.append(Contract("Future", "0x61c36a8d610163660E21a8b7359e1Cac0C9133e1", []))
-
-for contract in contracts:
-    with open(abi_path(contract.name)) as full_abi_json:
-        contract.abi = load(full_abi_json)["abi"]
 
 
 json_config = {
