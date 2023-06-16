@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {DexStorageLib} from "../../diamond/libraries/Lib.DEX.sol";
+import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {Auth} from "../commodity/Commodity.Auth.sol";
 
 abstract contract Utils is Auth {

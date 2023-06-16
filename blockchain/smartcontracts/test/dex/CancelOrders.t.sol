@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.DEX.sol";
+import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.Dex.sol";
 import {Future} from "../../src/extracto/facet/future/Future.sol";
 import {DexBaseSetup} from "./DexBaseSetup.t.sol";
 
