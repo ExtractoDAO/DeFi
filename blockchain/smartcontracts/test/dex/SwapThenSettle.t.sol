@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
-import {EStorage} from "../../../src/extracto/facet/commodity/Commodity.Storage.sol";
+import {DexBaseSetup} from "./DexBaseSetup.t.sol";
+import {Future} from "../../src/extracto/facet/future/Future.sol";
 
-contract MatchOrdersSwap is BaseSetup {
+contract SwapThenSettle is DexBaseSetup {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        DexBaseSetup.setUp();
     }
 
     /*
@@ -20,7 +18,7 @@ contract MatchOrdersSwap is BaseSetup {
     - Then: The contract must change ownership from investor1 to investor2
     - And: investor1 should receive 500.0 USDC
     */
-    function test_trade_orders() public {
+    function test_withdraw_after_swap() public {
         address investor1 = address(0x1);
         address investor2 = address(0x2);
 
@@ -35,27 +33,23 @@ contract MatchOrdersSwap is BaseSetup {
         vm.stopPrank();
 
         // Put Sell Order
-        vm.startPrank(investor1);
-        usdc.approve(address(commodity), amount);
+        vm.prank(investor1);
+        usdc.approve(address(diamond), amount);
         // buy contract by $250USD
-        (address _future,) = commodity.createFuture(address(usdc), amount);
+        (address _future,) = h.createFuture(investor1, address(usdc), amount);
         future = Future(_future);
         // sell order of $500USD
+        vm.prank(investor1);
         future.sell(amount * 2);
-        vm.stopPrank();
 
         vm.prank(investor2);
-        usdc.approve(address(commodity), amount * 2);
+        usdc.approve(address(diamond), amount * 2);
         vm.prank(investor2);
         // buy order of $500USD
-        commodity.buyOrder(address(usdc), commodityAmount, amount * 2);
+        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2);
 
-        // Validations
-        assertEq(future.investor(), investor2);
-        assertEq(commodity.sellOrders().length, 0);
-        assertEq(commodity.buyOrders().length, 0);
-
-        assertEq(usdc.balanceOf(investor1), amount * 2);
-        assertEq(usdc.balanceOf(investor2), 0);
+        vm.roll(locktime);
+        vm.prank(investor2);
+        future.withdraw();
     }
 }

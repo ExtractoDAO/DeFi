@@ -1,136 +1,176 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {EAuth} from "./Commodity.Auth.sol";
+import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
+import {COW} from "../../../token/COW.sol";
+import {Auth} from "./Commodity.Auth.sol";
 
-abstract contract ECrud is EAuth {
-    /*//////////////////////////////////////////////////////////////
-                               CONSTRUCTOR
-    //////////////////////////////////////////////////////////////*/
+abstract contract Crud is Auth {
+    constructor() Auth() {}
 
-    constructor(
-        address[] memory _tokens,
-        uint8[] memory _decimals,
-        uint256 _locktime,
-        uint256 _kgSupply,
-        uint256 _buyPrice,
-        uint256 _sellPrice,
-        bool _active,
-        address _dao,
-        address _cow
-    ) EAuth(_tokens, _decimals, _locktime, _kgSupply, _buyPrice, _sellPrice, _active, _dao, _cow) {}
+    /*////////////////////////////////////////////////////////////
+                                                    GET FUNCTIONS
+    ////////////////////////////////////////////////////////////*/
+
+    function getTotalSupplyKG() public view returns (uint256 totalSupplyKg) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        totalSupplyKg = lib.totalSupplyKg;
+    }
+
+    function getYieldFarming() public view returns (uint256 yieldFarming) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        yieldFarming = lib.yieldFarming;
+    }
+
+    function getSellPrice() public view returns (uint256 sellPrice) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        sellPrice = lib.sellPrice;
+    }
+
+    function getBuyPrice() public view returns (uint256 buyPrice) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        buyPrice = lib.buyPrice;
+    }
+
+    function getLocktime() public view returns (uint256 locktime) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        locktime = lib.locktime;
+    }
+
+    function getActivated() public view returns (bool activated) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        activated = lib.activated;
+    }
+
+    function getFullDrawer() external view returns (address[] memory drawer) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        drawer = lib.drawer;
+    }
+
+    function getContractsByInvestor(address investor)
+        public
+        view
+        returns (CommodityStorageLib.Contract[] memory contractsInvestor)
+    {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        contractsInvestor = lib.contractsByInvestor[investor];
+    }
+
+    function getContractByAddress(address future)
+        public
+        view
+        returns (address investor, address _future, uint256 kg, bool burn)
+    {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Contract memory _contract = lib.contracts[future];
+
+        investor = _contract.investor;
+        _future = _contract.future;
+        kg = _contract.commodityAmount;
+        burn = _contract.burn;
+    }
+
+    function getAllowedTokens() public view returns (address[] memory tokens) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        tokens = lib.allowedTokens;
+    }
+
+    function getAllowedTokensLength() public view returns (uint256 length) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        length = lib.allowedTokens.length;
+    }
+
+    function getDao() public view returns (address dao) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        dao = lib.dao;
+    }
+
+    function getController() public view returns (address controller) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        controller = lib.controller;
+    }
+
+    function getCOW() public view returns (COW cow) {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        cow = lib.cow;
+    }
+
+    /*////////////////////////////////////////////////////////////
+                                                    SET FUNCTIONS
+    ////////////////////////////////////////////////////////////*/
+
+    // TODO: add multisig
+    function setController(address newController) public {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        lib.controller = newController;
+    }
+
+    // TODO: add multisig
+    function setDAO(address newDAO) public {
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        lib.dao = newDAO;
+    }
+
+    function setCOW(address newCow) public {
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        lib.cow = COW(newCow);
+    }
 
     /*//////////////////////////////////////////////////////////////
                                 ADD
     //////////////////////////////////////////////////////////////*/
 
-    function addAddressWhitelist(address newVip) public {
-        onlyOwner();
-
-        Vip memory vip = Vip(vips.length, true);
-        whitelist[newVip] = vip;
-        vips.push(newVip);
-    }
-
     function addTokens(address newToken, uint8 decimal) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        TokenAndDecimals memory token = TokenAndDecimals(tokens.length, decimal, true);
-        tokenList[newToken] = token;
-        tokens.push(newToken);
-    }
-
-    /*//////////////////////////////////////////////////////////////
-                                GET
-    //////////////////////////////////////////////////////////////*/
-
-    function getContractsByInvestor(address investor) public view returns (Contract[] memory) {
-        return contractsByInvestor[investor];
-    }
-
-    function getWhiteList() public view returns (address[] memory) {
-        return vips;
-    }
-
-    function getFullDrawer() public view returns (address[] memory) {
-        return drawer;
-    }
-
-    function getTokens() public view returns (address[] memory) {
-        return tokens;
-    }
-
-    function filterOrderBy(OrderType typed) private view returns (Order[] memory) {
-        uint256 count;
-        for (uint256 j = 0; j < orderBook.length; j++) {
-            if (orderBook[j].typed == typed) {
-                count++;
-            }
-        }
-        Order[] memory orders = new Order[](count);
-        uint256 i;
-
-        for (uint256 j = 0; j < orderBook.length; j++) {
-            if (orderBook[j].typed == typed) {
-                orders[i] = orderBook[j];
-                i++;
-            } else {
-                continue;
-            }
-        }
-
-        return orders;
-    }
-
-    function sellOrders() external view returns (Order[] memory) {
-        return filterOrderBy(OrderType.Sell);
-    }
-
-    function buyOrders() external view returns (Order[] memory) {
-        return filterOrderBy(OrderType.Buy);
+        CommodityStorageLib.TokenAndDecimals memory token =
+            CommodityStorageLib.TokenAndDecimals(getAllowedTokensLength(), decimal, true);
+        lib.listAllowedTokens[newToken] = token;
+        lib.allowedTokens.push(newToken);
     }
 
     /*//////////////////////////////////////////////////////////////
                                 UPDATE
     //////////////////////////////////////////////////////////////*/
 
+    // TODO: Pausable ???
     function updateActive(bool state) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        getActivated = state;
-
-        if (getActivated) {
-            emit OnSale(getTotalSupplyKG);
-        }
+        lib.activated = state;
     }
 
     function updateBuyPrice(uint256 newBuyPrice) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        getBuyPrice = newBuyPrice;
-
-        emit WeightPriceUpdated(newBuyPrice);
+        lib.buyPrice = newBuyPrice;
     }
 
     function updateLockTime(uint256 newLockTime) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        getLockTime = newLockTime;
+        lib.locktime = newLockTime;
     }
 
     function updateSellPrice(uint256 newSellPrice) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        getSellPrice = newSellPrice;
-
-        emit WeightPriceUpdated(newSellPrice);
+        lib.sellPrice = newSellPrice;
     }
 
-    function updateYieldFarming(uint256 newYieldFarming) public {
-        onlyOwner();
-        // input 1 for yield 1%, if you want to return nothing %, input 0
-        require(0 <= newYieldFarming && newYieldFarming <= 100, "INVALID_YIELD");
-        getYieldFarming = newYieldFarming;
+    function updateYieldFarming(uint8 newYieldFarming) public {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        onlyController();
+        validateYield(newYieldFarming);
+
+        lib.yieldFarming = newYieldFarming;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -138,18 +178,11 @@ abstract contract ECrud is EAuth {
     //////////////////////////////////////////////////////////////*/
 
     function delTokens(address noauth) public {
-        onlyOwner();
+        onlyController();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        tokenList[noauth].active = false;
-        tokens[tokenList[noauth].index] = tokens[tokens.length - 1];
-        tokens.pop();
-    }
-
-    function delAddressWhitelist(address novip) public {
-        onlyOwner();
-
-        whitelist[novip].active = false;
-        vips[whitelist[novip].index] = vips[vips.length - 1];
-        vips.pop();
+        lib.listAllowedTokens[noauth].active = false;
+        lib.allowedTokens[lib.listAllowedTokens[noauth].index] = lib.allowedTokens[lib.allowedTokens.length - 1];
+        lib.allowedTokens.pop();
     }
 }

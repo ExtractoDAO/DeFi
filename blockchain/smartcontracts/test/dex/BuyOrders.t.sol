@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
-import "../../../src/extracto/facet/commodity/Commodity.Storage.sol";
+import {DexBaseSetup} from "./DexBaseSetup.t.sol";
+import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.DEX.sol";
 
-contract BuyOrders is BaseSetup {
+contract BuyOrders is DexBaseSetup {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        DexBaseSetup.setUp();
     }
 
     /*
@@ -20,20 +18,20 @@ contract BuyOrders is BaseSetup {
     function test_length_of_bid_book() public {
         vm.assume(investor != address(0x0));
         uint256 amount = 11 * 10e18;
-        uint256 _commodityAmount = 5759 * 10e16; // 57.59kg
+
+        uint256 commodityAmount = 5759 * 10e16; // 57.59kg
         vm.label(investor, string(abi.encodePacked("new investor")));
 
         vm.prank(controller);
         usdc.transfer(investor, amount);
 
-        vm.startPrank(investor);
-        commodity.buyOrder(address(usdc), _commodityAmount, amount);
-        vm.stopPrank();
+        vm.prank(investor);
+        h.buyOrder(investor, address(usdc), commodityAmount, amount);
 
-        Commodity.Order[] memory bids = commodity.buyOrders();
+        DexStorageLib.Order[] memory bids = h.buyOrders();
         assertEq(bids.length, 1);
 
-        assertApproxEqRel(bids[0].commodityAmount, _commodityAmount, 10e14, "commodityAmount dont match");
+        assertApproxEqRel(bids[0].commodityAmount, commodityAmount, 10e14, "commodityAmount dont match");
         assertEq(bids[0].tokenAddress, address(usdc), "token addres dont match");
         assertEq(bids[0].investor, investor, "investor dont match");
         assertEq(bids[0].future, address(0x0), "future dont match");

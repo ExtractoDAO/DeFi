@@ -24,6 +24,7 @@ import {
 
 library DiamondStorageLib {
     event DiamondCut(Facet[] _diamondCut, address _init, bytes _calldata);
+    event NoInitializationContract();
 
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.storage");
     address constant ZERO_ADDRESS = address(0x0);
@@ -63,11 +64,11 @@ library DiamondStorageLib {
 
     /// @notice This function retrieves the diamond storage struct which is declared in a specific storage slot.
     /// @dev The diamond storage struct is stored at a specific storage slot to prevent clashes with other state variables in the contract.
-    /// @return ds Returns an instance of the Storage struct (representing the diamond storage).
-    function getDiamondStorage() internal pure returns (Storage storage ds) {
+    /// @return lib Returns an instance of the Storage struct (representing the diamond storage).
+    function getDiamondStorage() internal pure returns (Storage storage lib) {
         bytes32 storagePosition = DIAMOND_STORAGE_POSITION;
         assembly {
-            ds.slot := storagePosition
+            lib.slot := storagePosition
         }
     }
 
@@ -81,11 +82,11 @@ library DiamondStorageLib {
 
     function initializeDiamondCut(address _init, bytes memory _calldata) internal {
         if (_init == ZERO_ADDRESS) {
+            emit NoInitializationContract();
             return;
         }
 
         enforceHasContractCode(_init, "function: initializeDiamondCut()");
-
         (bool success, bytes memory error) = _init.delegatecall(_calldata);
 
         if (!success) {
@@ -103,8 +104,8 @@ library DiamondStorageLib {
     }
 
     function setController(address newController) internal {
-        Storage storage ds = getDiamondStorage();
-        ds.controller = newController;
+        Storage storage lib = getDiamondStorage();
+        lib.controller = newController;
     }
 
     /*////////////////////////////////////////////////////////////
@@ -112,8 +113,8 @@ library DiamondStorageLib {
     ////////////////////////////////////////////////////////////*/
 
     function onlyController() internal view {
-        Storage storage ds = getDiamondStorage();
-        if (ds.controller != msg.sender) {
+        Storage storage lib = getDiamondStorage();
+        if (lib.controller != msg.sender) {
             revert NoAuthorized();
         }
     }
@@ -174,20 +175,20 @@ library DiamondStorageLib {
         checkFacetAddress(_facetAddress, "function: addFunctions()");
         checkFnSelectors(_fnSelectors.length);
 
-        Storage storage ds = getDiamondStorage();
+        Storage storage lib = getDiamondStorage();
 
-        uint256 fnSelectorsCounter = uint256(ds.facetToFnSelectors[_facetAddress].fnSelectors.length);
+        uint256 fnSelectorsCounter = uint256(lib.facetToFnSelectors[_facetAddress].fnSelectors.length);
 
         if (fnSelectorsCounter == 0) {
-            addFacet(ds, _facetAddress);
+            addFacet(lib, _facetAddress);
         }
         for (uint256 selectorIndex; selectorIndex < _fnSelectors.length; selectorIndex++) {
             bytes4 selector = _fnSelectors[selectorIndex];
-            address oldFacetAddress = ds.fnSelectorToFacet[selector].facet;
+            address oldFacetAddress = lib.fnSelectorToFacet[selector].facet;
             if (oldFacetAddress != ZERO_ADDRESS) {
                 revert CannotAddFunctionToDiamondThatAlreadyExists(selector);
             }
-            addFunction(ds, selector, fnSelectorsCounter, _facetAddress);
+            addFunction(lib, selector, fnSelectorsCounter, _facetAddress);
             fnSelectorsCounter++;
         }
     }
@@ -195,29 +196,29 @@ library DiamondStorageLib {
     /// @notice This function is responsible for adding a new facet to the contract's storage.
     /// @dev It checks:
     /// @dev if the provided facet address contains bytecode.
-    /// @param ds The instance of the contract's storage.
+    /// @param lib The instance of the contract's storage.
     /// @param _facetAddress The address of the new facet.
-    function addFacet(Storage storage ds, address _facetAddress) internal {
+    function addFacet(Storage storage lib, address _facetAddress) internal {
         enforceHasContractCode(_facetAddress, "function: addFacet()");
 
-        ds.facetToFnSelectors[_facetAddress].facetAddressID = ds.facets.length;
-        ds.facets.push(_facetAddress);
-        ds.facetsLength++;
+        lib.facetToFnSelectors[_facetAddress].facetAddressID = lib.facets.length;
+        lib.facets.push(_facetAddress);
+        lib.facetsLength++;
     }
 
     /// @notice This function is responsible for adding a new function to the contract's storage.
     /// @dev It maps the function selector to the facet and updates the storage.
-    /// @param ds The instance of the contract's storage.
+    /// @param lib The instance of the contract's storage.
     /// @param _selector The function selector that will be added.
     /// @param _selectorPosition The position of the function selector in the list.
     /// @param _facetAddress The address of the facet where the function resides.
-    function addFunction(Storage storage ds, bytes4 _selector, uint256 _selectorPosition, address _facetAddress)
+    function addFunction(Storage storage lib, bytes4 _selector, uint256 _selectorPosition, address _facetAddress)
         internal
     {
-        ds.fnSelectorToFacet[_selector].fnSelectorsID = _selectorPosition;
-        ds.facetToFnSelectors[_facetAddress].fnSelectors.push(_selector);
-        ds.fnSelectorToFacet[_selector].facet = _facetAddress;
-        ds.fnSelectorLength++;
+        lib.fnSelectorToFacet[_selector].fnSelectorsID = _selectorPosition;
+        lib.facetToFnSelectors[_facetAddress].fnSelectors.push(_selector);
+        lib.fnSelectorToFacet[_selector].facet = _facetAddress;
+        lib.fnSelectorLength++;
     }
 
     /*////////////////////////////////////////////////////////////
@@ -235,20 +236,20 @@ library DiamondStorageLib {
         checkFacetAddress(_facetAddress, "function: replaceFunctions()");
         checkFnSelectors(_fnSelectors.length);
 
-        Storage storage ds = getDiamondStorage();
-        uint256 fnSelectorsCounter = uint256(ds.facetToFnSelectors[_facetAddress].fnSelectors.length);
+        Storage storage lib = getDiamondStorage();
+        uint256 fnSelectorsCounter = uint256(lib.facetToFnSelectors[_facetAddress].fnSelectors.length);
         if (fnSelectorsCounter == 0) {
-            addFacet(ds, _facetAddress);
+            addFacet(lib, _facetAddress);
         }
 
         for (uint256 selectorIndex; selectorIndex < _fnSelectors.length; selectorIndex++) {
             bytes4 selector = _fnSelectors[selectorIndex];
-            address oldFacetAddress = ds.fnSelectorToFacet[selector].facet;
+            address oldFacetAddress = lib.fnSelectorToFacet[selector].facet;
             if (oldFacetAddress == _facetAddress) {
                 revert CannotAddFunctionToDiamondThatAlreadyExists(selector);
             }
-            removeFunction(ds, oldFacetAddress, selector);
-            addFunction(ds, selector, fnSelectorsCounter, _facetAddress);
+            removeFunction(lib, oldFacetAddress, selector);
+            addFunction(lib, selector, fnSelectorsCounter, _facetAddress);
             fnSelectorsCounter++;
         }
     }
@@ -264,41 +265,41 @@ library DiamondStorageLib {
     /// @dev if facet address is the same address of the diamond
     /// @dev if the facet does not already contain the function selectors.
     /// @dev if a function selector does not exist, it will not throw an error. It will just continue to the next operation.
-    /// @param ds A reference to the storage slot where the diamond storage structure resides.
+    /// @param lib A reference to the storage slot where the diamond storage structure resides.
     /// @param _facetAddress The facet address that the function selector should be removed from. This must be a non-zero address and not the address of the current contract.
     /// @param _selector The function selector to be removed.
-    function removeFunction(Storage storage ds, address _facetAddress, bytes4 _selector) internal {
+    function removeFunction(Storage storage lib, address _facetAddress, bytes4 _selector) internal {
         checkFacetAddress(_facetAddress, "function: removeFunction()");
 
         // replace selector with last selector, then delete last selector
-        uint256 selectorPosition = ds.fnSelectorToFacet[_selector].fnSelectorsID;
-        uint256 lastSelectorPosition = ds.facetToFnSelectors[_facetAddress].fnSelectors.length - 1;
+        uint256 selectorPosition = lib.fnSelectorToFacet[_selector].fnSelectorsID;
+        uint256 lastSelectorPosition = lib.facetToFnSelectors[_facetAddress].fnSelectors.length - 1;
 
         // if not the same then replace _selector with lastSelector
         if (selectorPosition != lastSelectorPosition) {
-            bytes4 lastSelector = ds.facetToFnSelectors[_facetAddress].fnSelectors[lastSelectorPosition];
-            ds.facetToFnSelectors[_facetAddress].fnSelectors[selectorPosition] = lastSelector;
-            ds.fnSelectorToFacet[lastSelector].fnSelectorsID = uint96(selectorPosition);
+            bytes4 lastSelector = lib.facetToFnSelectors[_facetAddress].fnSelectors[lastSelectorPosition];
+            lib.facetToFnSelectors[_facetAddress].fnSelectors[selectorPosition] = lastSelector;
+            lib.fnSelectorToFacet[lastSelector].fnSelectorsID = uint96(selectorPosition);
         }
 
         // delete the last selector
-        ds.facetToFnSelectors[_facetAddress].fnSelectors.pop();
-        delete ds.fnSelectorToFacet[_selector];
+        lib.facetToFnSelectors[_facetAddress].fnSelectors.pop();
+        delete lib.fnSelectorToFacet[_selector];
 
         // if no more selectors for facet address then delete the facet address
         if (lastSelectorPosition == 0) {
             // replace facet address with last facet address and delete last facet address
-            uint256 lastfacetAddressID = ds.facetsLength;
-            uint256 facetAddressID = ds.facetToFnSelectors[_facetAddress].facetAddressID;
+            uint256 lastfacetAddressID = lib.facetsLength;
+            uint256 facetAddressID = lib.facetToFnSelectors[_facetAddress].facetAddressID;
 
             if (facetAddressID != lastfacetAddressID) {
-                address lastFacetAddress = ds.facets[lastfacetAddressID];
-                ds.facets[facetAddressID] = lastFacetAddress;
-                ds.facetToFnSelectors[lastFacetAddress].facetAddressID = facetAddressID;
+                address lastFacetAddress = lib.facets[lastfacetAddressID];
+                lib.facets[facetAddressID] = lastFacetAddress;
+                lib.facetToFnSelectors[lastFacetAddress].facetAddressID = facetAddressID;
             }
 
-            ds.facets.pop();
-            delete ds.facetToFnSelectors[_facetAddress].facetAddressID;
+            lib.facets.pop();
+            delete lib.facetToFnSelectors[_facetAddress].facetAddressID;
         }
     }
 
@@ -315,11 +316,11 @@ library DiamondStorageLib {
             revert FacetZeroAddress(_facetAddress, "function: removeFunctions()");
         }
 
-        Storage storage ds = getDiamondStorage();
+        Storage storage lib = getDiamondStorage();
         for (uint256 selectorIndex; selectorIndex < _fnSelectors.length; selectorIndex++) {
             bytes4 selector = _fnSelectors[selectorIndex];
-            address oldFacetAddress = ds.fnSelectorToFacet[selector].facet;
-            removeFunction(ds, oldFacetAddress, selector);
+            address oldFacetAddress = lib.fnSelectorToFacet[selector].facet;
+            removeFunction(lib, oldFacetAddress, selector);
         }
     }
 

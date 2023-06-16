@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-
-import {CommodityStorageLib} from "./libraries/LibCommodity.sol";
-import {FunctionNotFound} from "./interfaces/Types.sol";
+import {FunctionNotFound, ZeroAddress} from "./interfaces/Types.sol";
 import {DiamondStorageLib} from "./libraries/Lib.sol";
-import {DEXStorageLib} from "./libraries/LibDEX.sol";
 import {Louper} from "./Louper.sol";
 import {Cutter} from "./Cutter.sol";
 
@@ -15,14 +12,11 @@ contract Diamond is Cutter, Louper {
     /// @notice Creates a new diamond contract
     /// @dev This function sets the controller of the diamond to the sender of this transaction
     /// and sets the token of the DiamondStorageLib
-    /// @param dao .
-    /// @param cow .
-    constructor(address dao, address cow) {
-        CommodityStorageLib.setController(msg.sender);
+    constructor() Cutter() Louper() {
+        if (msg.sender == address(0x0)) {
+            revert ZeroAddress();
+        }
         DiamondStorageLib.setController(msg.sender);
-        DEXStorageLib.setController(msg.sender);
-        CommodityStorageLib.setCOW(cow);
-        CommodityStorageLib.setDAO(dao);
     }
 
     /// @notice Function to receive Ether
@@ -32,10 +26,10 @@ contract Diamond is Cutter, Louper {
     /// @notice Fallback function
     /// @dev This function is executed if the contract was called with data but without a matching function
     fallback() external payable {
-        DiamondStorageLib.Storage storage ds = DiamondStorageLib.getDiamondStorage();
+        DiamondStorageLib.Storage storage lib = DiamondStorageLib.getDiamondStorage();
 
         // Get the facet address corresponding to the function selector of the call
-        address facet = ds.fnSelectorToFacet[msg.sig].facet;
+        address facet = lib.fnSelectorToFacet[msg.sig].facet;
         if (facet == DiamondStorageLib.ZERO_ADDRESS) {
             revert FunctionNotFound(msg.sig);
         }

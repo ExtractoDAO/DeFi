@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
-import {EStorage} from "../../../src/extracto/facet/commodity/Commodity.Storage.sol";
+import {DexBaseSetup} from "./DexBaseSetup.t.sol";
+import {Future} from "../../src/extracto/facet/future/Future.sol";
 
-contract SwapThenYielding is BaseSetup {
+contract SwapThenYielding is DexBaseSetup {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        DexBaseSetup.setUp();
     }
 
     /*
@@ -33,22 +31,20 @@ contract SwapThenYielding is BaseSetup {
         vm.stopPrank();
 
         // Put Sell Order
-        vm.startPrank(investor1);
-        usdc.approve(address(commodity), amount);
-        (address _future,) = commodity.createFuture(address(usdc), amount); // buy contract of 189.21kg by $361.398USD
+        vm.prank(investor1);
+        usdc.approve(address(diamond), amount);
+        (address _future,) = h.createFuture(investor1, address(usdc), amount); // buy contract of 189.21kg by $361.398USD
         future = Future(_future);
+        vm.prank(investor1);
         future.sell(amount * 2); // sell order of 189.21kg by $722.796USD
-        vm.stopPrank();
 
         vm.prank(investor2);
-        usdc.approve(address(commodity), amount * 2);
-        vm.prank(investor2);
-        commodity.buyOrder(address(usdc), commodityAmount, amount * 2); // buy order of 189.21kg by $722.796USD
+        usdc.approve(address(diamond), amount * 2);
+        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2); // buy order of 189.21kg by $722.796USD
 
-        vm.prank(deployer);
-        commodity.updateYieldFarming(17); // update yield farming to 17%
+        h.updateYieldFarming(deployer, 17); // update yield farming to 17%
 
-        vm.roll(_135days_in_blocks_to_unlock);
+        vm.roll(locktime);
         vm.prank(investor2);
         future.withdraw();
 

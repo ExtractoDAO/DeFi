@@ -1,38 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {BaseSetup} from "../../BaseSetup.t.sol";
-import {Future} from "../../../src/extracto/facet/future/Future.sol";
-import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
+import "../../src/extracto/facet/future/Future.sol";
+import {DexBaseSetup} from "./DexBaseSetup.t.sol";
+import {DexStorageLib} from "../../src/extracto/diamond/libraries/Lib.DEX.sol";
 
-contract SellOrders is BaseSetup {
+contract SellOrders is DexBaseSetup {
     function setUp() public virtual override {
-        BaseSetup.setUp();
+        DexBaseSetup.setUp();
     }
+
     /*
     # Scenary: Put a single Sell Order
         - Give: that the a investor sell contracts
         - When: see the order book
         - Then: should have 1 ask order
     */
-
     function test_length_of_ask_order_book() public {
         uint256 amount = 11 * 10e18;
 
         vm.prank(controller);
         usdc.transfer(investor, amount);
 
-        vm.startPrank(investor);
-        usdc.approve(address(commodity), amount);
-        (address _future, uint256 _commodityAmount) = commodity.createFuture(address(usdc), amount);
-        future = Future(_future);
-        future.sell(amount + 1 * 10e18);
-        vm.stopPrank();
+        vm.prank(investor);
+        usdc.approve(address(diamond), amount);
+        (address _future, uint256 commodityAmount) = h.createFuture(investor, address(usdc), amount);
 
-        Commodity.Order[] memory asks = commodity.sellOrders();
+        future = Future(_future);
+        vm.prank(investor);
+        future.sell(amount + 1 * 10e18);
+
+        DexStorageLib.Order[] memory asks = h.sellOrders();
         assertEq(asks.length, 1);
 
-        assertApproxEqRel(asks[0].commodityAmount, _commodityAmount, 10e14, "commodityAmount dont match");
+        assertApproxEqRel(asks[0].commodityAmount, commodityAmount, 10e14, "commodityAmount dont match");
         assertEq(asks[0].tokenAddress, address(0x0), "token addres dont match");
         assertEq(asks[0].amount, amount + 1 * 10e18, "amount dont match");
         assertEq(asks[0].investor, investor, "investor dont match");
