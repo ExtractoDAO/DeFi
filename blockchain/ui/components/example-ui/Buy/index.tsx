@@ -3,6 +3,8 @@ import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { SelectToken } from "./components/SelectToken";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { ethers } from "ethers";
+import deployedContracts from "~~/generated/deployedContracts";
 
 export const Buy = () => {
   const [amount, setAmount] = useState<number>(0);
@@ -23,10 +25,16 @@ export const Buy = () => {
     setAmount(Number.isNaN(numericValue) ? 0 : numericValue / Price);
   };
 
+  const getDecimals = (token:string) => {
+    return 18
+  }
+
+  const selectedToken = "MockToken";
+
   const { writeAsync: approveAsync } = useScaffoldContractWrite({
-    contractName: "COW",
+    contractName: selectedToken,
     functionName: "approve",
-    args: [amount],
+    args: [deployedContracts[31337][0].contracts.Commodity.address, ethers.utils.parseUnits(amount.toString(), getDecimals(selectedToken))],
     blockConfirmations: 1,
     onBlockConfirmation: txnReceipt => {
       console.log("Transaction blockHash", txnReceipt.blockHash);
@@ -34,8 +42,7 @@ export const Buy = () => {
   });
 
   const handleApprove = async () => {
-    console.log("Approving amount:", amount);
-    await approveAsync();
+    
   };
 
   const handleConfirm = () => {
@@ -70,7 +77,7 @@ export const Buy = () => {
       </div>
 
       <Button
-        onClick={handleApprove}
+        onClick={approveAsync}
         className="btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest"
       >
         Approve
