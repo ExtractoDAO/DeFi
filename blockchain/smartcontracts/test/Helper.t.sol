@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {DexStorageLib} from "../src/extracto/diamond/libraries/Lib.DEX.sol";
+import {DexStorageLib} from "../src/extracto/diamond/libraries/Lib.Dex.sol";
 import {Diamond} from "../src/extracto/diamond/Diamond.sol";
 import {console2} from "forge-std/console2.sol";
 import {Test} from "forge-std/Test.sol";
