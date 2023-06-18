@@ -183,9 +183,7 @@ contract Dex is Crud {
         }
 
         // send Token
-        ERC20 token = ERC20(buy.tokenAddress);
-        bool sent = token.transferFrom(buy.investor, sell.investor, sell.amount);
-        require(sent, "PAYMENT_FAILED");
+        validatePayment(buy.tokenAddress, buy.investor, sell.investor, sell.amount);
 
         // swap on Future
         Future future = Future(sell.future);

@@ -91,10 +91,7 @@ contract Commodity is Math {
         lib.contracts[future] = CommodityStorageLib.Contract(msg.sender, future, kg, false);
         lib.drawer.push(future);
 
-        ERC20 token = ERC20(tokenAddress);
-        //TODO: add custom error
-        bool sent = token.transferFrom(msg.sender, lib.dao, amount);
-        require(sent, "PAYMENT_FAILED");
+        validatePayment(tokenAddress, amount);
     }
 
     /**
