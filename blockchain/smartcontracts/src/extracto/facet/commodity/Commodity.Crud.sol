@@ -101,6 +101,7 @@ abstract contract Crud is Auth {
 
     // TODO: add multisig
     function setController(address newController) public {
+        onlyController();
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
         lib.controller = newController;
     }
@@ -136,7 +137,6 @@ abstract contract Crud is Auth {
                                 UPDATE
     //////////////////////////////////////////////////////////////*/
 
-    // TODO: Pausable ???
     function updateActive(bool state) public {
         onlyController();
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();

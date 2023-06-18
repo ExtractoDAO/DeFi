@@ -73,8 +73,7 @@ abstract contract Auth {
         }
     }
 
-    function onlyActive(address investor) internal view {
-        zeroAddr(investor);
+    function onlyActive() internal view {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         if (lib.activated == false) {
