@@ -77,7 +77,8 @@ contract Commodity is Math {
         minimumAmount(amount, tokenAddress);
         onlyStableCoins(tokenAddress);
         onlyKgSupply(amount);
-        onlyActive(msg.sender);
+        zeroAddr(msg.sender);
+        onlyActive();
 
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
@@ -104,9 +105,10 @@ contract Commodity is Math {
      * @param investor The address of the owner of the futures contract who will receive the tokens. The tokens will be received by the investor, not by the contract.
      */
     function mintToken(uint256 commodityAmount, address investor) external nonReentrant {
+        onlyActive();
+        onlyFutures(investor, msg.sender);
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        onlyFutures(investor, msg.sender);
         lib.contracts[msg.sender].burn = true;
 
         uint256 amount = calculateSellAmountYielded(commodityAmount);
