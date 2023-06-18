@@ -2,10 +2,13 @@
 pragma solidity ^0.8.18;
 
 import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
+import {ERC20} from "../../../token/ERC20.sol";
 
 error TokensDecimalsLengthError(uint256 tokensLength, uint256 decimalsLength);
 error UnavailableKilos(uint256 kilos, uint256 yourAmount, uint256 diff);
+error InsufficientAllowance(uint256 need, uint256 have, uint256 diff);
 error InsufficientAmount(uint256 yourAmount, uint256 minimumAmount);
+error PaymentFailed(address from, address to, uint256 amount);
 error InvalidOwnership(address future, address investor);
 error InvalidYield(uint8 minimum, uint8 maximum);
 
@@ -145,6 +148,37 @@ abstract contract Auth {
         }
         if (lib.contracts[future].investor != investor) {
             revert InvalidOwnership(future, investor);
+        }
+    }
+
+    function validatePayment(address tokenAddr, uint256 amount) internal {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        validateAllowance(tokenAddr, msg.sender, address(this), amount);
+        ERC20 token = ERC20(tokenAddr);
+
+        if (token.transferFrom(msg.sender, lib.dao, amount) == false) {
+            revert PaymentFailed(msg.sender, lib.dao, amount);
+        }
+    }
+
+    function validatePayment(address tokenAddr, address from, address to, uint256 amount) internal {
+        validateAllowance(tokenAddr, from, address(this), amount);
+        ERC20 token = ERC20(tokenAddr);
+
+        if (token.transferFrom(from, to, amount) == false) {
+            revert PaymentFailed(from, to, amount);
+        }
+    }
+
+    function validateAllowance(address tokenAddr, address investor, address commodity, uint256 amount) internal view {
+        ERC20 token = ERC20(tokenAddr);
+        uint256 allowance = token.allowance(investor, commodity);
+
+        if (allowance != amount) {
+            uint256 need = amount;
+            uint256 have = allowance;
+            uint256 diff = need - have;
+            revert InsufficientAllowance(need, have, diff);
         }
     }
 }
