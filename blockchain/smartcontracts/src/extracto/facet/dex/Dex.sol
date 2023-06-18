@@ -6,7 +6,7 @@ import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {ERC20} from "../../../token/ERC20.sol";
 import {Future} from "../future/Future.sol";
 import "../../../utils/math/UD60x18.sol";
-import {Crud} from "./DEX.Crud.sol";
+import {Crud} from "./Dex.Crud.sol";
 
 contract Dex is Crud {
     /*//////////////////////////////////////////////////////////////

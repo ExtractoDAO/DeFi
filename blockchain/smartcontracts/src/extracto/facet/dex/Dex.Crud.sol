@@ -2,7 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
-import {Utils} from "./DEX.Utils.sol";
+import {Utils} from "./Dex.Utils.sol";
 
 abstract contract Crud is Utils {
     constructor() Utils() {}
