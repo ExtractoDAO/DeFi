@@ -17,11 +17,11 @@ abstract contract Data is Script {
         hex"59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
     address controller = vm.addr(bytes2uint(controllerPrivateKey));
     address dao = vm.addr(bytes2uint(daoPrivateKey));
-    uint256 commodityBuyPrice = 1_91 * 1e16;
-    uint256 commoditySellPrice = 1_91 * 1e16;
+    uint256 commodityBuyPrice = 2_00 * 1e16;
+    uint256 commoditySellPrice = 2_00 * 1e16;
     uint256 commoditySupply = 1_000_000 * 1e16;
     uint256 locktime = 5;
-    uint8 yield = 50;
+    uint8 yieldFarming = 50;
     bool activateSells = true;
 
     address[] tokens;
@@ -127,7 +127,7 @@ contract Local is Helper {
             bytes4(
                 keccak256(
                     bytes(
-                        "init(address[],uint8[],uint256,uint256,uint256,uint256,bool,address,address)"
+                        "init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"
                     )
                 )
             ),
@@ -137,6 +137,7 @@ contract Local is Helper {
             commoditySupply,
             commodityBuyPrice,
             commoditySellPrice,
+            yieldFarming,
             activateSells,
             dao,
             address(cow)

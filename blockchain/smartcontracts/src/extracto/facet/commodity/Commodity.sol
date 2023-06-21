@@ -23,6 +23,7 @@ contract Commodity is Math {
         uint256 kgSupply,
         uint256 buyPrice,
         uint256 sellPrice,
+        uint8 yieldFarming,
         bool active,
         address dao,
         address cow
@@ -36,6 +37,7 @@ contract Commodity is Math {
 
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
+        lib.yieldFarming = yieldFarming;
         lib.totalSupplyKg = kgSupply;
         lib.sellPrice = sellPrice;
         lib.buyPrice = buyPrice;
