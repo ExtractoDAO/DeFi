@@ -24,11 +24,15 @@ library DexStorageLib {
         address future;
         address investor;
         OrderType typed;
+        bytes32 id;
     }
 
     struct Storage {
         address controller;
         Order[] orderBook;
+        mapping(bytes32 => bool) orderById;
+        mapping(address => Order[]) ordersByInvestor;
+        mapping(address => mapping(bytes32 => Order)) orderByInvestorById;
     }
 
     /*////////////////////////////////////////////////////////////
