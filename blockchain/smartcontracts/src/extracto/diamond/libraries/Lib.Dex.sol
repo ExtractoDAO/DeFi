@@ -44,33 +44,4 @@ library DexStorageLib {
             lib.slot := storagePosition
         }
     }
-
-    /*//////////////////////////////////////////////////////////////
-                                GET
-    //////////////////////////////////////////////////////////////*/
-
-    function getController() internal view returns (address controller) {
-        Storage storage lib = getDEXStorage();
-        controller = lib.controller;
-    }
-
-    /*////////////////////////////////////////////////////////////
-                                                    SET FUNCTIONS
-    ////////////////////////////////////////////////////////////*/
-
-    function setController(address newController) internal {
-        Storage storage lib = getDEXStorage();
-        lib.controller = newController;
-    }
-
-    /*////////////////////////////////////////////////////////////
-                                              VALIDATION FUNCTIONS
-    ////////////////////////////////////////////////////////////*/
-
-    function onlyController() internal view {
-        Storage storage lib = getDEXStorage();
-        if (lib.controller != msg.sender) {
-            revert NoAuthorized();
-        }
-    }
 }
