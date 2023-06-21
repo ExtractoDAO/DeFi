@@ -26,18 +26,18 @@ library CommodityStorageLib {
         address controller;
         address dao;
         //
-        uint256 totalSupplyKg;
+        uint256 totalCommoditySupply;
         uint256 yieldFarming;
         uint256 sellPrice;
         uint256 buyPrice;
         uint256 locktime;
         bool activated;
         //
-        address[] allowedTokens;
+        address[] allowedTokensList;
         address[] drawer;
         //
         mapping(address => Contract[]) contractsByInvestor;
-        mapping(address => TokenAndDecimals) listAllowedTokens;
+        mapping(address => TokenAndDecimals) allowedTokens;
         mapping(address => Contract) contracts;
     }
 
