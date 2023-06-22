@@ -42,7 +42,7 @@ library DexStorageLib {
     /// @notice This function retrieves the diamond storage struct which is declared in a specific storage slot.
     /// @dev The diamond storage struct is stored at a specific storage slot to prevent clashes with other state variables in the contract.
     /// @return lib Returns an instance of the Storage struct (representing the diamond storage).
-    function getDEXStorage() internal pure returns (Storage storage lib) {
+    function getDexStorage() internal pure returns (Storage storage lib) {
         bytes32 storagePosition = DIAMOND_STORAGE_POSITION;
         assembly {
             lib.slot := storagePosition
