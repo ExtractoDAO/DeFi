@@ -103,8 +103,8 @@ abstract contract Auth {
     function minimumAmount(uint256 amount, address tokenAddress) internal view {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        if (amount < 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals) {
-            revert InsufficientAmount(amount, 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals);
+        if (amount < 10 * 10 ** lib.allowedTokens[tokenAddress].decimals) {
+            revert InsufficientAmount(amount, 10 * 10 ** lib.allowedTokens[tokenAddress].decimals);
         }
     }
 

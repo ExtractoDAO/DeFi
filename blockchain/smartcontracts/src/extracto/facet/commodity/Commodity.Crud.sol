@@ -129,7 +129,7 @@ abstract contract Crud is Auth {
 
         CommodityStorageLib.TokenAndDecimals memory token =
             CommodityStorageLib.TokenAndDecimals(getAllowedTokensLength(), decimal, true);
-        lib.listAllowedTokens[newToken] = token;
+        lib.allowedTokens[newToken] = token;
         lib.allowedTokensList.push(newToken);
     }
 
@@ -181,8 +181,8 @@ abstract contract Crud is Auth {
         onlyController();
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        lib.listAllowedTokens[noauth].active = false;
-        lib.allowedTokensList[lib.listAllowedTokens[noauth].index] = lib.allowedTokensList[lib.allowedTokensList.length - 1];
+        lib.allowedTokens[noauth].active = false;
+        lib.allowedTokensList[lib.allowedTokens[noauth].index] = lib.allowedTokensList[lib.allowedTokensList.length - 1];
         lib.allowedTokensList.pop();
     }
 }
