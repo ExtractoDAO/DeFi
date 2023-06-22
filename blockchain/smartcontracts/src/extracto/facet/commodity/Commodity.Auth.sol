@@ -2,6 +2,7 @@
 pragma solidity ^0.8.18;
 
 import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
+import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {ERC20} from "../../../token/ERC20.sol";
 
 error TokensDecimalsLengthError(uint256 tokensLength, uint256 decimalsLength);
@@ -9,15 +10,17 @@ error UnavailableKilos(uint256 kilos, uint256 yourAmount, uint256 diff);
 error InsufficientAllowance(uint256 need, uint256 have, uint256 diff);
 error InsufficientAmount(uint256 yourAmount, uint256 minimumAmount);
 error PaymentFailed(address from, address to, uint256 amount);
-error InvalidOwnership(address future, address investor);
+error InvalidFutureOwnership(address future, address investor);
+error InvalidOrderOwnership(address investor, bytes32 orderId);
 error InvalidYield(uint8 minimum, uint8 maximum);
 
+error FutureNotExists(address future);
 error ZeroAddress(address investor);
 error BurnContract(address future);
 error InvalidToken(address token);
+error OrderNotFound(bytes32 id);
 
 error InvalidSignature();
-error OrderNotFound();
 error InternalError();
 error Unauthorized();
 error NoReentrancy();
@@ -52,11 +55,12 @@ abstract contract Auth {
 
     function onlyStableCoins(address token) internal view {
         zeroAddr(token);
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
 
         bool condition = true;
-        for (uint256 i = 0; i < lib.allowedTokens.length; i++) {
-            if (lib.allowedTokens[i] == token) {
+        for (uint256 i = 0; i < lib.allowedTokensList.length; i++) {
+            if (lib.allowedTokensList[i] == token) {
                 condition = false;
             }
         }
@@ -66,34 +70,29 @@ abstract contract Auth {
     }
 
     function onlyKgSupply(uint256 amount) internal view {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
 
-        if (lib.totalSupplyKg < amount) {
-            revert UnavailableKilos(lib.totalSupplyKg, amount, amount - lib.totalSupplyKg);
+        if (lib.totalCommoditySupply < amount) {
+            revert UnavailableKilos(
+                lib.totalCommoditySupply,
+                amount,
+                amount - lib.totalCommoditySupply
+            );
         }
     }
 
     function onlyActive() internal view {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
 
         if (lib.activated == false) {
             revert Deactivated();
         }
     }
 
-    /**
-     * @notice This function checks if the sender is the owner of the order.
-     * @dev This function reverts the transaction if the investor is a zero address or if the sender is not the investor.
-     * @param investor The address of the investor to check.
-     */
-    function onlyOrderOwner(address investor) internal view {
-        if (investor == address(0x0) || msg.sender != investor) {
-            revert Unauthorized();
-        }
-    }
-
-    function revertOrderNotFound() internal pure {
-        revert OrderNotFound();
+    function revertOrderNotFound(bytes32 id) internal pure {
+        revert OrderNotFound(id);
     }
 
     function revertInternalError() internal pure {
@@ -101,15 +100,20 @@ abstract contract Auth {
     }
 
     function minimumAmount(uint256 amount, address tokenAddress) internal view {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
 
-        if (amount < 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals) {
-            revert InsufficientAmount(amount, 10 * 10 ** lib.listAllowedTokens[tokenAddress].decimals);
+        if (amount < 10 * 10 ** lib.allowedTokens[tokenAddress].decimals) {
+            revert InsufficientAmount(
+                amount,
+                10 * 10 ** lib.allowedTokens[tokenAddress].decimals
+            );
         }
     }
 
     function onlyController() internal view {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
         if (lib.controller != msg.sender) {
             revert Unauthorized();
         }
@@ -122,7 +126,10 @@ abstract contract Auth {
         }
     }
 
-    function validateTokensDecimalsLength(uint256 tokensLength, uint256 decimalsLength) internal pure {
+    function validateTokensDecimalsLength(
+        uint256 tokensLength,
+        uint256 decimalsLength
+    ) internal pure {
         if (tokensLength != decimalsLength) {
             revert TokensDecimalsLengthError(tokensLength, decimalsLength);
         }
@@ -130,28 +137,52 @@ abstract contract Auth {
 
     function initController(address controller) internal {
         zeroAddr(controller);
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
         lib.controller = controller;
     }
 
-    function onlyFutures(address investor, address future) internal view {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
-
-        zeroAddr(lib.contracts[future].investor);
-        zeroAddr(msg.sender);
-        zeroAddr(investor);
-        zeroAddr(future);
+    function onlyNotBurnedFutures(address future) internal view {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
 
         if (lib.contracts[future].burn == true) {
             revert BurnContract(future);
         }
+    }
+
+    function onlyFutures(address future) internal view {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
+
+        if (lib.contracts[future].investor == address(0x0)) {
+            revert FutureNotExists(future);
+        }
+    }
+
+    function onlyOwnerOfFutures(
+        address investor,
+        address future
+    ) internal view {
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
+
         if (lib.contracts[future].investor != investor) {
-            revert InvalidOwnership(future, investor);
+            revert InvalidFutureOwnership(future, investor);
+        }
+    }
+
+    function onlyOwnerOfOrder(bytes32 id) internal view {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
+
+        if (lib.orderByInvestorById[msg.sender][id].investor != msg.sender) {
+            revert InvalidOrderOwnership(msg.sender, id);
         }
     }
 
     function validatePayment(address tokenAddr, uint256 amount) internal {
-        CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
+        CommodityStorageLib.Storage storage lib = CommodityStorageLib
+            .getCommodityStorage();
         validateAllowance(tokenAddr, msg.sender, address(this), amount);
         ERC20 token = ERC20(tokenAddr);
 
@@ -160,7 +191,12 @@ abstract contract Auth {
         }
     }
 
-    function validatePayment(address tokenAddr, address from, address to, uint256 amount) internal {
+    function validatePayment(
+        address tokenAddr,
+        address from,
+        address to,
+        uint256 amount
+    ) internal {
         validateAllowance(tokenAddr, from, address(this), amount);
         ERC20 token = ERC20(tokenAddr);
 
@@ -169,7 +205,12 @@ abstract contract Auth {
         }
     }
 
-    function validateAllowance(address tokenAddr, address investor, address commodity, uint256 amount) internal view {
+    function validateAllowance(
+        address tokenAddr,
+        address investor,
+        address commodity,
+        uint256 amount
+    ) internal view {
         ERC20 token = ERC20(tokenAddr);
         uint256 allowance = token.allowance(investor, commodity);
 

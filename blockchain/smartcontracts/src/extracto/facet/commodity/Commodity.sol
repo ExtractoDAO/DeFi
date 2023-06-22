@@ -107,8 +107,11 @@ contract Commodity is Math {
      * @param investor The address of the owner of the futures contract who will receive the tokens. The tokens will be received by the investor, not by the contract.
      */
     function mintToken(uint256 commodityAmount, address investor) external nonReentrant {
+        zeroAddr(investor);
+        zeroAddr(msg.sender);
         onlyActive();
-        onlyFutures(investor, msg.sender);
+        onlyFutures(msg.sender);
+        onlyNotBurnedFutures(msg.sender);
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         lib.contracts[msg.sender].burn = true;
