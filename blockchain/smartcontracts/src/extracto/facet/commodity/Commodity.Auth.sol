@@ -55,8 +55,8 @@ abstract contract Auth {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         bool condition = true;
-        for (uint256 i = 0; i < lib.allowedTokens.length; i++) {
-            if (lib.allowedTokens[i] == token) {
+        for (uint256 i = 0; i < lib.allowedTokensList.length; i++) {
+            if (lib.allowedTokensList[i] == token) {
                 condition = false;
             }
         }

@@ -46,7 +46,7 @@ contract Commodity is Math {
 
         for (uint256 i = 0; i < tokens.length; i++) {
             lib.listAllowedTokens[tokens[i]] = CommodityStorageLib.TokenAndDecimals(i, decimals[i], true);
-            lib.allowedTokens.push(tokens[i]);
+            lib.allowedTokensList.push(tokens[i]);
         }
 
         result = true;

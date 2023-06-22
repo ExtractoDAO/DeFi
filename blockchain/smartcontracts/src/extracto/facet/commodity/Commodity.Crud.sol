@@ -72,12 +72,12 @@ abstract contract Crud is Auth {
 
     function getAllowedTokens() public view returns (address[] memory tokens) {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
-        tokens = lib.allowedTokens;
+        tokens = lib.allowedTokensList;
     }
 
     function getAllowedTokensLength() public view returns (uint256 length) {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
-        length = lib.allowedTokens.length;
+        length = lib.allowedTokensList.length;
     }
 
     function getDao() public view returns (address dao) {
@@ -130,7 +130,7 @@ abstract contract Crud is Auth {
         CommodityStorageLib.TokenAndDecimals memory token =
             CommodityStorageLib.TokenAndDecimals(getAllowedTokensLength(), decimal, true);
         lib.listAllowedTokens[newToken] = token;
-        lib.allowedTokens.push(newToken);
+        lib.allowedTokensList.push(newToken);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ abstract contract Crud is Auth {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         lib.listAllowedTokens[noauth].active = false;
-        lib.allowedTokens[lib.listAllowedTokens[noauth].index] = lib.allowedTokens[lib.allowedTokens.length - 1];
-        lib.allowedTokens.pop();
+        lib.allowedTokensList[lib.listAllowedTokens[noauth].index] = lib.allowedTokensList[lib.allowedTokensList.length - 1];
+        lib.allowedTokensList.pop();
     }
 }
