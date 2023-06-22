@@ -15,7 +15,7 @@ contract BaseSetup is Utils {
     uint256 locktime = 10;
     uint256 tokenSupply = 1_000_000_000_000 * 1e18;
     uint256 initialCapital = 100_000 * 1e18;
-    uint256 kgSupply = 1_000_000 * 1e18;
+    uint256 commoditySupply = 1_000_000 * 1e18;
     uint256 kgPrice = 1_91 * 1e16;
     bool status = true;
     address controller;
@@ -106,7 +106,7 @@ contract BaseSetup is Utils {
             tokens,
             decimals,
             locktime,
-            kgSupply,
+            commoditySupply,
             kgPrice,
             kgPrice,
             status,
