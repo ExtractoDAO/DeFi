@@ -7,9 +7,9 @@ import {Auth} from "../commodity/Commodity.Auth.sol";
 abstract contract Utils is Auth {
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order) internal returns (bool value, uint256 index) {
+    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool value, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        DexStorageLib.OrderType againsOrder = order.typed;
+
 
         for (index = 0; index < lib.orderBook.length; index++) {
             DexStorageLib.Order memory orderProposal = lib.orderBook[index];
