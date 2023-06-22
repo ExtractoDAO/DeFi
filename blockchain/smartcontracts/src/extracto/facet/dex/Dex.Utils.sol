@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {Auth} from "../commodity/Commodity.Auth.sol";
@@ -7,65 +7,19 @@ import {Auth} from "../commodity/Commodity.Auth.sol";
 abstract contract Utils is Auth {
     constructor() Auth() {}
 
-    /**
-     * @notice Finds an order in the order book that matches the specified order.
-     * @dev 1. This function iterates through the order book to find an order that matches the specified order.
-     * @param order The order to search for in the order book.
-     * @return result True if the order is found, false otherwise.
-     * @return index The index of the order in the order book, or 0 if the order is not found.
-     */
-    function findOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
-        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
+    function matchOrder(DexStorageLib.Order memory order) internal returns (bool value, uint256 index) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
+        DexStorageLib.OrderType againsOrder = order.typed;
 
         for (index = 0; index < lib.orderBook.length; index++) {
-            //
-            if (lib.orderBook[index].typed != order.typed) {
+            DexStorageLib.Order memory orderProposal = lib.orderBook[index];
+
+            if (orderProposal.typed == order.typed) {
                 continue;
             } else {
-                DexStorageLib.Order storage _order = lib.orderBook[index];
-                //
-                result = true;
-                result = result && _order.commodityAmount == order.commodityAmount;
-                result = result && _order.tokenAddress == order.tokenAddress;
-                result = result && _order.investor == order.investor;
-                result = result && _order.amount == order.amount;
-                result = result && _order.future == order.future;
-                //
-                if (result) {
-                    return (result, index);
-                } else {
-                    continue;
-                }
-            }
-        }
-        //
-        index = 0;
-    }
-
-    /**
-     * @notice Finds an order in the order book with the specified commodity amount, amount, and order type.
-     * @param commodityAmount The commodity amount of the order to find.
-     * @param amount The amount of the order to find.
-     * @param typed The order type of the order to find.
-     * @return value Whether an order was found or not.
-     * @return index The index of the found order in the order book.
-     */
-    function findOrder(uint256 commodityAmount, uint256 amount, DexStorageLib.OrderType typed)
-        internal
-        view
-        returns (bool value, uint256 index)
-    {
-        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
-
-        for (index = 0; index < lib.orderBook.length; index++) {
-            //
-            if (lib.orderBook[index].typed != typed) {
-                continue;
-            } else {
-                DexStorageLib.Order storage order = lib.orderBook[index];
-                value = order.commodityAmount == commodityAmount && order.amount == amount;
-
-                if (value) {
+                bool matchAmount = order.amount == orderProposal.amount;
+                bool matchCommodityAmount = order.commodityAmount == orderProposal.commodityAmount;
+                if (matchAmount && matchCommodityAmount) {
                     return (value, index);
                 } else {
                     continue;
@@ -75,8 +29,8 @@ abstract contract Utils is Auth {
         index = 0;
     }
 
-    function filterOrderBy(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {
-        DexStorageLib.Storage storage lib = DexStorageLib.getDEXStorage();
+    function filterOrdersByType(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
         uint256 count;
         for (uint256 j = 0; j < lib.orderBook.length; j++) {
@@ -98,5 +52,20 @@ abstract contract Utils is Auth {
         }
 
         return orders;
+    }
+
+    function mountOrder(
+        uint256 commodityAmount,
+        uint256 amount,
+        address tokenAddress,
+        address future,
+        address investor,
+        DexStorageLib.OrderType typed,
+        uint256 randNonce
+    ) internal pure returns (DexStorageLib.Order memory buy) {
+        bytes32 id =
+            keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
+
+        buy = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
     }
 }

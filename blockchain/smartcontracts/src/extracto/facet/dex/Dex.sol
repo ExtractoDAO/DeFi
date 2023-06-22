@@ -28,7 +28,7 @@ contract Dex is Crud {
             commodityAmount, amount, address(0x0), future, msg.sender, DexStorageLib.OrderType.Sell, randNonce
         );
 
-        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DexStorageLib.OrderType.Buy);
+        (bool _match, uint256 index) = matchOrder(sell);
 
         if (_match) {
             swap(lib.orderBook[index], sell);
@@ -48,7 +48,7 @@ contract Dex is Crud {
         );
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        (bool _match, uint256 index) = findOrder(commodityAmount, amount, DexStorageLib.OrderType.Sell);
+        (bool _match, uint256 index) = matchOrder(buy);
 
         if (_match) {
             swap(buy, lib.orderBook[index]);

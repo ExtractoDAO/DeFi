@@ -8,10 +8,10 @@ abstract contract Crud is Utils {
     constructor() Utils() {}
 
     function sellOrders() external view returns (DexStorageLib.Order[] memory) {
-        return filterOrderBy(DexStorageLib.OrderType.Sell);
+        return filterOrdersByType(DexStorageLib.OrderType.Sell);
     }
 
     function buyOrders() external view returns (DexStorageLib.Order[] memory) {
-        return filterOrderBy(DexStorageLib.OrderType.Buy);
+        return filterOrdersByType(DexStorageLib.OrderType.Buy);
     }
 }
