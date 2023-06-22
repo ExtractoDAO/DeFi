@@ -38,7 +38,7 @@ contract Commodity is Math {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         lib.yieldFarming = yieldFarming;
-        lib.totalSupplyKg = kgSupply;
+        lib.totalCommoditySupply = kgSupply;
         lib.sellPrice = sellPrice;
         lib.buyPrice = buyPrice;
         lib.locktime = locktime;

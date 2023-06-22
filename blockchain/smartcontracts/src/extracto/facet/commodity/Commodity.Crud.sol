@@ -14,7 +14,7 @@ abstract contract Crud is Auth {
 
     function getTotalSupplyKG() public view returns (uint256 totalSupplyKg) {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
-        totalSupplyKg = lib.totalSupplyKg;
+        totalSupplyKg = lib.totalCommoditySupply;
     }
 
     function getYieldFarming() public view returns (uint256 yieldFarming) {

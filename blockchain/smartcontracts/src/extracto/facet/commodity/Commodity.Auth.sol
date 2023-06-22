@@ -68,8 +68,8 @@ abstract contract Auth {
     function onlyKgSupply(uint256 amount) internal view {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        if (lib.totalSupplyKg < amount) {
-            revert UnavailableKilos(lib.totalSupplyKg, amount, amount - lib.totalSupplyKg);
+        if (lib.totalCommoditySupply < amount) {
+            revert UnavailableKilos(lib.totalCommoditySupply, amount, amount - lib.totalCommoditySupply);
         }
     }
 
