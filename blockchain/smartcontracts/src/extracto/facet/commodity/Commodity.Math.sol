@@ -28,7 +28,7 @@ abstract contract Math is Crud {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         // getTotalSupplyKG - amount
-        lib.totalSupplyKg = unwrap(ud60x18(lib.totalSupplyKg).sub(ud60x18(amount)));
+        lib.totalCommoditySupply = unwrap(ud60x18(lib.totalCommoditySupply).sub(ud60x18(amount)));
     }
 
     function calculateSellAmountYielded(uint256 kg) internal view returns (uint256) {
