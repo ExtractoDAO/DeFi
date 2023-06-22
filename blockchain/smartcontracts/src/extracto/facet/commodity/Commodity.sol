@@ -20,7 +20,7 @@ contract Commodity is Math {
         address[] memory tokens,
         uint8[] memory decimals,
         uint256 locktime,
-        uint256 kgSupply,
+        uint256 commoditySupply,
         uint256 buyPrice,
         uint256 sellPrice,
         uint8 yieldFarming,
@@ -38,7 +38,7 @@ contract Commodity is Math {
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
         lib.yieldFarming = yieldFarming;
-        lib.totalCommoditySupply = kgSupply;
+        lib.totalCommoditySupply = commoditySupply;
         lib.sellPrice = sellPrice;
         lib.buyPrice = buyPrice;
         lib.locktime = locktime;
