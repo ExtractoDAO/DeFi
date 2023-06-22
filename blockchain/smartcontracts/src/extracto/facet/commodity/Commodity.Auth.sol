@@ -74,11 +74,7 @@ abstract contract Auth {
             .getCommodityStorage();
 
         if (lib.totalCommoditySupply < amount) {
-            revert UnavailableKilos(
-                lib.totalCommoditySupply,
-                amount,
-                amount - lib.totalCommoditySupply
-            );
+            revert UnavailableKilos(lib.totalCommoditySupply, amount, amount - lib.totalCommoditySupply);
         }
     }
 
@@ -104,10 +100,7 @@ abstract contract Auth {
             .getCommodityStorage();
 
         if (amount < 10 * 10 ** lib.allowedTokens[tokenAddress].decimals) {
-            revert InsufficientAmount(
-                amount,
-                10 * 10 ** lib.allowedTokens[tokenAddress].decimals
-            );
+            revert InsufficientAmount(amount, 10 * 10 ** lib.allowedTokens[tokenAddress].decimals);
         }
     }
 
