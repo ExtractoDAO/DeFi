@@ -39,7 +39,7 @@ contract Dex is Crud {
         }
     }
 
-   function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce) external {
+    function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce) external {
         onlyStableCoins(tokenAddress);
         validateAllowance(tokenAddress, msg.sender, address(this), amount);
 
@@ -93,7 +93,6 @@ contract Dex is Crud {
             }
         }
     }
-
 
     function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
