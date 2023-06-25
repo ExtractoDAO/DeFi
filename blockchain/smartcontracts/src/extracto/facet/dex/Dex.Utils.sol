@@ -7,7 +7,7 @@ import {Auth} from "../commodity/Commodity.Auth.sol";
 abstract contract Utils is Auth {
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool value, uint256 index) {
+    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
         for (index = 0; index < lib.orderBook.length; index++) {
@@ -16,10 +16,11 @@ abstract contract Utils is Auth {
             if (orderProposal.typed == order.typed) {
                 continue;
             } else {
-                bool matchAmount = order.amount == orderProposal.amount;
-                bool matchCommodityAmount = order.commodityAmount == orderProposal.commodityAmount;
-                if (matchAmount && matchCommodityAmount) {
-                    return (value, index);
+                result = true;
+                result = result && order.amount == orderProposal.amount;
+                result = result && order.commodityAmount == orderProposal.commodityAmount;
+                if (result) {
+                    return (result, index);
                 } else {
                     continue;
                 }
