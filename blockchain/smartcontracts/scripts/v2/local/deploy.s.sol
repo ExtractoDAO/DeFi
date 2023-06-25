@@ -1,19 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "../../lib/forge-std/src/Script.sol";
-import {Facet, Action} from "../../src/extracto/diamond/interfaces/Types.sol";
-import {Commodity} from "../../src/extracto/facet/commodity/Commodity.sol";
-import {Diamond} from "../../src/extracto/diamond/Diamond.sol";
-import {Dex} from "../../src/extracto/facet/dex/Dex.sol";
-import {MockToken} from "../../test/MockToken.t.sol";
-import {COW} from "../../src/token/COW.sol";
+import "../../../lib/forge-std/src/Script.sol";
+import {Facet, Action} from "../../../src/extracto/diamond/interfaces/Types.sol";
+import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
+import {Diamond} from "../../../src/extracto/diamond/Diamond.sol";
+import {Dex} from "../../../src/extracto/facet/dex/Dex.sol";
+import {MockToken} from "../../../test/MockToken.t.sol";
+import {COW} from "../../../src/token/COW.sol";
 
 abstract contract Data is Script {
-    bytes32 controllerPrivateKey =
-        hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    bytes32 daoPrivateKey =
-        hex"59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
+    bytes32 controllerPrivateKey = hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+    bytes32 daoPrivateKey = hex"59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
     address dao = vm.addr(bytes2uint(daoPrivateKey));
     uint256 commodityBuyPrice = 2_00 * 1e16;
     uint256 commoditySellPrice = 2_00 * 1e16;
@@ -34,8 +32,8 @@ abstract contract Data is Script {
     MockToken usdc;
     MockToken usdt;
 
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     constructor() {}
@@ -44,11 +42,7 @@ abstract contract Data is Script {
 abstract contract Helper is Data {
     constructor() Data() {}
 
-    function commodityFacetSelectors()
-        public
-        view
-        returns (bytes4[] memory selectors)
-    {
+    function commodityFacetSelectors() public view returns (bytes4[] memory selectors) {
         selectors = new bytes4[](27);
 
         selectors[0] = commodity.getTotalSupplyKG.selector;
@@ -80,11 +74,7 @@ abstract contract Helper is Data {
         selectors[26] = commodity.mintToken.selector;
     }
 
-    function dexFacetSelectors()
-        public
-        view
-        returns (bytes4[] memory selectors)
-    {
+    function dexFacetSelectors() public view returns (bytes4[] memory selectors) {
         selectors = new bytes4[](5);
 
         selectors[0] = dex.sellOrders.selector;
@@ -115,19 +105,12 @@ contract Local is Helper {
         cow = new COW();
         cow.setDao(address(diamond));
 
-        Facet memory commodityFunctions = Facet({
-            facetAddress: address(commodity),
-            action: Action.Save,
-            fnSelectors: commodityFacetSelectors()
-        });
+        Facet memory commodityFunctions =
+            Facet({facetAddress: address(commodity), action: Action.Save, fnSelectors: commodityFacetSelectors()});
 
         bytes memory init = abi.encodeWithSelector(
             bytes4(
-                keccak256(
-                    bytes(
-                        "init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"
-                    )
-                )
+                keccak256(bytes("init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"))
             ),
             tokens,
             decimals,
@@ -143,11 +126,8 @@ contract Local is Helper {
         commodityCut.push(commodityFunctions);
         diamond.diamondCut(commodityCut, address(commodity), init);
 
-        Facet memory dexFunctions = Facet({
-            facetAddress: address(dex),
-            action: Action.Save,
-            fnSelectors: dexFacetSelectors()
-        });
+        Facet memory dexFunctions =
+            Facet({facetAddress: address(dex), action: Action.Save, fnSelectors: dexFacetSelectors()});
         dexCut.push(dexFunctions);
         diamond.diamondCut(dexCut, address(0x0), new bytes(0));
 
