@@ -23,24 +23,24 @@ contract FutureWithdrawTest is BaseSetup {
 
     function test_simple_withdraw() public {
         uint256 amount = 499_23 * 1e16; // 499.23 USDC
-        assertEq(cow.balanceOf(investor), 0);
+        assertEq(cow.balanceOf(investor), 0, "Initial investor balance should be 0");
 
         vm.prank(investor);
         usdc.approve(address(diamond), amount);
         (address _future,) = h.createFuture(investor, address(usdc), amount);
 
         future = Future(_future);
-        assertEq(future.getKg(), 261_37_696335078534031400);
+        assertEq(future.getKg(), 261_37_696335078534031400, "Incorrect value returned by getKg function");
 
         vm.roll(locktime + 1);
 
         vm.prank(investor);
         future.withdraw();
 
-        assertEq(cow.balanceOf(investor), 4992_29_9999999999999997);
-        assertEq(future.investor(), investor);
-        assertEq(future.dao(), address(diamond));
-        assertEq(future.burn(), true);
+        assertEq(cow.balanceOf(investor), 4992_29_9999999999999997, "Incorrect investor balance after withdrawal");
+        assertEq(future.investor(), investor, "Investor address mismatch");
+        assertEq(future.dao(), address(diamond), "Incorrect DAO address");
+        assertEq(future.burn(), true, "Burn flag not set correctly");
     }
 
     // Given: that the investor buy 297.12 USDC of Kg of meat
