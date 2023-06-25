@@ -5,10 +5,9 @@ import {Commodity} from "../src/extracto/commodity/Commodity.sol";
 import {COW} from "../src/token/ERC20.sol";
 import "../lib/forge-std/src/Script.sol";
 
-
 contract Mumbai is Script {
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     bytes32 privateKey = vm.envBytes32("MUMBAI_PRIVATE_KEY");
@@ -38,9 +37,9 @@ contract Mumbai is Script {
         tokens.push(0x28e38b65cf6B91645a56057C32F400833377844b); // xUSD
         decimals.push(6);
 
-
         cow = new COW();
-        Commodity extracto = new Commodity(tokens, decimals, locktime, supply, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
+        Commodity extracto =
+            new Commodity(tokens, decimals, locktime, supply, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
         cow.setDao(address(extracto));
         extracto.updateYieldFarming(yield);
 

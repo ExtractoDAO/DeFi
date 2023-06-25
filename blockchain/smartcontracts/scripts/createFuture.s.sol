@@ -11,8 +11,8 @@ contract Run is Script {
     Commodity ext = Commodity(vm.envAddress("Commodity"));
     MockToken usdc = MockToken(vm.envAddress("USDC"));
 
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     function run() external {

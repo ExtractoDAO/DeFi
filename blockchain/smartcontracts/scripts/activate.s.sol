@@ -9,8 +9,8 @@ contract Run is Script {
     Commodity ext = Commodity(0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512);
     address investor = vm.addr(bytes2uint(privateKey));
 
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     function run() external {

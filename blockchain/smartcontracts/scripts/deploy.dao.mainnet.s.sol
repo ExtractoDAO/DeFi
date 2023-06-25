@@ -5,10 +5,9 @@ import {Commodity} from "../src/extracto/commodity/Commodity.sol";
 import {COW} from "../src/token/ERC20.sol";
 import "../lib/forge-std/src/Script.sol";
 
-
 contract Polygon is Script {
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     bytes32 privateKey = vm.envBytes32("POLYGON_PRIVATE_KEY");
@@ -25,7 +24,6 @@ contract Polygon is Script {
 
     Commodity extracto;
     COW cow;
-
 
     function run() external {
         vm.startBroadcast(bytes2uint(privateKey));
@@ -44,7 +42,8 @@ contract Polygon is Script {
         cow = new COW();
 
         // create Commodity
-        extracto = new Commodity(tokens, decimals, locktime, supply, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
+        extracto =
+            new Commodity(tokens, decimals, locktime, supply, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
 
         // set Commodity on COW token
         cow.setDao(address(extracto));
@@ -68,8 +67,6 @@ contract Polygon is Script {
         extracto.addAddressWhitelist(0x719c03Dec577325fB499a06BA7eBeaD6Cf2e4cA4);
         // edu = 0x7CA3cd22B34F34f2A895866F7f8e64Cc7Ec5eb77
         extracto.addAddressWhitelist(0x7CA3cd22B34F34f2A895866F7f8e64Cc7Ec5eb77);
-
-
 
         console.log("COW token: ", address(cow));
         console.log("Commodity      : ", address(extracto));

@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-
 import {Commodity} from "../src/extracto/facet/commodity/Commodity.sol";
 import {COW} from "../src/token/COW.sol";
 import {MockToken} from "../test/MockToken.t.sol";
 import "../lib/forge-std/src/Script.sol";
 
 contract DeployE2E is Script {
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     // bytes32 privateKey = hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
@@ -50,7 +49,8 @@ contract DeployE2E is Script {
 
         cow = new COW();
 
-        Commodity extracto = new Commodity(tokens, decimals, locktime, supply * 1e18, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
+        Commodity extracto =
+        new Commodity(tokens, decimals, locktime, supply * 1e18, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
         cow.setDao(address(extracto));
         extracto.updateYieldFarming(yield);
 
