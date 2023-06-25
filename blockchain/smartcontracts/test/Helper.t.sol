@@ -251,16 +251,8 @@ contract Helper is Test {
         }
     }
 
-    function cancelOrder(address investor, DexStorageLib.Order memory sell) external {
-        payload = abi.encodeWithSignature(
-            "cancelOrder((uint256,uint256,address,address,address,uint8))",
-            sell.commodityAmount,
-            sell.amount,
-            sell.tokenAddress,
-            sell.future,
-            sell.investor,
-            uint8(sell.typed)
-        );
+    function cancelOrder(address investor, bytes32 id) external {
+        payload = abi.encodeWithSignature("cancelOrder(bytes32)", id);
 
         vm.prank(investor);
         (bool ok, bytes memory data) = address(diamond).call(payload);
