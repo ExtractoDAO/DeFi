@@ -17,6 +17,7 @@ contract BaseSetup is Utils {
     uint256 initialCapital = 100_000 * 1e18;
     uint256 commoditySupply = 1_000_000 * 1e18;
     uint256 kgPrice = 1_91 * 1e16;
+    uint8 yieldFarming = 50;
     bool status = true;
     address controller;
     address investor;
@@ -102,13 +103,16 @@ contract BaseSetup is Utils {
             Facet({facetAddress: address(commodityFacet), action: Action.Save, fnSelectors: selectors});
 
         bytes memory init = abi.encodeWithSelector(
-            bytes4(keccak256(bytes("init(address[],uint8[],uint256,uint256,uint256,uint256,bool,address,address)"))),
+            bytes4(
+                keccak256(bytes("init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"))
+            ),
             tokens,
             decimals,
             locktime,
             commoditySupply,
             kgPrice,
             kgPrice,
+            yieldFarming,
             status,
             controller,
             address(cow)
