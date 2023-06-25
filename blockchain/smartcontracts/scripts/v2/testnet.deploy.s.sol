@@ -31,8 +31,8 @@ abstract contract Data is Script {
     MockToken usdc;
     MockToken usdt;
 
-    function bytes2uint(bytes32 b) public pure returns (uint result) {
-        result = uint(b);
+    function bytes2uint(bytes32 b) public pure returns (uint256 result) {
+        result = uint256(b);
     }
 
     constructor() {}
@@ -41,11 +41,7 @@ abstract contract Data is Script {
 abstract contract Helper is Data {
     constructor() Data() {}
 
-    function commodityFacetSelectors()
-        public
-        view
-        returns (bytes4[] memory selectors)
-    {
+    function commodityFacetSelectors() public view returns (bytes4[] memory selectors) {
         selectors = new bytes4[](27);
 
         selectors[0] = commodity.getTotalSupplyKG.selector;
@@ -77,11 +73,7 @@ abstract contract Helper is Data {
         selectors[26] = commodity.mintToken.selector;
     }
 
-    function dexFacetSelectors()
-        public
-        view
-        returns (bytes4[] memory selectors)
-    {
+    function dexFacetSelectors() public view returns (bytes4[] memory selectors) {
         selectors = new bytes4[](5);
 
         selectors[0] = dex.sellOrders.selector;
@@ -108,19 +100,12 @@ contract Testnet is Helper {
         cow = new COW();
         cow.setDao(address(diamond));
 
-        Facet memory commodityFunctions = Facet({
-            facetAddress: address(commodity),
-            action: Action.Save,
-            fnSelectors: commodityFacetSelectors()
-        });
+        Facet memory commodityFunctions =
+            Facet({facetAddress: address(commodity), action: Action.Save, fnSelectors: commodityFacetSelectors()});
 
         bytes memory init = abi.encodeWithSelector(
             bytes4(
-                keccak256(
-                    bytes(
-                        "init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"
-                    )
-                )
+                keccak256(bytes("init(address[],uint8[],uint256,uint256,uint256,uint256,uint8,bool,address,address)"))
             ),
             tokens,
             decimals,
@@ -136,11 +121,8 @@ contract Testnet is Helper {
         commodityCut.push(commodityFunctions);
         diamond.diamondCut(commodityCut, address(commodity), init);
 
-        Facet memory dexFunctions = Facet({
-            facetAddress: address(dex),
-            action: Action.Save,
-            fnSelectors: dexFacetSelectors()
-        });
+        Facet memory dexFunctions =
+            Facet({facetAddress: address(dex), action: Action.Save, fnSelectors: dexFacetSelectors()});
         dexCut.push(dexFunctions);
         diamond.diamondCut(dexCut, address(0x0), new bytes(0));
 
