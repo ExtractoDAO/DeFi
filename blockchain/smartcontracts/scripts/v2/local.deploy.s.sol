@@ -2,20 +2,18 @@
 pragma solidity ^0.8.18;
 
 import "../../lib/forge-std/src/Script.sol";
-import {Diamond} from "../../src/extracto/diamond/Diamond.sol";
 import {Facet, Action} from "../../src/extracto/diamond/interfaces/Types.sol";
 import {Commodity} from "../../src/extracto/facet/commodity/Commodity.sol";
+import {Diamond} from "../../src/extracto/diamond/Diamond.sol";
 import {Dex} from "../../src/extracto/facet/dex/Dex.sol";
-import {COW} from "../../src/token/COW.sol";
 import {MockToken} from "../../test/MockToken.t.sol";
+import {COW} from "../../src/token/COW.sol";
 
 abstract contract Data is Script {
-    // bytes32 privateKey = vm.envBytes32("LOCAL_PRIVATE_KEY");
     bytes32 controllerPrivateKey =
         hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
     bytes32 daoPrivateKey =
         hex"59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
-    address controller = vm.addr(bytes2uint(controllerPrivateKey));
     address dao = vm.addr(bytes2uint(daoPrivateKey));
     uint256 commodityBuyPrice = 2_00 * 1e16;
     uint256 commoditySellPrice = 2_00 * 1e16;
