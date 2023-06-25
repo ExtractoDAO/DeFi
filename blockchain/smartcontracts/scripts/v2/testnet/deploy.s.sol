@@ -11,7 +11,8 @@ import {COW} from "../../../src/token/COW.sol";
 
 abstract contract Data is Script {
     address controller = vm.envUint("MUMBAI_PRIVATE_KEY");
-    address dao = address(0xa9E5C68e1145ED5797a9FEfd6C594E9e3f37C1Ea);
+    // Robson's address
+    address dao = address(0x78CAA01F86c42348e847BCEd7e64464B073F3FFf);
     uint256 commodityBuyPrice = 2_00 * 1e16;
     uint256 commoditySellPrice = 2_00 * 1e16;
     uint256 commoditySupply = 1_000_000 * 1e18;
