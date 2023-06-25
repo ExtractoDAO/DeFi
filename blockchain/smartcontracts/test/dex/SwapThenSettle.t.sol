@@ -18,7 +18,7 @@ contract SwapThenSettle is DexBaseSetup {
     - Then: The contract must change ownership from investor1 to investor2
     - And: investor1 should receive 500.0 USDC
     */
-    function test_withdraw_after_swap() public {
+    function test_withdraw_after_swap(uint256 randomNonce) public {
         address investor1 = address(0x1);
         address investor2 = address(0x2);
 
@@ -46,7 +46,7 @@ contract SwapThenSettle is DexBaseSetup {
         usdc.approve(address(diamond), amount * 2);
         vm.prank(investor2);
         // buy order of $500USD
-        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2);
+        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2, randomNonce);
 
         vm.roll(locktime);
         vm.prank(investor2);

@@ -18,7 +18,7 @@ contract SwapThenYielding is DexBaseSetup {
     - Then: The contract must change ownership from investor1 to investor2
     - And: investor1 should receive 500.0 USDC
     */
-    function test_yielding_after_swap() public {
+    function test_yielding_after_swap(uint256 randomNonce) public {
         address investor1 = address(0x1);
         address investor2 = address(0x2);
 
@@ -40,7 +40,7 @@ contract SwapThenYielding is DexBaseSetup {
 
         vm.prank(investor2);
         usdc.approve(address(diamond), amount * 2);
-        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2); // buy order of 189.21kg by $722.796USD
+        h.buyOrder(investor2, address(usdc), commodityAmount, amount * 2, randomNonce); // buy order of 189.21kg by $722.796USD
 
         h.updateYieldFarming(deployer, 17); // update yield farming to 17%
 

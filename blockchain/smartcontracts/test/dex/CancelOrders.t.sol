@@ -57,13 +57,13 @@ contract CancelOrders is DexBaseSetup {
         - When: see the order book
         - Then: should have 0 ask orders
     */
-    function test_canceled_buy_order_book_length() public {
+    function test_canceled_buy_order_book_length(uint256 randomNonce) public {
         uint256 buyCommodityAmount = 10_99 * 10e16; // 10.99kg
         uint256 buyAmount = 11 * 10e18;
 
         // Put Buy Order
         vm.prank(investor);
-        h.buyOrder(investor, address(usdc), buyCommodityAmount, buyAmount);
+        h.buyOrder(investor, address(usdc), buyCommodityAmount, buyAmount, randomNonce);
 
         // 1 Validation
         assertEq(h.buyOrders().length, 1);

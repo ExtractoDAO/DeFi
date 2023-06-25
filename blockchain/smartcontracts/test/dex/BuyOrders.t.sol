@@ -15,7 +15,7 @@ contract BuyOrders is DexBaseSetup {
         - When: see the order book
         - Then: should have 1 bid order
     */
-    function test_length_of_bid_book() public {
+    function test_length_of_bid_book(uint256 randomNonce) public {
         vm.assume(investor != address(0x0));
         uint256 amount = 11 * 10e18;
 
@@ -26,7 +26,8 @@ contract BuyOrders is DexBaseSetup {
         usdc.transfer(investor, amount);
 
         vm.prank(investor);
-        h.buyOrder(investor, address(usdc), commodityAmount, amount);
+        usdc.approve(address(diamond), amount);
+        h.buyOrder(investor, address(usdc), commodityAmount, amount, randomNonce);
 
         DexStorageLib.Order[] memory bids = h.buyOrders();
         assertEq(bids.length, 1);

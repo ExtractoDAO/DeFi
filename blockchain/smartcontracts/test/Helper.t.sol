@@ -206,8 +206,12 @@ contract Helper is Test {
         }
     }
 
-    function buyOrder(address investor, address token, uint256 commodityAmount, uint256 amount) external {
-        payload = abi.encodeWithSignature("buyOrder(address,uint256,uint256)", token, commodityAmount, amount);
+    function buyOrder(address investor, address token, uint256 commodityAmount, uint256 amount, uint256 randomNonce)
+        external
+    {
+        payload = abi.encodeWithSignature(
+            "buyOrder(address,uint256,uint256,uint256)", token, commodityAmount, amount, randomNonce
+        );
 
         vm.prank(investor);
         (bool ok, bytes memory data) = address(diamond).call(payload);
