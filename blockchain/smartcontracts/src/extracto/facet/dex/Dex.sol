@@ -11,21 +11,21 @@ import {Crud} from "./Dex.Crud.sol";
 contract Dex is Crud {
     constructor() Crud() {}
 
-    function sellOrder(address future, uint256 amount) external {
-        zeroAddr(future);
+    function sellOrder(address investor, uint256 amount) external {
+        zeroAddr(investor);
         zeroAddr(msg.sender);
-        onlyFutures(future);
-        onlyNotBurnedFutures(future);
-        onlyOwnerOfFutures(msg.sender, future);
+        onlyFutures(msg.sender);
+        onlyNotBurnedFutures(msg.sender);
+        onlyOwnerOfFutures(investor, msg.sender);
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
-        uint256 rawCommodityAmount = libCommodity.contracts[future].commodityAmount;
+        uint256 rawCommodityAmount = libCommodity.contracts[msg.sender].commodityAmount;
 
         uint256 commodityAmount = unwrap(floor(ud60x18(rawCommodityAmount)));
         uint256 randNonce = rawCommodityAmount - commodityAmount;
         DexStorageLib.Order memory sell = mountOrder(
-            commodityAmount, amount, address(0x0), future, msg.sender, DexStorageLib.OrderType.Sell, randNonce
+            commodityAmount, amount, address(0x0), msg.sender, investor, DexStorageLib.OrderType.Sell, randNonce
         );
 
         (bool _match, uint256 index) = matchOrder(sell);
