@@ -10,7 +10,8 @@ import {MockToken} from "../../../test/MockToken.t.sol";
 import {COW} from "../../../src/token/COW.sol";
 
 abstract contract Data is Script {
-    address controller = vm.envUint("MUMBAI_PRIVATE_KEY");
+    bytes32 privateKey = vm.envBytes32("MUMBAI_PRIVATE_KEY");
+    address controller = vm.addr(bytes2uint(privateKey));
     // Robson's address
     address dao = address(0x78CAA01F86c42348e847BCEd7e64464B073F3FFf);
     uint256 commodityBuyPrice = 2_00 * 1e16;
