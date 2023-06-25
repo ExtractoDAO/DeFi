@@ -30,9 +30,8 @@ contract Future is FBase {
     function sell(uint256 amount) external {
         onlyInvestor();
 
-        (bool ok, bytes memory data) = address(extracto).call(
-            abi.encodeWithSignature("sellOrder(address,uint256,uint256)", investor, getKg, amount)
-        );
+        bytes memory payload = abi.encodeWithSignature("sellOrder(address,uint256)", investor, amount);
+        (bool ok, bytes memory data) = address(extracto).call(payload);
         if (!ok) {
             assembly {
                 revert(add(data, 32), mload(data))
