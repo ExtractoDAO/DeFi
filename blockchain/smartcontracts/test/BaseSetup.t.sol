@@ -17,7 +17,7 @@ contract BaseSetup is Utils {
     uint256 initialCapital = 100_000 * 1e18;
     uint256 commoditySupply = 1_000_000 * 1e18;
     uint256 kgPrice = 1_91 * 1e16;
-    uint8 yieldFarming = 50;
+    uint8 yieldFarming = 0;
     bool status = true;
     address controller;
     address investor;
