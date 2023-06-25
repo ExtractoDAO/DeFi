@@ -4,14 +4,7 @@ pragma solidity ^0.8.18;
 import "../../../lib/forge-std/src/Script.sol";
 import {Facet, Action} from "../../../src/extracto/diamond/interfaces/Types.sol";
 import {Diamond} from "../../../src/extracto/diamond/Diamond.sol";
-
-contract NewContract {
-    constructor() {}
-
-    function sum() external {}
-
-    function init(address owner, uint256 x) external {}
-}
+import {NewContract} from "./NewContract.sol";
 
 abstract contract Data is Script {
     bytes32 controllerPrivateKey = hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
@@ -34,7 +27,7 @@ abstract contract Helper is Data {
     function getFacetSelectors() public view returns (bytes4[] memory selectors) {
         selectors = new bytes4[](1);
 
-        selectors[0] = newContract.sum.selector;
+        selectors[0] = newContract.getYieldFarming.selector;
     }
 
     function getInitPaylaod() public view returns (bytes memory init) {
@@ -50,17 +43,17 @@ abstract contract Helper is Data {
     }
 }
 
-contract Local is Helper {
+contract Upgrade is Helper {
     constructor() Helper() {}
 
     function run() external {
         vm.startBroadcast(bytes2uint(controllerPrivateKey));
 
         newContract = new NewContract();
-        newFacets = Facet({facetAddress: address(newContract), action: Action.Save, fnSelectors: getFacetSelectors()});
+        newFacets = Facet({facetAddress: address(newContract), action: Action.Modify, fnSelectors: getFacetSelectors()});
         cut.push(newFacets);
 
-        diamondCut(cut, address(newContract), getInitPaylaod());
+        diamondCut(cut, address(0x0), new bytes(0));
 
         console2.log("NewContract address:   ", address(newContract));
         bytes4[] memory arr = getFacetSelectors();
@@ -71,5 +64,4 @@ contract Local is Helper {
         console2.log("Diamond address:       ", address(diamond));
         vm.stopBroadcast();
     }
-
 }
