@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.18;
 
 import {CommodityStorageLib} from "../../../src/extracto/diamond/libraries/Lib.Commodity.sol";
 

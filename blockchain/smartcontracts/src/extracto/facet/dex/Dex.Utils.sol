@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.18;
 
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {Auth} from "../commodity/Commodity.Auth.sol";
