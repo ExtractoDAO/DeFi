@@ -11,7 +11,7 @@ import {Crud} from "./Dex.Crud.sol";
 contract Dex is Crud {
     constructor() Crud() {}
 
-    function sellOrder(address investor, uint256 amount) external {
+    function sellOrder(address investor, uint256 amount) external returns (bytes32 id) {
         zeroAddr(investor);
         zeroAddr(msg.sender);
         onlyFutures(msg.sender);
@@ -36,10 +36,14 @@ contract Dex is Crud {
             lib.orderByInvestorById[sell.investor][sell.id] = sell;
             lib.ordersByInvestor[sell.investor].push(sell);
             lib.orderBook.push(sell);
+            id = sell.id;
         }
     }
 
-    function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce) external {
+    function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce)
+        external
+        returns (bytes32 id)
+    {
         onlyStableCoins(tokenAddress);
         validateAllowance(tokenAddress, msg.sender, address(this), amount);
 
@@ -56,12 +60,13 @@ contract Dex is Crud {
             lib.orderByInvestorById[buy.investor][buy.id] = buy;
             lib.ordersByInvestor[buy.investor].push(buy);
             lib.orderBook.push(buy);
+            id = buy.id;
         }
     }
 
     function cancelOrder(bytes32 orderId) external {
         zeroAddr(msg.sender);
-        onlyOwnerOfOrder(orderId);
+        onlyOwnerOfOrder(msg.sender, orderId);
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
         if (lib.orderByInvestorById[msg.sender][orderId].investor == address(0x0)) {

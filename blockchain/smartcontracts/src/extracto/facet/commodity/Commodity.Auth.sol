@@ -150,11 +150,11 @@ abstract contract Auth {
         }
     }
 
-    function onlyOwnerOfOrder(bytes32 id) internal view {
+    function onlyOwnerOfOrder(address investor, bytes32 id) internal view {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        if (lib.orderByInvestorById[msg.sender][id].investor != msg.sender) {
-            revert InvalidOrderOwnership(msg.sender, id);
+        if (lib.orderByInvestorById[investor][id].investor != investor) {
+            revert InvalidOrderOwnership(investor, id);
         }
     }
 

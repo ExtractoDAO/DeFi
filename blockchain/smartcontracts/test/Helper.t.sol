@@ -208,6 +208,7 @@ contract Helper is Test {
 
     function buyOrder(address investor, address token, uint256 commodityAmount, uint256 amount, uint256 randomNonce)
         external
+        returns (bytes32 id)
     {
         payload = abi.encodeWithSignature(
             "buyOrder(address,uint256,uint256,uint256)", token, commodityAmount, amount, randomNonce
@@ -219,6 +220,10 @@ contract Helper is Test {
         if (!ok) {
             assembly {
                 revert(add(data, 32), mload(data))
+            }
+        } else {
+            assembly {
+                id := mload(add(data, 32))
             }
         }
     }

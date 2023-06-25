@@ -27,7 +27,7 @@ contract Future is FBase {
         extracto.mintToken(getKg, investor);
     }
 
-    function sell(uint256 amount) external {
+    function sell(uint256 amount) external returns (bytes32 id) {
         onlyInvestor();
 
         bytes memory payload = abi.encodeWithSignature("sellOrder(address,uint256)", investor, amount);
@@ -35,6 +35,10 @@ contract Future is FBase {
         if (!ok) {
             assembly {
                 revert(add(data, 32), mload(data))
+            }
+        } else {
+            assembly {
+                id := mload(add(data, 32))
             }
         }
     }

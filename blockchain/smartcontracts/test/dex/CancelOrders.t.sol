@@ -30,7 +30,7 @@ contract CancelOrders is DexBaseSetup {
         (address _future,) = h.createFuture(investor, address(usdc), sellAmount);
         future = Future(_future);
         vm.prank(investor);
-        future.sell(sellAmount);
+        bytes32 id = future.sell(sellAmount);
 
         // 1 Validation
         assertEq(h.sellOrders().length, 1);
@@ -43,8 +43,9 @@ contract CancelOrders is DexBaseSetup {
         sell.future = _future;
         sell.investor = investor;
         sell.typed = DexStorageLib.OrderType.Sell;
+        sell.id = id;
 
-        h.cancelOrder(investor, sell);
+        h.cancelOrder(investor, sell.id);
 
         // 2 Validation
         assertEq(h.sellOrders().length, 0);
@@ -63,7 +64,8 @@ contract CancelOrders is DexBaseSetup {
 
         // Put Buy Order
         vm.prank(investor);
-        h.buyOrder(investor, address(usdc), buyCommodityAmount, buyAmount, randomNonce);
+        usdc.approve(address(diamond), buyAmount);
+        bytes32 id = h.buyOrder(investor, address(usdc), buyCommodityAmount, buyAmount, randomNonce);
 
         // 1 Validation
         assertEq(h.buyOrders().length, 1);
@@ -76,8 +78,9 @@ contract CancelOrders is DexBaseSetup {
         buy.future = address(0x0);
         buy.investor = investor;
         buy.typed = DexStorageLib.OrderType.Buy;
+        buy.id = id;
 
-        h.cancelOrder(investor, buy);
+        h.cancelOrder(investor, buy.id);
 
         // 2 Validation
         assertEq(h.buyOrders().length, 0);
