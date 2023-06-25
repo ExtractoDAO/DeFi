@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "../../lib/forge-std/src/Script.sol";
-import {Facet, Action} from "../../src/extracto/diamond/interfaces/Types.sol";
-import {Commodity} from "../../src/extracto/facet/commodity/Commodity.sol";
-import {Diamond} from "../../src/extracto/diamond/Diamond.sol";
-import {Dex} from "../../src/extracto/facet/dex/Dex.sol";
-import {MockToken} from "../../test/MockToken.t.sol";
-import {COW} from "../../src/token/COW.sol";
+import "../../../lib/forge-std/src/Script.sol";
+import {Facet, Action} from "../../../src/extracto/diamond/interfaces/Types.sol";
+import {Commodity} from "../../../src/extracto/facet/commodity/Commodity.sol";
+import {Diamond} from "../../../src/extracto/diamond/Diamond.sol";
+import {Dex} from "../../../src/extracto/facet/dex/Dex.sol";
+import {MockToken} from "../../../test/MockToken.t.sol";
+import {COW} from "../../../src/token/COW.sol";
 
 abstract contract Data is Script {
     address controller = vm.envUint("MUMBAI_PRIVATE_KEY");
