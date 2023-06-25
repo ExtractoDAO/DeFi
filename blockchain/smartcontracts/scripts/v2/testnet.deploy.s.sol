@@ -14,7 +14,7 @@ abstract contract Data is Script {
     address dao = address(0xa9E5C68e1145ED5797a9FEfd6C594E9e3f37C1Ea);
     uint256 commodityBuyPrice = 2_00 * 1e16;
     uint256 commoditySellPrice = 2_00 * 1e16;
-    uint256 commoditySupply = 1_000_000 * 1e16;
+    uint256 commoditySupply = 1_000_000 * 1e18;
     uint256 locktime = 5;
     uint8 yieldFarming = 50;
     bool activateSells = true;
@@ -98,12 +98,9 @@ contract Testnet is Helper {
     function run() external {
         vm.startBroadcast(vm.envUint("MUMBAI_PRIVATE_KEY"));
 
-        usdt = new MockToken("USDT", commoditySupply * 1e18, 18);
-        usdc = new MockToken("USDC", commoditySupply * 1e6, 6);
+        usdt = new MockToken("ExUSDT", commoditySupply * 1e18, 18);
         tokens.push(address(usdt));
         decimals.push(18);
-        tokens.push(address(usdc));
-        decimals.push(6);
 
         commodity = new Commodity();
         diamond = new Diamond();
@@ -149,10 +146,9 @@ contract Testnet is Helper {
 
         console.log("Commodity address: ", address(commodity));
         console.log("Diamond address:   ", address(diamond));
-        console.log("USDT address:      ", address(usdt));
-        console.log("USDC address:      ", address(usdc));
-        console.log("COW address:       ", address(cow));
+        console.log("ExUSDT address:    ", address(usdt));
         console.log("Dex address:       ", address(dex));
+        console.log("COW address:       ", address(cow));
         vm.stopBroadcast();
     }
 }
