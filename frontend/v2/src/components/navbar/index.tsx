@@ -1,12 +1,16 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import { Bars3Icon } from "@heroicons/react/24/outline"
 import classNames from "classnames"
 
-interface NavbarProps {
-    children: ReactNode
+type Props = {
+    /**
+     * Allows the parent component to modify the state when the
+     * menu button is clicked.
+     */
+    onMenuButtonClick(): void
 }
 
-export default function Navbar({ children }: NavbarProps) {
+export default function Navbar({ onMenuButtonClick }: Props) {
     return (
         <React.Fragment>
             <nav
@@ -19,11 +23,10 @@ export default function Navbar({ children }: NavbarProps) {
             >
                 <div className="font-bold text-lg">Admin Panel</div>
                 <div className="flex-grow"></div>
-                <button className="md:hidden">
+                <button className="md:hidden" onClick={onMenuButtonClick}>
                     <Bars3Icon className="h-6 w-6" />
                 </button>
             </nav>
-            {children}
         </React.Fragment>
     )
 }
