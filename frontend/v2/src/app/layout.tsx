@@ -4,6 +4,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 import "./globals.css"
 import Sidebar from "@/components/sidebar"
+import Navbar from "@/components/navbar"
 export const metadata = {
     title: "ExtractoDAO",
     description: "The DeFi 2.0"
@@ -21,7 +22,9 @@ export default function RootLayout({
             <body
                 className={`${inter.className} bg-slate/50 dark:bg-Default/gray/900`}
             >
-                <Sidebar>{children}</Sidebar>
+                <Sidebar>
+                    <Navbar>{children}</Navbar>
+                </Sidebar>
             </body>
         </html>
     )
