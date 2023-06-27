@@ -28,7 +28,7 @@ export default function Sidebar({ children }: SidebarProps) {
                     <Bars3Icon className="w-10 h-10" />
                 </button>
             </div>
-            {children}
+            <div>{children}</div>
         </div>
     )
 }
