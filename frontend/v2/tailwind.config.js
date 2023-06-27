@@ -7,6 +7,12 @@ module.exports = {
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}"
     ],
     theme: {
+        extend: {
+            gridTemplateColumns: {
+                sidebar: "256px auto", //for sidebar layout
+                "sidebar-collapsed": "72px auto" //for collapsed sidebar layout
+            }
+        },
         colors: {
             // Base
             white: "#FFFFFF",
