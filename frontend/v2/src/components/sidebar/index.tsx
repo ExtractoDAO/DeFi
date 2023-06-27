@@ -11,7 +11,7 @@ export default function Sidebar({ children }: SidebarProps) {
     const [collapsed, setSidebarCollapsed] = useState(true)
 
     return (
-        <aside
+        <div
             className={classNames({
                 // 👇 use grid layout
                 "grid min-h-screen": true,
@@ -29,6 +29,6 @@ export default function Sidebar({ children }: SidebarProps) {
                 </button>
             </div>
             {children}
-        </aside>
+        </div>
     )
 }
