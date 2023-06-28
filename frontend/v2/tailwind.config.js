@@ -23,6 +23,7 @@ module.exports = {
             // Gray
             "Default/gray/50": "#F9FAFB",
             "Default/gray/200": "#E5E7EB",
+            "gray/100": "#F6F6F6",
             "gray/200": "#E4E6EA",
             "gray/400": "#9BA2AE",
             "gray/500": "#6B7280",
