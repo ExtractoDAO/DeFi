@@ -1,6 +1,6 @@
-import React from "react"
-import { Bars3Icon } from "@heroicons/react/24/outline"
-import classNames from "classnames"
+import React, { useState } from "react"
+import { Cog8ToothIcon } from "@heroicons/react/24/outline"
+import { BellIcon } from "@heroicons/react/24/outline"
 
 type Props = {
     /**
@@ -10,22 +10,94 @@ type Props = {
     onMenuButtonClick(): void
 }
 
+const ButtonConect = () => {
+    return (
+        <>
+            <button
+                className="text-gray/900
+                border
+                py-2.5
+                px-3
+                rounded-lg
+              border-gray/200"
+            >
+                Connect
+            </button>
+        </>
+    )
+}
+
+const PhotoProfile = () => {
+    return (
+        <>
+            <div
+                className="w-8
+                    border
+                  border-gray/200
+                    rounded-full
+                    h-8"
+            ></div>
+        </>
+    )
+}
+
 export default function Navbar({ onMenuButtonClick }: Props) {
+    const [isConnected, setIsConnected] = useState(true)
+
     return (
         <React.Fragment>
             <nav
-                className={classNames({
-                    "bg-white text-zinc-500": true, // colors
-                    "flex items-center": true, // layout
-                    "w-screen md:w-full sticky z-10 px-4 shadow-sm h-[73px] top-0 ":
-                        true //positioning & styling
-                })}
+                className="bg-white 
+                  dark:bg-gray/900
+                    border
+                    border-gray/200
+                    flex
+                    items-center
+                    w-screen   
+                    md:w-full
+                    z-10 
+                    pl-6
+                    pr-6
+                    h-[64px] 
+                    top-0"
             >
-                <div className="font-bold text-lg">Admin Panel</div>
-                <div className="flex-grow"></div>
-                <button className="md:hidden" onClick={onMenuButtonClick}>
-                    <Bars3Icon className="h-6 w-6" />
-                </button>
+                <div>
+                    <div
+                        className="text-gray/600
+                            w-[110px]
+                            text-xl/medium"
+                    >
+                        Admin Panel
+                    </div>
+                </div>
+                <div
+                    className="flex
+                        w-full
+                        items-center
+                        justify-end
+                        "
+                >
+                    <Cog8ToothIcon
+                        className="w-6 
+                          h-6
+                          mr-3
+                        text-slate/700"
+                    />
+                    {isConnected ? (
+                        <>
+                            <BellIcon
+                                className="w-6 
+                                    h-6
+                                    mr-3
+                                  text-slate/700"
+                            />
+
+                            <PhotoProfile />
+                        </>
+                    ) : (
+                        <ButtonConect />
+                    )}
+                </div>
             </nav>
         </React.Fragment>
     )
