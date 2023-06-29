@@ -32,6 +32,10 @@ module.exports = {
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
             "gray/900": "#131313",
+
+            "deep-gray/100": "#0D0D0D",
+            "deep-gray/200": "#202329",
+            "deep-gray/300": "#161616",
             // Slate
             "slate/100": "#F0F4F8",
             "slate/50": "#F7F9FB",
