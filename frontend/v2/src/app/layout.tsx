@@ -15,13 +15,11 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const theme = "light"
+    const theme: "light" | "dark" = "light"
 
     return (
         <html lang="en" className={theme}>
-            <body
-                className={`${inter.className} bg-slate/50 dark:bg-Default/gray/900`}
-            >
+            <body className={`${inter.className} bg-slate/50 dark:bg-gray/900`}>
                 <Layout>{children}</Layout>
             </body>
         </html>
