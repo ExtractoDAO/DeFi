@@ -162,12 +162,13 @@ export default function Navbar() {
                             </Link>
                             <Link
                                 href={""}
-                                className=" flex
-                                px-3
-                                py-2.5
-                                gap-[12px]
-                                items-center
-                                "
+                                className={classNames(
+                                    "flex",
+                                    "px-3",
+                                    "py-2.5",
+                                    "items-center",
+                                    { "max-md:hidden": true }
+                                )}
                             >
                                 <Cog8ToothIcon
                                     className="w-6
