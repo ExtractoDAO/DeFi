@@ -21,10 +21,8 @@ const Layout = (props: PropsWithChildren) => {
         >
             <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
             <div>
-                <Navbar
-                    onMenuButtonClick={() => setShowSidebar((prev) => !prev)}
-                />
-                <div className="p-6 max-md:px-4 ">{props.children}</div>
+                <Navbar/>
+                {props.children}
             </div>
         </div>
     )
