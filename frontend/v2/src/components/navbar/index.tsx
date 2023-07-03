@@ -105,12 +105,13 @@ export default function Navbar() {
                 >
                     <div>
                         <div
-                            id="page-title"
                             className="text-gray/600
                             font-medium
                           dark:text-gray/600
                             w-[110px]
                             text-xl/medium
+                            not-italic
+                            leading-normal
                             "
                         >
                             {pageTitle}
