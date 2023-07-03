@@ -135,42 +135,47 @@ export default function Navbar() {
                         gap-[12px]
                         "
                     >
-                        <Link
-                            href={""}
-                            className={classNames(
-                                "flex",
-                                "px-3",
-                                "py-2.5",
-                                "gap-[12px]",
-                                "items-center",
-                                {
-                                    hidden: isConnected === false
-                                }
-                            )}
+                        <div
+                            className="items-center
+                                flex
+                                "
                         >
-                            <BellIcon
-                                className="w-6
+                            <Link
+                                href={""}
+                                className={classNames(
+                                    "flex",
+                                    "px-3",
+                                    "py-2.5",
+                                    "items-center",
+                                    {
+                                        hidden: isConnected === false
+                                    }
+                                )}
+                            >
+                                <BellIcon
+                                    className="w-6
                                     h-6
                                     text-gray/400
                                     "
-                            />
-                        </Link>
-                        <Link
-                            href={""}
-                            className=" flex
+                                />
+                            </Link>
+                            <Link
+                                href={""}
+                                className=" flex
                                 px-3
                                 py-2.5
                                 gap-[12px]
                                 items-center
                                 "
-                        >
-                            <Cog8ToothIcon
-                                className="w-6
+                            >
+                                <Cog8ToothIcon
+                                    className="w-6
                                     h-6
                                     text-gray/400
                                     "
-                            />
-                        </Link>
+                                />
+                            </Link>
+                        </div>
                         <PhotoProfile />
                         <ButtonConect />
                     </div>
