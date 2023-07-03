@@ -4,6 +4,8 @@ import { BellIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import classNames from "classnames"
 import { usePathname } from "next/navigation"
+import LogoDAO from "@/assets/img/logo-dao.svg"
+import Image from "next/image"
 
 const getPageTitle = (pathname: string): string => {
     switch (pathname) {
@@ -103,9 +105,20 @@ export default function Navbar() {
                         { "max-md:hidden": true }
                     )}
                 >
-                    <div>
-                        <div
-                            className="text-gray/600
+                    <div
+                        className={classNames("hidden", {
+                            "max-md:block": true
+                        })}
+                    >
+                        <Image
+                            src={LogoDAO.src}
+                            alt="Logo"
+                            width={48}
+                            height={15.987}
+                        />
+                    </div>
+                    <div
+                        className="text-gray/600
                             font-medium
                           dark:text-gray/600
                             w-[110px]
@@ -113,9 +126,8 @@ export default function Navbar() {
                             not-italic
                             leading-normal
                             "
-                        >
-                            {pageTitle}
-                        </div>
+                    >
+                        {pageTitle}
                     </div>
                     <div
                         className="flex
