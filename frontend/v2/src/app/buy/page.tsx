@@ -1,3 +1,5 @@
+import Buy from "@/components/buy"
+
 export default function page() {
-    return <h1>Buy</h1>
+    return <Buy />
 }
