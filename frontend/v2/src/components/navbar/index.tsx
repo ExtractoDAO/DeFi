@@ -3,9 +3,27 @@ import { Cog8ToothIcon } from "@heroicons/react/24/outline"
 import { BellIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import classNames from "classnames"
+import { usePathname } from "next/navigation"
+
+const getPageTitle = (pathname: string): string => {
+    switch (pathname) {
+        case "/":
+            return "Dashboard"
+        case "/buy":
+            return "Buy contracts"
+        case "/drawer":
+            return "Drawer"
+        case "/exchange":
+            return "Exchange"
+        default:
+            return ""
+    }
+}
 
 export default function Navbar() {
     const [isConnected] = useState(true)
+    const pathname = usePathname()
+    const pageTitle = getPageTitle(pathname)
 
     const PhotoProfile = () => {
         return (
@@ -95,7 +113,7 @@ export default function Navbar() {
                             text-xl/medium
                             "
                         >
-                            Dashboard
+                            {pageTitle}
                         </div>
                     </div>
                     <div
