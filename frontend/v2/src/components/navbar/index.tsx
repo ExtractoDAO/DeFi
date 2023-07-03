@@ -102,7 +102,6 @@ export default function Navbar() {
                         "justify-between",
                         "items-center",
                         "self-stretch",
-                        { "max-md:hidden": true }
                     )}
                 >
                     <div
@@ -118,14 +117,16 @@ export default function Navbar() {
                         />
                     </div>
                     <div
-                        className="text-gray/600
-                            font-medium
-                          dark:text-gray/600
-                            w-[110px]
-                            text-xl/medium
-                            not-italic
-                            leading-normal
-                            "
+                        className={classNames(
+                            "text-gray/600",
+                            "font-medium",
+                            "dark:text-gray/600",
+                            "w-[110px]",
+                            "text-xl/medium",
+                            "not-italic",
+                            "leading-normal",
+                            { "max-md:hidden": true }
+                        )}
                     >
                         {pageTitle}
                     </div>
