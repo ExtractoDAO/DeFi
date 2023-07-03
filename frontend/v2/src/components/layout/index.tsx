@@ -20,9 +20,7 @@ const Layout = (props: PropsWithChildren) => {
         >
             <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
             <div>
-                <Navbar
-                    onMenuButtonClick={() => setShowSidebar((prev) => !prev)}
-                />
+                <Navbar/>
                 {props.children}
             </div>
         </div>
