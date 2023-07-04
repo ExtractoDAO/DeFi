@@ -37,8 +37,11 @@ module.exports = {
             "deep-gray/200": "#202329",
             "deep-gray/300": "#161616",
             // Slate
-            "slate/100": "#F0F4F8",
             "slate/50": "#F7F9FB",
+            "slate/100": "#F0F4F8",
+            "slate/200": "#E1E7EF",
+            "slate/400": "#93A2B7",
+            "slate/600": "#475569",
             "slate/700": "#334155",
             // Red
             "red/500": "#EE4444",
