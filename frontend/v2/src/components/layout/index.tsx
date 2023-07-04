@@ -15,13 +15,14 @@ const Layout = (props: PropsWithChildren) => {
                 "grid-cols-sidebar": !collapsed,
                 "grid-cols-sidebar-collapsed": collapsed,
                 "transition-[grid-template-columns] duration-300 ease-in-out":
-                    true
+                    true,
+                "max-md:block": true
             })}
         >
             <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
             <div>
-                <Navbar/>
-                {props.children}
+                <Navbar />
+                <div className="p-6 max-md:px-4 ">{props.children}</div>
             </div>
         </div>
     )

@@ -31,11 +31,16 @@ const Sidebar = ({
     return (
         <div
             className={`bg-white
-                    dark:bg-gray/900
+                    dark:bg-deep-gray/100
                     text-zinc-50 z-20
                     max-md:fixed
                     max-md:bottom-0
-                    max-md:w-full`}
+                    max-md:w-full
+                    dark:border-r
+                    dark:border-deep-gray/200
+                    border-r
+                    border-gray/200
+                    `}
         >
             <div
                 className={classnames({
@@ -122,10 +127,12 @@ const Sidebar = ({
                                 flex
                                 flex-col
                                 gap-2
-                                items-stretch
                                 max-md:flex-row
                                 max-md:justify-center
-                            `]: true
+                            `]: true,
+                            "items-stretch": !collapsed,
+                            "items-center": collapsed,
+                            "transition-all duration-300": true
                         })}
                     >
                         <span
