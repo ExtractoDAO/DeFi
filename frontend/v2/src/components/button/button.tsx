@@ -41,3 +41,12 @@ export const PrimBtDisabled = (props: ButtonProps) => {
         </button>
     )
 }
+
+export const SecondaryButton = (props: ButtonProps) => {
+
+    return (
+        <button>
+
+        </button>
+    )
+}
