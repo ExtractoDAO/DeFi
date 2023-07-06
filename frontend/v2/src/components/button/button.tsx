@@ -95,7 +95,19 @@ export const SecondaryButton = (props: ButtonProps) => {
     const { children, iconleft, iconright, defaultStyle } = props
 
     return (
-        <button>
+        <button
+            {...props}
+            className={`${defaultStyle} 
+                    border 
+                    border-solid 
+                  border-gray/200 
+                  bg-white
+                  hover:border-gray/300
+                  focus:border-gray/800
+                  dark:text-deep-gray/100
+                    
+                  `}
+        >
             {iconright &&
                 cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
