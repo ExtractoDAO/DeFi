@@ -1,0 +1,25 @@
+import {
+    ButtonHTMLAttributes,
+    ReactElement,
+    ReactNode,
+} from "react"
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: ReactNode
+    iconleft?: ReactElement
+    iconright?: ReactElement
+    variant?: ""
+    defaultStyle?: string
+}
+
+export const Button = (props: ButtonProps) => {
+    const { variant } = props
+
+
+    switch (variant) {
+        case "":
+            return <></>
+        default:
+            return <></>
+    }
+}
