@@ -32,3 +32,12 @@ export const PrimaryButton = (props: ButtonProps) => {
         </button>
     )
 }
+
+export const PrimBtDisabled = (props: ButtonProps) => {
+
+    return (
+        <button>
+            
+        </button>
+    )
+}
