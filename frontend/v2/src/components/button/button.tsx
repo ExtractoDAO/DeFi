@@ -22,17 +22,17 @@ export const Button = (props: ButtonProps) => {
     const style =
         "flex inline-flex py-2 px-4 items-center gap-[10px] text-sm not-italic font-medium rounded-[4px] dark:bg-brand/primary/500 dark:text-deep-gray/100 "
 
-    switch (variant) {
-        case "secondary":
-            return <SecondaryButton {...props} />
-        case "secdisabled":
-            return <SecBtDisabled {...props} />
-        case "primdisabled":
-            return <PrimBtDisabled {...props} />
-        default:
-            return <PrimaryButton {...props} />
+        switch (variant) {
+            case "secondary":
+                return <SecondaryButton defaultStyle={style} {...props} />
+            case "secdisabled":
+                return <SecBtDisabled defaultStyle={style} {...props} />
+            case "primdisabled":
+                return <PrimBtDisabled defaultStyle={style} {...props} />
+            default:
+                return <PrimaryButton defaultStyle={style} {...props} />
+        }
     }
-}
 
 export const PrimaryButton = (props: ButtonProps) => {
 
