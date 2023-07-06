@@ -2,6 +2,7 @@ import {
     ButtonHTMLAttributes,
     ReactElement,
     ReactNode,
+    cloneElement,
 } from "react"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -39,7 +40,15 @@ export const PrimaryButton = (props: ButtonProps) => {
 
     return (
         <button>
-            
+            {iconright &&
+                cloneElement(iconright, {
+                    className: ""
+                })}
+            <span>{children}</span>
+            {iconleft &&
+                cloneElement(iconleft, {
+                    className: ""
+                })}
         </button>
     )
 }
@@ -49,7 +58,15 @@ export const PrimBtDisabled = (props: ButtonProps) => {
 
     return (
         <button>
-            
+            {iconright &&
+                cloneElement(iconright, {
+                    className: ""
+                })}
+            <span>{children}</span>
+            {iconleft &&
+                cloneElement(iconleft, {
+                    className: ""
+                })}
         </button>
     )
 }
@@ -59,7 +76,15 @@ export const SecondaryButton = (props: ButtonProps) => {
 
     return (
         <button>
-
+            {iconright &&
+                cloneElement(iconright, {
+                    className: ""
+                })}
+            <span>{children}</span>
+            {iconleft &&
+                cloneElement(iconleft, {
+                    className: ""
+                })}
         </button>
     )
 }
@@ -69,7 +94,15 @@ export const SecBtDisabled = (props: ButtonProps) => {
 
     return (
         <button>
-
+            {iconright &&
+                cloneElement(iconright, {
+                    className: ""
+                })}
+            <span>{children}</span>
+            {iconleft &&
+                cloneElement(iconleft, {
+                    className: ""
+                })}
         </button>
     )
 }
