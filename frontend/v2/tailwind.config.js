@@ -20,6 +20,8 @@ module.exports = {
             "brand/primary/500": "#F9712B",
             "brand/secondary/100": "#DCD5E3",
             "brand/secondary/500": "#522B72",
+            "brand/secondary/300": "#9780AA",
+            "brand/secondary/600": "#42225B",
             // Gray
             "Default/gray/50": "#F9FAFB",
             "Default/gray/200": "#E5E7EB",
@@ -30,6 +32,7 @@ module.exports = {
             "gray/500": "#6B7280",
             "Default/gray/500": "#6B7280",
             "gray/600": "#4B5563",
+            "gray/800": "#1F2937",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
             "gray/900": "#131313",
