@@ -23,3 +23,12 @@ export const Button = (props: ButtonProps) => {
             return <></>
     }
 }
+
+export const PrimaryButton = (props: ButtonProps) => {
+
+    return (
+        <button>
+            
+        </button>
+    )
+}
