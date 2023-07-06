@@ -70,7 +70,14 @@ export const PrimBtDisabled = (props: ButtonProps) => {
     const { children, iconleft, iconright, defaultStyle } = props
 
     return (
-        <button>
+        <button
+            {...props}
+            className={`${defaultStyle} 
+                bg-brand/secondary/100
+                text-brand/secondary/300
+                  cursor-default
+                `}
+        >
             {iconright &&
                 cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
