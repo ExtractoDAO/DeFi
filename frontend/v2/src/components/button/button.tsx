@@ -125,7 +125,14 @@ export const SecBtDisabled = (props: ButtonProps) => {
     const { children, iconleft, iconright, defaultStyle } = props
 
     return (
-        <button>
+        <button
+            {...props}
+            className={`${defaultStyle} 
+                   bg-gray/200
+                   text-gray/500
+                     cursor-default
+                  `}
+        >
             {iconright &&
                 cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
