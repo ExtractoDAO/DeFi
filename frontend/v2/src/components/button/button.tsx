@@ -50,3 +50,12 @@ export const SecondaryButton = (props: ButtonProps) => {
         </button>
     )
 }
+
+export const SecBtDisabled = (props: ButtonProps) => {
+
+    return (
+        <button>
+
+        </button>
+    )
+}
