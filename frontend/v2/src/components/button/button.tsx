@@ -35,6 +35,7 @@ export const Button = (props: ButtonProps) => {
     }
 
 export const PrimaryButton = (props: ButtonProps) => {
+    const { children, iconleft, iconright, defaultStyle } = props
 
     return (
         <button>
@@ -44,6 +45,7 @@ export const PrimaryButton = (props: ButtonProps) => {
 }
 
 export const PrimBtDisabled = (props: ButtonProps) => {
+    const { children, iconleft, iconright, defaultStyle } = props
 
     return (
         <button>
@@ -53,6 +55,7 @@ export const PrimBtDisabled = (props: ButtonProps) => {
 }
 
 export const SecondaryButton = (props: ButtonProps) => {
+    const { children, iconleft, iconright, defaultStyle } = props
 
     return (
         <button>
@@ -62,6 +65,7 @@ export const SecondaryButton = (props: ButtonProps) => {
 }
 
 export const SecBtDisabled = (props: ButtonProps) => {
+    const { children, iconleft, iconright, defaultStyle } = props
 
     return (
         <button>
