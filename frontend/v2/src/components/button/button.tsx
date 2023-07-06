@@ -19,6 +19,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = (props: ButtonProps) => {
     const { variant } = props
 
+    const style =
+        "flex inline-flex py-2 px-4 items-center gap-[10px] text-sm not-italic font-medium rounded-[4px] dark:bg-brand/primary/500 dark:text-deep-gray/100 "
 
     switch (variant) {
         case "secondary":
