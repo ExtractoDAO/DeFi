@@ -42,12 +42,12 @@ export const PrimaryButton = (props: ButtonProps) => {
         <button>
             {iconright &&
                 cloneElement(iconright, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
             <span>{children}</span>
             {iconleft &&
                 cloneElement(iconleft, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
         </button>
     )
@@ -60,12 +60,12 @@ export const PrimBtDisabled = (props: ButtonProps) => {
         <button>
             {iconright &&
                 cloneElement(iconright, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
             <span>{children}</span>
             {iconleft &&
                 cloneElement(iconleft, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
         </button>
     )
@@ -78,12 +78,12 @@ export const SecondaryButton = (props: ButtonProps) => {
         <button>
             {iconright &&
                 cloneElement(iconright, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
             <span>{children}</span>
             {iconleft &&
                 cloneElement(iconleft, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
         </button>
     )
@@ -96,12 +96,12 @@ export const SecBtDisabled = (props: ButtonProps) => {
         <button>
             {iconright &&
                 cloneElement(iconright, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
             <span>{children}</span>
             {iconleft &&
                 cloneElement(iconleft, {
-                    className: ""
+                    className: "w-[16px] h-[16px] shrink-0"
                 })}
         </button>
     )
