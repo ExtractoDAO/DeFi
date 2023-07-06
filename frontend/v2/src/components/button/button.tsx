@@ -8,7 +8,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode
     iconleft?: ReactElement
     iconright?: ReactElement
-    variant?: ""
+    variant?:
+        | "primary"
+        | "secondary"
+        | "primdisabled"
+        | "secdisabled"
     defaultStyle?: string
 }
 
@@ -17,10 +21,14 @@ export const Button = (props: ButtonProps) => {
 
 
     switch (variant) {
-        case "":
-            return <></>
+        case "secondary":
+            return <SecondaryButton {...props} />
+        case "secdisabled":
+            return <SecBtDisabled {...props} />
+        case "primdisabled":
+            return <PrimBtDisabled {...props} />
         default:
-            return <></>
+            return <PrimaryButton {...props} />
     }
 }
 
