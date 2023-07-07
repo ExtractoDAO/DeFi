@@ -11,6 +11,7 @@ import BUSD from "@/assets/img/icons/currencies/busd.svg"
 import DAI from "@/assets/img/icons/currencies/dai.svg"
 
 import classnames from "classnames"
+import { useClickAnyWhere } from "usehooks-ts"
 
 interface IObj {
     [key: string]: string
@@ -19,6 +20,18 @@ interface IObj {
 function TokenSelector() {
     const [selected, setSelected] = useState("Tether")
     const [open, setOpen] = useState(false)
+    const [state, setState] = useState(0)
+
+    useClickAnyWhere(() => {
+        console.log("AQUIII")
+        if (state === 1) {
+            setState(state + 1)
+        }
+        if (state > 1) {
+            setOpen(false)
+            setState(0)
+        }
+    })
 
     const icons: IObj = {
         Tether: USDT,
@@ -69,7 +82,10 @@ function TokenSelector() {
                     gap-2.5
                     whitespace-nowrap
                 `}
-                onClick={() => setOpen(!open)}
+                onClick={() => {
+                    setOpen(!open)
+                    setState(state + 1)
+                }}
             >
                 <Image src={icons[selected]} alt="" className="w-4" />
                 {selected}
