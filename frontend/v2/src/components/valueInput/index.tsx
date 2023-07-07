@@ -27,7 +27,8 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
                 className={classnames({
                     "text-sm": true,
                     "font-medium": true,
-                    "text-slate/600": true
+                    "text-slate/600": true,
+                    "dark:text-slate/600": true
                 })}
             >
                 {label}
