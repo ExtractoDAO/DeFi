@@ -21,7 +21,7 @@ export const Button = (props: ButtonProps) => {
     const { variant } = props
 
     const style =
-        "flex inline-flex py-2 px-4 items-center gap-[10px] text-sm not-italic font-medium rounded-[4px] dark:bg-brand/primary/500 dark:text-deep-gray/100 "
+        "flex inline-flex py-2 px-4 items-center gap-[10px] text-sm not-italic font-medium rounded-[4px]"
 
         switch (variant) {
             case "secondary":
@@ -50,7 +50,9 @@ export const PrimaryButton = (props: ButtonProps) => {
                 focus:ring-brand/secondary/300 
                   focus:border-transparent 
                   focus:border
-                  dark:text-deep-gray/100
+
+                dark:bg-brand/primary/500 
+                dark:text-deep-gray/100
                 `}
         >
             {iconright &&
@@ -104,7 +106,11 @@ export const SecondaryButton = (props: ButtonProps) => {
                   bg-white
                   hover:border-gray/300
                   focus:border-gray/800
-                  dark:text-deep-gray/100
+
+                  dark:text-gray/250
+                  dark:bg-deep-gray/100
+                  dark:border-gray/350
+                  dark:hover:border-gray/400
                     
                   `}
         >
