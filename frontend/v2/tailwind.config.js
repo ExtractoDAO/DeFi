@@ -20,6 +20,7 @@ module.exports = {
             "brand/primary/500": "#F9712B",
             "brand/secondary/100": "#DCD5E3",
             "brand/secondary/500": "#522B72",
+            "brand/secondary/600": "#42225B",
             // Gray
             "Default/gray/50": "#F9FAFB",
             "Default/gray/200": "#E5E7EB",
@@ -52,7 +53,7 @@ module.exports = {
             "Default/green/800": "#065F46"
         },
         data: {
-            checked: 'ui~="checked"'
+            tokenSelectOpen: 'ui~="tokenSelectOpen"'
         }
     },
     plugins: []
