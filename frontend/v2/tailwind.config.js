@@ -25,7 +25,7 @@ module.exports = {
             "Default/gray/200": "#E5E7EB",
             "gray/100": "#F6F6F6",
             "gray/200": "#E4E6EA",
-            "gray/300":"#D8DFEE",
+            "gray/300": "#D8DFEE",
             "gray/400": "#9BA2AE",
             "gray/500": "#6B7280",
             "Default/gray/500": "#6B7280",
@@ -37,6 +37,7 @@ module.exports = {
             "deep-gray/100": "#0D0D0D",
             "deep-gray/200": "#202329",
             "deep-gray/300": "#161616",
+            "deep-gray/400": "#19222F",
             // Slate
             "slate/50": "#F7F9FB",
             "slate/100": "#F0F4F8",
@@ -49,6 +50,9 @@ module.exports = {
             // Green
             "Default/green/100": "#D1FAE5",
             "Default/green/800": "#065F46"
+        },
+        data: {
+            checked: 'ui~="checked"'
         }
     },
     plugins: []
