@@ -18,14 +18,17 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
                 "bg-slate/50": true,
                 rounded: true,
                 border: true,
-                "border-slate/200": true
+                "border-slate/200": true,
+                "dark:bg-gray/900": true,
+                "dark:border-deep-gray/400": true
             })}
         >
             <label
                 className={classnames({
                     "text-sm": true,
                     "font-medium": true,
-                    "text-slate/600": true
+                    "text-slate/600": true,
+                    "dark:text-slate/600": true
                 })}
             >
                 {label}
@@ -44,11 +47,12 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
                         "bg-slate/50": true,
                         "w-full": true,
                         "py-3": true,
-                        "border-0": true,
-                        "outline-0": true,
+                        "border-none": true,
+                        "outline-none": true,
                         "text-slate/400": true,
                         "font-medium": true,
-                        "text-xl": true
+                        "text-xl": true,
+                        "dark:bg-gray/900": true
                     })}
                 />
                 {insideElement && <insideElement.element />}

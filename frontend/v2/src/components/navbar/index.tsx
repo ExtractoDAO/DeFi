@@ -78,9 +78,9 @@ export default function Navbar() {
     return (
         <React.Fragment>
             <nav
-                className="bg-white 
+                className="bg-white
                   dark:border-deep-gray/200
-                  dark:bg-gray/900 
+                  dark:bg-deep-gray/100
                     border
                   border-gray/200
                     shrink-0
@@ -88,12 +88,12 @@ export default function Navbar() {
                     flex-col
                     items-center
                     justify-center
-                    w-screen   
+                    w-screen
                     md:w-full
                     gap-2.5
                     pl-6
                     pr-6
-                    h-[64px] 
+                    h-[64px]
                     "
             >
                 <div
@@ -101,7 +101,7 @@ export default function Navbar() {
                         "flex",
                         "justify-between",
                         "items-center",
-                        "self-stretch",
+                        "self-stretch"
                     )}
                 >
                     <div
