@@ -35,7 +35,6 @@ module.exports = {
             "gray/400": "#9BA2AE",
             "gray/500": "#6B7280",
             "gray/600": "#64748A",
-            "Default/gray/500": "#6B7280",
             "gray/600": "#4B5563",
             "gray/800": "#1F2937",
             "cool-gray/900": "#111827",
@@ -59,7 +58,10 @@ module.exports = {
             "red/500": "#EE4444",
             // Green
             "Default/green/100": "#D1FAE5",
-            "Default/green/800": "#065F46"
+            "Default/green/200": "#A0F9E0",
+            "Default/green/500": "#22C45E",
+            "Default/green/800": "#065F46",
+            "Default/green/900": "#073B19"
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
