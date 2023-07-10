@@ -10,6 +10,7 @@ import {
     ArrowsUpDownIcon
 } from "@heroicons/react/24/outline"
 import { useState } from "react"
+import { Button } from "../button"
 
 export default function Buy() {
     const [inverted, setInverted] = useState(false)
@@ -56,6 +57,8 @@ export default function Buy() {
                         insideElement={{
                             element: tokenSelector
                         }}
+                        showMaxButton
+                        labelRightContent="Balance: 300"
                     />
                     <button
                         onClick={() => setInverted(!inverted)}
@@ -76,7 +79,14 @@ export default function Buy() {
                     >
                         <ArrowsUpDownIcon className="w-5 text-slate/700" />
                     </button>
-                    <ValueInput label="To (Estimated)" />
+                    <ValueInput
+                        label="To (Estimated)"
+                        conversion={{
+                            value: "$ 1000",
+                            variation: "(+ 0.189%)"
+                        }}
+                    />
+                    <Button variant="primary">Confirm</Button>
                 </div>
             </div>
             <div className="w-full text-center mt-2">

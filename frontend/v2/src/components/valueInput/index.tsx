@@ -8,10 +8,24 @@ interface ValueInputProps {
         element: () => JSX.Element
         position?: "start" | "end"
     }
+    showMaxButton?: boolean
+    labelRightContent?: string
+    conversion?: {
+        value: string
+        variation?: string
+    }
 }
 
-export default function ValueInput({ label, insideElement }: ValueInputProps) {
+export default function ValueInput({
+    label,
+    insideElement,
+    showMaxButton,
+    labelRightContent,
+    conversion
+}: ValueInputProps) {
+    const [value, setValue] = useState("")
     const [focus, setFocus] = useState(false)
+
     return (
         <div
             className={classnames({
@@ -31,40 +45,89 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
                 "border-transparent": focus
             })}
         >
-            <label
-                className={classnames({
-                    "text-sm": true,
-                    "font-medium": true,
-                    "text-slate/600": true,
-                    "dark:text-slate/600": true
-                })}
-            >
-                {label}
-            </label>
+            <div className="flex justify-between items-center">
+                <label
+                    className={classnames({
+                        "text-sm": true,
+                        "font-medium": true,
+                        "text-slate/600": true,
+                        "dark:text-slate/600": true
+                    })}
+                >
+                    {label}
+                </label>
+                <span className="text-gray/500 text-sm">
+                    {labelRightContent}
+                </span>
+            </div>
             <div
                 className={classnames({
                     flex: true,
                     "items-center": true,
                     "flex-row": insideElement?.position === "end",
-                    "flex-row-reverse": insideElement?.position === "start"
+                    "flex-row-reverse": insideElement?.position === "start",
+                    "justify-between": true,
+                    "py-1": true,
+                    "h-14": true
                 })}
             >
-                <input
-                    type="text"
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
-                    className={classnames({
-                        "bg-slate/50": true,
-                        "w-full": true,
-                        "py-3": true,
-                        "border-none": true,
-                        "outline-none": true,
-                        "text-slate/400": true,
-                        "font-medium": true,
-                        "text-xl": true,
-                        "dark:bg-gray/900": true
-                    })}
-                />
+                <div>
+                    <div className="flex items-center">
+                        <input
+                            type="text"
+                            onFocus={() => setFocus(true)}
+                            onBlur={() => setFocus(false)}
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                            maxLength={16}
+                            style={
+                                showMaxButton
+                                    ? {
+                                          width: `${value.length + 2}ch`
+                                      }
+                                    : undefined
+                            }
+                            className={classnames({
+                                "bg-slate/50": true,
+                                "w-full": true,
+                                "pt-0": true,
+                                "border-none": true,
+                                "outline-none": true,
+                                "text-slate/400": true,
+                                "font-medium": true,
+                                "text-xl": true,
+                                "dark:bg-gray/900": true
+                            })}
+                        />
+                        {showMaxButton && (
+                            <button
+                                className={`
+                                px-4
+                                text-xs
+                                dark:bg-Default/green/900
+                                dark:text-Default/green/500
+                                h-max
+                                rounded-lg
+                                bg-Default/green/100
+                                text-Default/green/800
+                            `}
+                            >
+                                MAX
+                            </button>
+                        )}
+                    </div>
+                    {conversion && (
+                        <p className="text-xs mt-1">
+                            <span className="text-gray/400">
+                                {conversion.value}
+                            </span>{" "}
+                            <span className="text-Default/green/500">
+                                {conversion.variation}
+                            </span>
+                        </p>
+                    )}
+                </div>
+
                 {insideElement && <insideElement.element />}
             </div>
         </div>
