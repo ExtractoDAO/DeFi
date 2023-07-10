@@ -42,27 +42,28 @@ export default function Buy() {
                         </button>
                     </div>
                 </div>
-                <div
-                    className={classnames({
-                        flex: true,
-                        "gap-4": true,
-                        relative: true,
-                        "flex-col": !inverted,
-                        "flex-col-reverse": inverted,
-                        "transition-transform": true
-                    })}
-                >
-                    <ValueInput
-                        label="From"
-                        insideElement={{
-                            element: tokenSelector
-                        }}
-                        showMaxButton
-                        labelRightContent="Balance: 300"
-                    />
-                    <button
-                        onClick={() => setInverted(!inverted)}
-                        className={`
+                <div className="flex flex-col gap-4">
+                    <div
+                        className={classnames({
+                            flex: true,
+                            "gap-4": true,
+                            relative: true,
+                            "flex-col": !inverted,
+                            "flex-col-reverse": inverted,
+                            "transition-transform": true
+                        })}
+                    >
+                        <ValueInput
+                            label="From"
+                            insideElement={{
+                                element: tokenSelector
+                            }}
+                            showMaxButton
+                            labelRightContent="Balance: 300"
+                        />
+                        <button
+                            onClick={() => setInverted(!inverted)}
+                            className={`
                             p-2
                             border
                             border-slate/200
@@ -76,16 +77,17 @@ export default function Buy() {
                             dark:bg-gray/900
                             dark:border-slate/700
                         `}
-                    >
-                        <ArrowsUpDownIcon className="w-5 text-slate/700" />
-                    </button>
-                    <ValueInput
-                        label="To (Estimated)"
-                        conversion={{
-                            value: "$ 1000",
-                            variation: "(+ 0.189%)"
-                        }}
-                    />
+                        >
+                            <ArrowsUpDownIcon className="w-5 text-slate/700" />
+                        </button>
+                        <ValueInput
+                            label="To (Estimated)"
+                            conversion={{
+                                value: "$ 1000",
+                                variation: "(+ 0.189%)"
+                            }}
+                        />
+                    </div>
                     <Button variant="primary">Confirm</Button>
                 </div>
             </div>
