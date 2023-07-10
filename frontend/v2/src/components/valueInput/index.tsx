@@ -1,5 +1,6 @@
+"use client"
 import classnames from "classnames"
-import { ReactElement, ReactNode } from "react"
+import { ReactElement, ReactNode, useState } from "react"
 
 interface ValueInputProps {
     label?: string
@@ -10,6 +11,7 @@ interface ValueInputProps {
 }
 
 export default function ValueInput({ label, insideElement }: ValueInputProps) {
+    const [focus, setFocus] = useState(false)
     return (
         <div
             className={classnames({
@@ -20,7 +22,13 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
                 border: true,
                 "border-slate/200": true,
                 "dark:bg-gray/900": true,
-                "dark:border-deep-gray/400": true
+                "dark:border-deep-gray/400": true,
+
+                outline: focus,
+
+                "outline-brand/secondary/400": focus,
+                "dark:outline-brand/primary/400": focus,
+                "border-transparent": focus
             })}
         >
             <label
@@ -43,6 +51,8 @@ export default function ValueInput({ label, insideElement }: ValueInputProps) {
             >
                 <input
                     type="text"
+                    onFocus={() => setFocus(true)}
+                    onBlur={() => setFocus(false)}
                     className={classnames({
                         "bg-slate/50": true,
                         "w-full": true,

@@ -17,8 +17,10 @@ module.exports = {
             // Base
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
+            "brand/primary/400": "#ca5d25",
             "brand/primary/500": "#F9712B",
             "brand/secondary/100": "#DCD5E3",
+            "brand/secondary/400": "#75558E",
             "brand/secondary/500": "#522B72",
             "brand/secondary/600": "#42225B",
             // Gray
@@ -40,11 +42,13 @@ module.exports = {
             "deep-gray/200": "#202329",
             "deep-gray/300": "#161616",
             "deep-gray/400": "#19222F",
+            "deep-gray/500": "#171717",
             // Slate
             "slate/50": "#F7F9FB",
             "slate/100": "#F0F4F8",
             "slate/200": "#E1E7EF",
             "slate/400": "#93A2B7",
+            "slate/500": "#64748A",
             "slate/600": "#475569",
             "slate/700": "#334155",
             // Red
