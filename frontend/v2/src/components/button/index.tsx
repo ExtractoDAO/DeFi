@@ -4,146 +4,88 @@ import {
     ReactNode,
     cloneElement
 } from "react"
+import classNames from "classnames"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    children: ReactNode
+    children: ReactNode | string
     iconleft?: ReactElement
     iconright?: ReactElement
-    variant?: "primary" | "secondary" | "primdisabled" | "secdisabled"
-    defaultStyle?: string
+    variant?: "primary" | "secondary"
 }
 
-export const Button = (props: ButtonProps) => {
-    const { variant } = props
-
-    const style =
-        "flex inline-flex py-2 px-4 items-center gap-[10px] text-sm not-italic font-medium rounded-[4px]"
-
-    switch (variant) {
-        case "secondary":
-            return <SecondaryButton defaultStyle={style} {...props} />
-        case "secdisabled":
-            return <SecBtDisabled defaultStyle={style} {...props} />
-        case "primdisabled":
-            return <PrimBtDisabled defaultStyle={style} {...props} />
-        default:
-            return <PrimaryButton defaultStyle={style} {...props} />
-    }
-}
-
-export const PrimaryButton = (props: ButtonProps) => {
-    const { children, iconleft, iconright, defaultStyle } = props
-
+const Button = ({
+    children,
+    iconleft,
+    iconright,
+    variant = "primary",
+    ...props
+}: ButtonProps) => {
     return (
         <button
-            {...props}
-            className={`${defaultStyle}
-                text-white
-                bg-brand/secondary/500
+            className={classNames({
+                [`
+                inline-flex 
+                py-2 
+                px-4 
+                items-center 
+                gap-[10px] 
+                text-sm 
+                not-italic 
+                font-medium 
+                rounded-[4px]
+                `]: true,
+                [`
+                text-white 
+                bg-brand/secondary/500 
                 hover:bg-brand/secondary/600
-                  focus:outline-none
-                  focus:ring-2
-                focus:ring-brand/secondary/300
-                  focus:border-transparent
-                  focus:border
+                focus:outline-none 
+                focus:ring-2 
+                focus:ring-brand/secondary/300 
+                focus:border-transparent 
+                focus:border
 
-                dark:bg-brand/primary/500
+                disabled:bg-brand/secondary/100 
+                disabled:text-brand/secondary/300
+
+                dark:bg-brand/primary/500 
                 dark:text-deep-gray/100
-                `}
+                dark:hover:bg-brand/primary/400
+                dark:disabled:text-brand/primary/500
+                dark:disabled:bg-brand/primary/200
+                dark:focus:ring-brand/primary/200
+                `]: variant === "primary",
+                [` 
+                border 
+                border-solid 
+                border-gray/200 
+                bg-white 
+                hover:border-gray/300 
+                focus:border-gray/800 
+                
+                disabled:bg-gray/200 
+                disabled:text-gray/500
+                
+                dark:text-gray/250
+                dark:bg-deep-gray/100 
+                dark:border-gray/350 
+                dark:hover:border-gray/400
+                dark:disabled:bg-gray/250
+                dark:disabled:text-gray/400
+                `]: variant === "secondary"
+            })}
+            {...props}
         >
-            {iconright &&
-                cloneElement(iconright, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
-            <span className="w-full text-center">{children}</span>
             {iconleft &&
                 cloneElement(iconleft, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
-        </button>
-    )
-}
-
-export const PrimBtDisabled = (props: ButtonProps) => {
-    const { children, iconleft, iconright, defaultStyle } = props
-
-    return (
-        <button
-            {...props}
-            className={`${defaultStyle}
-                bg-brand/secondary/100
-                text-brand/secondary/300
-                  cursor-default
-                `}
-        >
-            {iconright &&
-                cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
                 })}
             <span>{children}</span>
-            {iconleft &&
-                cloneElement(iconleft, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
-        </button>
-    )
-}
-
-export const SecondaryButton = (props: ButtonProps) => {
-    const { children, iconleft, iconright, defaultStyle } = props
-
-    return (
-        <button
-            {...props}
-            className={`${defaultStyle}
-                    border
-                    border-solid
-                  border-gray/200
-                  bg-white
-                  hover:border-gray/300
-                  focus:border-gray/800
-
-                  dark:text-gray/250
-                  dark:bg-deep-gray/100
-                  dark:border-gray/350
-                  dark:hover:border-gray/400
-
-                  `}
-        >
             {iconright &&
                 cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
                 })}
-            <span>{children}</span>
-            {iconleft &&
-                cloneElement(iconleft, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
         </button>
     )
 }
 
-export const SecBtDisabled = (props: ButtonProps) => {
-    const { children, iconleft, iconright, defaultStyle } = props
-
-    return (
-        <button
-            {...props}
-            className={`${defaultStyle}
-                   bg-gray/200
-                   text-gray/500
-                     cursor-default
-                  `}
-        >
-            {iconright &&
-                cloneElement(iconright, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
-            <span>{children}</span>
-            {iconleft &&
-                cloneElement(iconleft, {
-                    className: "w-[16px] h-[16px] shrink-0"
-                })}
-        </button>
-    )
-}
+export default Button
