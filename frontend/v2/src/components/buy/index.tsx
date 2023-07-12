@@ -12,7 +12,12 @@ import {
 import { useState } from "react"
 import { Button } from "../button"
 
-export default function Buy() {
+interface Props {
+    setShowChart: (value: boolean) => void
+    showChart: boolean
+}
+
+export default function Buy({ setShowChart, showChart }: Props) {
     const [inverted, setInverted] = useState(false)
 
     return (
@@ -34,7 +39,7 @@ export default function Buy() {
                         Buy <b>future contracts</b> with main stablecoins
                     </span>
                     <div className="flex gap-2">
-                        <button>
+                        <button onClick={() => setShowChart(!showChart)}>
                             <ChartBarIcon className="w-5 text-slate/400" />
                         </button>
                         <button>
