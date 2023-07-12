@@ -17,6 +17,7 @@ module.exports = {
             // Base
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
+            "brand/primary/200": "#FDC6AA",
             "brand/primary/400": "#ca5d25",
             "brand/primary/500": "#F9712B",
             "brand/secondary/100": "#DCD5E3",
