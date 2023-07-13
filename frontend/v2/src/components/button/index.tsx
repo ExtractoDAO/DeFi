@@ -89,6 +89,7 @@ const Button = ({
                 [`
                 bg-orange/100
                 text-orange/500
+                cursor-default
                 `]: bgColor === "warning"
             })}
             {...props}
