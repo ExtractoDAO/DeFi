@@ -35,7 +35,7 @@ const Button = ({
                 rounded-[4px]
                 `]: true,
                 [`
-                text-white 
+                text-base/white 
                 bg-brand/secondary/500 
                 hover:bg-brand/secondary/600
                 focus:outline-none 
@@ -58,7 +58,7 @@ const Button = ({
                 border 
                 border-solid 
                 border-gray/200 
-                bg-white 
+                bg-base/white 
                 hover:border-gray/300 
                 focus:border-gray/800 
                 
@@ -74,13 +74,12 @@ const Button = ({
                 `]: bgColor === "secondary",
                 [`
                 bg-Default/green/500
-                text-white
-                cursor-default
+                text-base/white
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
                 [`
                 bg-red/500
-                text-white
+                text-base/white
                 hover:bg-red/600
 
                 dark:text-deep-gray/100
@@ -89,7 +88,6 @@ const Button = ({
                 [`
                 bg-orange/100
                 text-orange/500
-                cursor-default
                 `]: bgColor === "warning"
             })}
             {...props}
