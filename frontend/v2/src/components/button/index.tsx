@@ -10,14 +10,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode | string
     iconleft?: ReactElement
     iconright?: ReactElement
-    variant?: "primary" | "secondary"
+    bgColor?: "primary" | "secondary" | "success" | "error" | "warning"
 }
 
 const Button = ({
     children,
     iconleft,
     iconright,
-    variant = "primary",
+    bgColor = "primary",
     ...props
 }: ButtonProps) => {
     return (
@@ -53,7 +53,7 @@ const Button = ({
                 dark:disabled:text-brand/primary/500
                 dark:disabled:bg-brand/primary/200
                 dark:focus:ring-brand/primary/200
-                `]: variant === "primary",
+                `]: bgColor === "primary",
                 [` 
                 border 
                 border-solid 
@@ -71,7 +71,7 @@ const Button = ({
                 dark:hover:border-gray/400
                 dark:disabled:bg-gray/250
                 dark:disabled:text-gray/400
-                `]: variant === "secondary"
+                `]: bgColor === "secondary"
             })}
             {...props}
         >
