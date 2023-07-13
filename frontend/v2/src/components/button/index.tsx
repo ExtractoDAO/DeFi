@@ -86,6 +86,10 @@ const Button = ({
                 dark:text-deep-gray/100
                 dark:hover:bg-red/400
                 `]: bgColor === "error",
+                [`
+                bg-orange/100
+                text-orange/500
+                `]: bgColor === "warning"
             })}
             {...props}
         >
