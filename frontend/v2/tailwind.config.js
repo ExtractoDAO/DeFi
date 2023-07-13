@@ -56,13 +56,18 @@ module.exports = {
             "slate/600": "#475569",
             "slate/700": "#334155",
             // Red
-            "red/500": "#EE4444",
+            "red/400": "#FF6B6B",
+            "red/500": "#EF4444",
+            "red/600": "#DC2626",
             // Green
             "Default/green/100": "#D1FAE5",
             "Default/green/200": "#A0F9E0",
             "Default/green/500": "#22C45E",
             "Default/green/800": "#065F46",
-            "Default/green/900": "#073B19"
+            "Default/green/900": "#073B19",
+            // Orange
+            "orange/100": "#FEECD4",
+            "orange/500": "#F87316",
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
