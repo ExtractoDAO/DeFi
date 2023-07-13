@@ -71,7 +71,13 @@ const Button = ({
                 dark:hover:border-gray/400
                 dark:disabled:bg-gray/250
                 dark:disabled:text-gray/400
-                `]: bgColor === "secondary"
+                `]: bgColor === "secondary",
+                [`
+                bg-Default/green/500
+                text-white
+                cursor-default
+                dark:text-deep-gray/100
+                `]: bgColor === "success",
             })}
             {...props}
         >
