@@ -78,6 +78,14 @@ const Button = ({
                 cursor-default
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
+                [`
+                bg-red/500
+                text-white
+                hover:bg-red/600
+
+                dark:text-deep-gray/100
+                dark:hover:bg-red/400
+                `]: bgColor === "error",
             })}
             {...props}
         >
