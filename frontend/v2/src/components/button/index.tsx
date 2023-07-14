@@ -108,6 +108,10 @@ const Button = ({
                 [`
                 bg-warning/100
                 text-warning/500
+                border
+                border-warning/300
+                hover:bg-warning/200
+                focus:border-warning/500
                 cursor-pointer
 
                 disabled:cursor-default
