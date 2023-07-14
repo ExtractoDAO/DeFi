@@ -83,11 +83,11 @@ const Button = ({
                 dark:disabled:text-gray/400
                 `]: bgColor === "secondary",
                 [`
-                bg-green/500
+                bg-green/600
                 text-base/white
                 border
                 border-green/200
-                hover:bg-green/600
+                hover:bg-green/500
                 focus:border-green/800
                 cursor-pointer
                 
@@ -97,22 +97,22 @@ const Button = ({
                 disabled:text-green/300
 
                 dark:text-deep-gray/100
-                dark:bg-green/600
-                dark:border-green/600
-                dark:hover:bg-green/700
-                dark:hover:border-green/700
+                dark:bg-green/500
+                dark:border-green/500
+                dark:hover:bg-green/600
+                dark:hover:border-green/600
                 dark:focus:border
-                dark:focus:border-green/500
+                dark:focus:border-green/700
 
                 dark:disabled:bg-green/200
                 dark:disabled:text-green/600
                 `]: bgColor === "success",
                 [`
-                bg-error/500
+                bg-error/600
                 text-base/white
                 border
                 border-error/400
-                hover:bg-error/600
+                hover:bg-error/500
                 focus:border-error/700
                 cursor-pointer
 
@@ -122,13 +122,13 @@ const Button = ({
                 disabled:text-error/300
 
                 dark:text-deep-gray/100
-                dark:hover:bg-error/700
-                dark:hover:border-error/700
-                dark:bg-error/600
-                dark:border-error/600
-                dark:focus:border-error/400
+                dark:bg-error/500
+                dark:border-error/500
+                dark:hover:bg-error/600
+                dark:hover:border-error/600
+                dark:focus:border-error/700
 
-                dark:disabled:bg-error/400
+                dark:disabled:bg-error/300
                 dark:disabled:text-error/600
                 `]: bgColor === "error",
                 [`
