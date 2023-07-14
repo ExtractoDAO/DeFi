@@ -94,7 +94,10 @@ const Button = ({
                 [`
                 bg-error/500
                 text-base/white
+                border
+                border-error/400
                 hover:bg-error/600
+                focus:border-error/700
                 cursor-pointer
 
                 disabled:cursor-default
