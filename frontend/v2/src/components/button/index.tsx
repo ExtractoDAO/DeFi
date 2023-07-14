@@ -24,6 +24,8 @@ const Button = ({
         <button
             className={classNames({
                 [`
+                w-full
+                justify-center
                 inline-flex 
                 py-2 
                 px-4 
@@ -43,10 +45,10 @@ const Button = ({
                 focus:ring-brand/secondary/300 
                 focus:border-transparent 
                 focus:border
-
+        
                 disabled:bg-brand/secondary/100 
                 disabled:text-brand/secondary/300
-
+          
                 dark:bg-brand/primary/500 
                 dark:text-deep-gray/100
                 dark:hover:bg-brand/primary/400
@@ -60,7 +62,7 @@ const Button = ({
                 border-gray/200 
                 bg-base/white 
                 hover:border-gray/300 
-                focus:border-gray/800 
+                focus:border-gray/800        
                 
                 disabled:bg-gray/200 
                 disabled:text-gray/500
@@ -74,7 +76,7 @@ const Button = ({
                 `]: bgColor === "secondary",
                 [`
                 bg-Default/green/500
-                text-base/white
+                text-base/white 
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
                 [`
@@ -83,7 +85,7 @@ const Button = ({
                 hover:bg-red/600
 
                 dark:text-deep-gray/100
-                dark:hover:bg-red/400
+                 dark:hover:bg-red/400
                 `]: bgColor === "error",
                 [`
                 bg-orange/100
@@ -96,7 +98,7 @@ const Button = ({
                 cloneElement(iconleft, {
                     className: "w-[16px] h-[16px] shrink-0"
                 })}
-            <span>{children}</span>
+            {children}
             {iconright &&
                 cloneElement(iconright, {
                     className: "w-[16px] h-[16px] shrink-0"
