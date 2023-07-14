@@ -45,10 +45,12 @@ const Button = ({
                 focus:ring-brand/secondary/300 
                 focus:border-transparent 
                 focus:border
-        
+                cursor-pointer
+
                 disabled:bg-brand/secondary/100 
                 disabled:text-brand/secondary/300
-          
+                disabled:cursor-default
+
                 dark:bg-brand/primary/500 
                 dark:text-deep-gray/100
                 dark:hover:bg-brand/primary/400
@@ -62,10 +64,12 @@ const Button = ({
                 border-gray/200 
                 bg-base/white 
                 hover:border-gray/300 
-                focus:border-gray/800        
+                focus:border-gray/800 
+                cursor-pointer
                 
                 disabled:bg-gray/200 
                 disabled:text-gray/500
+                disabled:cursor-default
                 
                 dark:text-gray/250
                 dark:bg-deep-gray/100 
@@ -76,20 +80,33 @@ const Button = ({
                 `]: bgColor === "secondary",
                 [`
                 bg-Default/green/500
-                text-base/white 
+                text-base/white
+                cursor-pointer
+                
+                disabled:cursor-default
+
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
                 [`
                 bg-red/500
                 text-base/white
                 hover:bg-red/600
+                cursor-pointer
+
+                disabled:cursor-default
 
                 dark:text-deep-gray/100
-                 dark:hover:bg-red/400
+                dark:hover:bg-red/400
                 `]: bgColor === "error",
                 [`
                 bg-orange/100
                 text-orange/500
+                cursor-pointer
+
+                disabled:cursor-default
+
+                dark:
+
                 `]: bgColor === "warning"
             })}
             {...props}
