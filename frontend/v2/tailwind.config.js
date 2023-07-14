@@ -36,6 +36,7 @@ module.exports = {
             "gray/500": "#6B7280",
             "gray/600": "#64748A",
             "gray/600": "#4B5563",
+            "gray/700":"#18212E",
             "gray/800": "#1F2937",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
@@ -59,17 +60,29 @@ module.exports = {
             // Green
             "green/100": "#D1FAE5",
             "green/200": "#A0F9E0",
+            "green/300": "#38DB74",
             "green/500": "#22C45E",
+            "green/600": "#1F9D41",
+            "green/700": "#1A8B3A",
             "green/800": "#065F46",
             "green/900": "#073B19",
             
             // Warning
+            "disabled/warning/100": "#FFF6E9",
+            "dark/warning/200": "#FFC166",
             "warning/100": "#FEECD4",
+            "warning/200": "#FCD4B9",
+            "warning/300": "#FFA949",
             "warning/500": "#F87316",
             // Error
+            "error/100": "#FFE6E6",
+            "error/200": "#FFCCCC",
+            "error/300": "#FF9999",
             "error/400": "#FF6B6B",
             "error/500": "#EF4444",
             "error/600": "#DC2626",
+            "error/700": "#A81D1D",
+            "error/800": "#910F0F",
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
