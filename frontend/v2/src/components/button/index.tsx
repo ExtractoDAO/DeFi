@@ -81,6 +81,10 @@ const Button = ({
                 [`
                 bg-green/500
                 text-base/white
+                border
+                border-green/200
+                hover:bg-green/600
+                focus:border-green/800
                 cursor-pointer
                 
                 disabled:cursor-default
