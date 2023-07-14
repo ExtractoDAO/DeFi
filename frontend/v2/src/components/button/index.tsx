@@ -70,6 +70,7 @@ const Button = ({
                 disabled:bg-gray/200 
                 disabled:text-gray/500
                 disabled:cursor-default
+                disabled:border-none
                 
                 dark:text-gray/250
                 dark:bg-deep-gray/100 
@@ -87,7 +88,10 @@ const Button = ({
                 focus:border-green/800
                 cursor-pointer
                 
+                disabled:bg-green/100
+                disabled:border-none
                 disabled:cursor-default
+                disabled:text-green/300
 
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
@@ -100,7 +104,10 @@ const Button = ({
                 focus:border-error/700
                 cursor-pointer
 
+                disabled:bg-error/100
+                disabled:border-none
                 disabled:cursor-default
+                disabled:text-error/300
 
                 dark:text-deep-gray/100
                 dark:hover:bg-error/400
@@ -114,9 +121,10 @@ const Button = ({
                 focus:border-warning/500
                 cursor-pointer
 
+                disabled:bg-disabled/warning/100
+                disabled:border-none
                 disabled:cursor-default
-
-                dark:
+                disabled:text-warning/300
 
                 `]: bgColor === "warning"
             })}
