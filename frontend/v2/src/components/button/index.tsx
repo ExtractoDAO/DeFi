@@ -64,7 +64,7 @@ const Button = ({
                 border-gray/200 
                 bg-base/white 
                 hover:border-gray/300 
-                focus:border-gray/800 
+                focus:border-gray/800
                 cursor-pointer
                 
                 disabled:bg-gray/200 
@@ -76,6 +76,7 @@ const Button = ({
                 dark:bg-deep-gray/100 
                 dark:border-gray/700 
                 dark:hover:border-gray/400
+                dark:focus:border-gray/500
                 dark:disabled:bg-gray/250
                 dark:disabled:text-gray/400
                 `]: bgColor === "secondary",
@@ -94,6 +95,12 @@ const Button = ({
                 disabled:text-green/300
 
                 dark:text-deep-gray/100
+                dark:bg-green/600
+                dark:border-green/600
+                dark:hover:bg-green/700
+                dark:hover:border-green/700
+                dark:focus:border
+                dark:focus:border-green/500
                 `]: bgColor === "success",
                 [`
                 bg-error/500
@@ -110,7 +117,11 @@ const Button = ({
                 disabled:text-error/300
 
                 dark:text-deep-gray/100
-                dark:hover:bg-error/400
+                dark:hover:bg-error/700
+                dark:hover:border-error/700
+                dark:bg-error/600
+                dark:border-error/600
+                dark:focus:border-error/400
                 `]: bgColor === "error",
                 [`
                 bg-warning/100
@@ -125,6 +136,13 @@ const Button = ({
                 disabled:border-none
                 disabled:cursor-default
                 disabled:text-warning/300
+
+                dark:text-deep-gray/100
+                dark:hover:bg-warning/300
+                dark:hover:border-warning/300
+                dark:bg-dark/warning/200
+                dark:border-dark/warning/200
+                dark:focus:border-error/400
 
                 `]: bgColor === "warning"
             })}
