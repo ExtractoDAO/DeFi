@@ -73,13 +73,13 @@ const Button = ({
                 
                 dark:text-gray/250
                 dark:bg-deep-gray/100 
-                dark:border-gray/350 
+                dark:border-gray/700 
                 dark:hover:border-gray/400
                 dark:disabled:bg-gray/250
                 dark:disabled:text-gray/400
                 `]: bgColor === "secondary",
                 [`
-                bg-Default/green/500
+                bg-green/500
                 text-base/white
                 cursor-pointer
                 
@@ -88,19 +88,19 @@ const Button = ({
                 dark:text-deep-gray/100
                 `]: bgColor === "success",
                 [`
-                bg-red/500
+                bg-error/500
                 text-base/white
-                hover:bg-red/600
+                hover:bg-error/600
                 cursor-pointer
 
                 disabled:cursor-default
 
                 dark:text-deep-gray/100
-                dark:hover:bg-red/400
+                dark:hover:bg-error/400
                 `]: bgColor === "error",
                 [`
-                bg-orange/100
-                text-orange/500
+                bg-warning/100
+                text-warning/500
                 cursor-pointer
 
                 disabled:cursor-default
