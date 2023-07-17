@@ -1,18 +1,24 @@
+import InputField from "@/components/inputField"
+
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+
 export default function page() {
     return (
         <div>
             <div className="row-auto">
-                <input type="text" placeholder="Search by contract name" />
+                <InputField placeholder="Search by contract name" />
             </div>
             <div className="row-auto">
                 <table>
                     <thead>
-                        <th>CONTRACTS</th>
-                        <th>TYPE</th>
-                        <th>EXPIRATION DATE</th>
-                        <th>WEIGHT</th>
-                        <th>COW</th>
-                        <th>STATUS</th>
+                        <tr>
+                            <th>CONTRACTS</th>
+                            <th>TYPE</th>
+                            <th>EXPIRATION DATE</th>
+                            <th>WEIGHT</th>
+                            <th>COW</th>
+                            <th>STATUS</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
