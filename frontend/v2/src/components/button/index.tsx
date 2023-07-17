@@ -40,11 +40,10 @@ const Button = ({
                 text-base/white 
                 bg-brand/secondary/500 
                 hover:bg-brand/secondary/600
-                focus:outline-none 
-                focus:ring-2 
-                focus:ring-brand/secondary/300 
-                focus:border-transparent 
-                focus:border
+                focus:outline-brand/secondary/300 
+                focus:outline
+                focus:outline-2
+                focus:outline-offset-1
                 cursor-pointer
 
                 disabled:bg-brand/secondary/100 
@@ -54,7 +53,7 @@ const Button = ({
                 dark:bg-brand/primary/500 
                 dark:text-deep-gray/100
                 dark:hover:bg-brand/primary/400
-                dark:focus:ring-brand/primary/200
+                dark:focus:outline-brand/primary/200
 
                 dark:disabled:text-brand/primary/500
                 dark:disabled:bg-brand/primary/200
