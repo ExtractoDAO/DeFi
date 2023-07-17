@@ -105,25 +105,24 @@ const Button = ({
                 dark:disabled:text-green/600
                 `]: bgColor === "success",
                 [`
-                bg-error/600
+                bg-error/500
+                hover:bg-error/600
                 text-base/white
-                border
-                border-error/400
-                hover:bg-error/500
-                focus:border-error/700
+                focus:outline-error/700
+                focus:outline
+                focus:outline-1
                 cursor-pointer
 
                 disabled:bg-error/100
-                disabled:border-none
-                disabled:cursor-default
                 disabled:text-error/300
+                disabled:cursor-default
 
                 dark:text-deep-gray/100
-                dark:bg-error/500
-                dark:border-error/500
-                dark:hover:bg-error/600
-                dark:hover:border-error/600
-                dark:focus:border-error/700
+                dark:bg-error/600
+                dark:hover:bg-error/500
+                dark:focus:outline-error/800
+                dark:focus:outline
+                dark:focus:outline-1
 
                 dark:disabled:bg-error/300
                 dark:disabled:text-error/600
