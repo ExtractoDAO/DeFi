@@ -15,6 +15,7 @@ module.exports = {
         },
         colors: {
             // Base
+            transparent: "transparent",
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
             "brand/primary/400": "#ca5d25",
@@ -46,6 +47,8 @@ module.exports = {
             "deep-gray/300": "#161616",
             "deep-gray/400": "#19222F",
             "deep-gray/500": "#171717",
+            "deep-gray/600": "#0F172A",
+
             // Slate
             "slate/50": "#F7F9FB",
             "slate/100": "#F0F4F8",
