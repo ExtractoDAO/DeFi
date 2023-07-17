@@ -61,8 +61,8 @@ const Button = ({
                 [` 
                 border 
                 border-solid 
-                border-gray/200 
                 bg-base/white 
+                border-gray/200 
                 hover:border-gray/300 
                 focus:border-gray/800
                 cursor-pointer
@@ -82,26 +82,24 @@ const Button = ({
                 dark:disabled:text-gray/400
                 `]: bgColor === "secondary",
                 [`
-                bg-green/600
+                bg-green/500
+                hover:bg-green/600
                 text-base/white
-                border
-                border-green/200
-                hover:bg-green/500
-                focus:border-green/800
+                focus:outline-green/700
+                focus:outline
+                focus:outline-1
                 cursor-pointer
                 
                 disabled:bg-green/100
-                disabled:border-none
-                disabled:cursor-default
                 disabled:text-green/300
+                disabled:cursor-default
 
                 dark:text-deep-gray/100
-                dark:bg-green/500
-                dark:border-green/500
-                dark:hover:bg-green/600
-                dark:hover:border-green/600
-                dark:focus:border
-                dark:focus:border-green/700
+                dark:bg-green/600
+                dark:hover:bg-green/500
+                dark:focus:outline-green/800
+                dark:focus:outline
+                dark:focus:outline-1
 
                 dark:disabled:bg-green/200
                 dark:disabled:text-green/600
