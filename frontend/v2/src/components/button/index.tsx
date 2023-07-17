@@ -129,27 +129,26 @@ const Button = ({
                 `]: bgColor === "error",
                 [`
                 bg-warning/100
-                text-warning/500
-                border
-                border-warning/300
                 hover:bg-warning/200
-                focus:border-warning/500
+                text-warning/500
+                focus:outline-warning/300
+                focus:outline
+                focus:outline-1
                 cursor-pointer
 
-                disabled:bg-disabled/warning/100
-                disabled:border-none
-                disabled:cursor-default
+                disabled:bg-warning/50
                 disabled:text-warning/300
+                disabled:cursor-default
 
                 dark:text-deep-gray/100
-                dark:hover:bg-warning/300
-                dark:hover:border-warning/300
-                dark:bg-dark/warning/200
-                dark:border-dark/warning/200
-                dark:focus:border-error/400
+                dark:bg-warning/200
+                dark:hover:bg-warning/100
+                dark:focus:outline-warning/400
+                dark:focus:outline
+                dark:focus:outline-1
 
-                dark:disabled:bg-warning/200
-                dark:disabled:text-warning/500
+                dark:disabled:bg-warning/50
+                dark:disabled:text-warning/400
                 `]: bgColor === "warning"
             })}
             {...props}
