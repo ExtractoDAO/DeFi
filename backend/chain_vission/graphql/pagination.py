@@ -1,17 +1,17 @@
-import strawberry
 from typing import List, Optional, TypeVar
+from strawberry import type, field
 
 
 GenericType = TypeVar("GenericType")
 
 
-@strawberry.type
+@type
 class PaginationWindow(List[GenericType]):
-    items: List[GenericType] = strawberry.field(
+    items: List[GenericType] = field(
         description="The list of items in this pagination window."
     )
 
-    total_items_count: int = strawberry.field(
+    total_items_count: int = field(
         description="Total number of items in the filtered dataset."
     )
 
