@@ -38,6 +38,7 @@ module.exports = {
             "gray/600": "#64748A",
             "gray/600": "#4B5563",
             "gray/800": "#1F2937",
+            "gray/900": "#1F2228",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
             "gray/900": "#131313",
@@ -48,6 +49,7 @@ module.exports = {
             "deep-gray/400": "#19222F",
             "deep-gray/500": "#171717",
             "deep-gray/600": "#0F172A",
+            "deep-gray/700": "#121212",
 
             // Slate
             "slate/50": "#F7F9FB",
