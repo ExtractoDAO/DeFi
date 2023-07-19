@@ -1,9 +1,9 @@
-from typing import List, Optional
 from chain_vission import adapter_app
-import strawberry
+from typing import List, Optional
+from strawberry import type
 
 
-@strawberry.type
+@type
 class Price:
     """
     type Price {

@@ -1,7 +1,7 @@
-import uvicorn
-from chain_vission.domain.schema import schema
+from chain_vission.graphql.schema import schema
 from strawberry.fastapi import GraphQLRouter
 from chain_vission import app
+import uvicorn
 
 graphql_app = GraphQLRouter(schema)
 app.include_router(graphql_app, prefix="/graphql")

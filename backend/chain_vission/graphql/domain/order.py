@@ -1,9 +1,9 @@
-from typing import List, Optional
-import strawberry
 from chain_vission import adapter_app
+from typing import List, Optional
+from strawberry import type
 
 
-@strawberry.type
+@type
 class Order:
     """
     type Contract {
