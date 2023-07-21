@@ -30,7 +30,7 @@ const Sidebar = ({
 
     return (
         <div
-            className={`bg-white
+            className={`bg-base/white
                     dark:bg-deep-gray/100
                     text-zinc-50 z-20
                     max-md:fixed
@@ -91,7 +91,7 @@ const Sidebar = ({
                         right: "-15px"
                     }}
                     className={`
-                      bg-white
+                      bg-base/white
                         grid
                         place-content-center
                         w-8
@@ -112,7 +112,7 @@ const Sidebar = ({
                         className={`
                             w-5
                             h-5
-                            bg-white
+                            bg-base/white
                             text-slate/700
                             dark:bg-deep-gray/100
                         `}

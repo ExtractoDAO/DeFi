@@ -23,7 +23,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
     return (
         <div className="flex flex-col items-start gap-2 max-md:w-full max-w-2xl mx-auto">
             <div className="p-1.5 bg-slate/100 rounded-md dark:bg-deep-gray/500">
-                <button className="bg-white py-1.5 px-3.5 rounded text-sm text-gray/900 dark:bg-deep-gray/100 dark:text-gray/300">
+                <button className="bg-base/white py-1.5 px-3.5 rounded text-sm text-gray/900 dark:bg-deep-gray/100 dark:text-gray/300">
                     Buy
                 </button>
                 <button
@@ -33,7 +33,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                     Conversion
                 </button>
             </div>
-            <div className=" p-6 bg-white dark:bg-deep-gray/100 w-full">
+            <div className=" p-6 bg-base/white dark:bg-deep-gray/100 w-full">
                 <div className="flex justify-between items-center mb-4">
                     <span className="text-slate/500">
                         Buy <b>future contracts</b> with main stablecoins
@@ -74,7 +74,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                             border-slate/200
                             rounded-md
                             absolute
-                            bg-white
+                            bg-base/white
                             top-2/4
                             left-2/4
                             -translate-x-2/4

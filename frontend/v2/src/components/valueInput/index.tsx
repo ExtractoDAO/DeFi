@@ -104,12 +104,12 @@ export default function ValueInput({
                                 className={`
                                 px-4
                                 text-xs
-                                dark:bg-Default/green/900
-                                dark:text-Default/green/500
+                                dark:bg-green/900
+                                dark:text-green/500
                                 h-max
                                 rounded-lg
-                                bg-Default/green/100
-                                text-Default/green/800
+                                bg-green/100
+                                text-green/800
                             `}
                             >
                                 MAX
@@ -121,7 +121,7 @@ export default function ValueInput({
                             <span className="text-gray/400">
                                 {conversion.value}
                             </span>{" "}
-                            <span className="text-Default/green/500">
+                            <span className="text-green/500">
                                 {conversion.variation}
                             </span>
                         </p>
