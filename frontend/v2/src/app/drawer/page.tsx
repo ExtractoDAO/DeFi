@@ -1,49 +1,16 @@
+import InputField from "@/components/inputField"
+import TableContracts from "@/components/tableContracts"
+
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+
 export default function page() {
     return (
         <div>
             <div className="row-auto">
-                <input type="text" placeholder="Search by contract name" />
+                <InputField placeholder="Search by contract name" />
             </div>
             <div className="row-auto">
-                <table>
-                    <thead>
-                        <th>CONTRACTS</th>
-                        <th>TYPE</th>
-                        <th>EXPIRATION DATE</th>
-                        <th>WEIGHT</th>
-                        <th>COW</th>
-                        <th>STATUS</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>My contract 01</td>
-                            <td>FAT OX</td>
-                            <td>05-31-2024</td>
-                            <td>2.8 Kg</td>
-                            <td>0.58 (0.0 USD)</td>
-                            <td>Active</td>
-                            <td>View</td>
-                        </tr>
-                        <tr>
-                            <td>My contract 01</td>
-                            <td>FAT OX</td>
-                            <td>05-31-2024</td>
-                            <td>2.8 Kg</td>
-                            <td>0.58 (0.0 USD)</td>
-                            <td>Active</td>
-                            <td>View</td>
-                        </tr>
-                        <tr>
-                            <td>My contract 01</td>
-                            <td>FAT OX</td>
-                            <td>05-31-2024</td>
-                            <td>2.8 Kg</td>
-                            <td>0.58 (0.0 USD)</td>
-                            <td>Active</td>
-                            <td>View</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <TableContracts />
             </div>
             <div className="row-auto">
                 <span>1</span>

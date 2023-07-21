@@ -15,6 +15,8 @@ module.exports = {
         },
         colors: {
             // Base
+            transparent: "transparent",
+            white: "#FFFFFF",
             "base/white": "#FFFFFF",
             "brand/primary/200": "#FDC6AA",
             "brand/primary/400": "#ca5d25",
@@ -36,8 +38,9 @@ module.exports = {
             "gray/500": "#6B7280",
             "gray/600": "#64748A",
             "gray/600": "#4B5563",
-            "gray/700":"#18212E",
+            "gray/700": "#18212E",
             "gray/800": "#1F2937",
+            "gray/900": "#1F2228",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
             "gray/900": "#131313",
@@ -47,6 +50,9 @@ module.exports = {
             "deep-gray/300": "#161616",
             "deep-gray/400": "#19222F",
             "deep-gray/500": "#171717",
+            "deep-gray/600": "#0F172A",
+            "deep-gray/700": "#121212",
+
             // Slate
             "slate/50": "#F7F9FB",
             "slate/100": "#F0F4F8",
@@ -66,7 +72,7 @@ module.exports = {
             "green/700": "#1A8B3A",
             "green/800": "#065F46",
             "green/900": "#073B19",
-            
+
             // Warning
             "warning/50": "#FFF7ED",
             "dark/warning/200": "#FFC166",
@@ -83,7 +89,7 @@ module.exports = {
             "error/500": "#EF4444",
             "error/600": "#DC2626",
             "error/700": "#B91C1C",
-            "error/800": "#991B1B",
+            "error/800": "#991B1B"
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
