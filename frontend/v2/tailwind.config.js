@@ -18,6 +18,7 @@ module.exports = {
             transparent: "transparent",
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
+            "brand/primary/200": "#FDC6AA",
             "brand/primary/400": "#ca5d25",
             "brand/primary/500": "#F9712B",
             "brand/secondary/100": "#DCD5E3",
@@ -37,6 +38,7 @@ module.exports = {
             "gray/500": "#6B7280",
             "gray/600": "#64748A",
             "gray/600": "#4B5563",
+            "gray/700": "#18212E",
             "gray/800": "#1F2937",
             "gray/900": "#1F2228",
             "cool-gray/900": "#111827",
@@ -62,11 +64,32 @@ module.exports = {
             // Red
             "red/500": "#EE4444",
             // Green
-            "Default/green/100": "#D1FAE5",
-            "Default/green/200": "#A0F9E0",
-            "Default/green/500": "#22C45E",
-            "Default/green/800": "#065F46",
-            "Default/green/900": "#073B19"
+            "green/100": "#D1FAE5",
+            "green/200": "#A0F9E0",
+            "green/300": "#38DB74",
+            "green/500": "#26DA68",
+            "green/600": "#22C45E",
+            "green/700": "#1A8B3A",
+            "green/800": "#065F46",
+            "green/900": "#073B19",
+
+            // Warning
+            "warning/50": "#FFF7ED",
+            "dark/warning/200": "#FFC166",
+            "warning/100": "#ffedd5",
+            "warning/200": "#fed7aa",
+            "warning/300": "#fdba74",
+            "warning/400": "#fb923c",
+            "warning/500": "#f97316",
+            // Error
+            "error/100": "#FEE2E2",
+            "error/200": "#FECACA",
+            "error/300": "#FCA5A5",
+            "error/400": "#F87171",
+            "error/500": "#EF4444",
+            "error/600": "#DC2626",
+            "error/700": "#B91C1C",
+            "error/800": "#991B1B"
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'

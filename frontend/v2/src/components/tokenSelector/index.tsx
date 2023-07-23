@@ -49,11 +49,11 @@ function TokenSelector() {
             className={`
                 px-4 py-1
                 flex items-center gap-2.5
-                bg-white
+                bg-base/white
                 dark:bg-deep-gray/100
                 border border-gray/200 dark:border-deep-gray/200
                 cursor-pointer
-                dark:text-white
+                dark:text-base/white
                 text-sm
                 whitespace-nowrap
                 first-of-type:rounded-t
@@ -74,7 +74,7 @@ function TokenSelector() {
                     rounded
                     text-gray/900 dark:text-gray/300
                     text-sm
-                    bg-white
+                    bg-base/white
                     border border-gray/200 dark:border-deep-gray/200
                     dark:bg-deep-gray/100
                     flex
@@ -92,7 +92,7 @@ function TokenSelector() {
                 <ChevronDownIcon
                     className={classnames({
                         "w-8": true,
-                        "dark:text-white": true,
+                        "dark:text-base/white": true,
                         "rotate-180": open,
                         "transition-transform": true
                     })}

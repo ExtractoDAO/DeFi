@@ -78,7 +78,7 @@ export default function Navbar() {
     return (
         <React.Fragment>
             <nav
-                className="bg-white
+                className="bg-base/white
                   dark:border-deep-gray/200
                   dark:bg-deep-gray/100
                     border
