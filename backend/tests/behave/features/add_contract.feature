@@ -6,3 +6,4 @@ Feature: Contracts
         Given that the user is logged in "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
         When user buys a contract
         Then the new contract should be available
+        And the user "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" should log out

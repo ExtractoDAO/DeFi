@@ -11,5 +11,4 @@ def before_feature(context, feature):
 
 
 def after_feature(context, feature):
-    context.singout()
     print(f"\n🏁 finished `{feature.name}`")
