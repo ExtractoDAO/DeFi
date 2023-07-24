@@ -28,6 +28,7 @@ module.exports = {
             "brand/secondary/600": "#42225B",
             // Gray
             "Default/gray/50": "#F9FAFB",
+            "Default/gray/100": "#F1F1F1",
             "Default/gray/200": "#E5E7EB",
             "gray/100": "#F6F6F6",
             "gray/200": "#E4E6EA",
