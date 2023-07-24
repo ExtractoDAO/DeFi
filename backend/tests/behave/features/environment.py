@@ -1,14 +1,15 @@
-from chain_vission.adapter.firebase import FirebaseAdapter
+from fastapi.testclient import TestClient
+from chain_vission.main import app
 import unittest
 
 
 def before_feature(context, feature):
-    print(f"🚀 Start settings for {feature}...")
-    context.aq = feature.tags
-    context.adapter = FirebaseAdapter()
+    print(f"🚀 Start settings for `{feature.name}`")
+    context.client = TestClient(app)
     context.test = unittest.TestCase()
     print("✅ Done for test!")
 
 
 def after_feature(context, feature):
-    print(f"🏁 finished {feature}")
+    context.singout()
+    print(f"\n🏁 finished `{feature.name}`")
