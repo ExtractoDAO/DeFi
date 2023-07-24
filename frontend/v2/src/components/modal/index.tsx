@@ -42,7 +42,22 @@ export default function Modal({ title, icon, message, buttons }: ModalProps) {
                     <div>
                         <p>{message}</p>
                     </div>
-                   
+                    {buttons.map((button, index) => (
+                        <div
+                            key={index}
+                            className={classNames({
+                                "flex justify-center max-sm:mb-1 max-sm:ml-0":
+                                    index === 0
+                            })}
+                        >
+                            <Button
+                                bgColor={button.bgColor}
+                                onClick={button.onClick}
+                            >
+                                {button.label}
+                            </Button>
+                        </div>
+                    ))}
                     <Dialog.Title as="h3">{title}</Dialog.Title>
                 </Transition.Child>
             </Dialog>
