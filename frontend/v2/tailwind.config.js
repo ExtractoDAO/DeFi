@@ -18,6 +18,7 @@ module.exports = {
             transparent: "transparent",
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
+            "brand/primary/100": "#FEE3D5",
             "brand/primary/200": "#FDC6AA",
             "brand/primary/400": "#ca5d25",
             "brand/primary/500": "#F9712B",
@@ -29,6 +30,7 @@ module.exports = {
             // Gray
             "Default/gray/50": "#F9FAFB",
             "Default/gray/200": "#E5E7EB",
+            "gray/50": "#FAFAFA",
             "gray/100": "#F6F6F6",
             "gray/200": "#E4E6EA",
             "gray/250": "#D5DDF0",
