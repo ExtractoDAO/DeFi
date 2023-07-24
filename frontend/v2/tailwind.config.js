@@ -99,5 +99,5 @@ module.exports = {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
         }
     },
-    plugins: []
+    plugins: [require("tailwind-bootstrap-grid")()]
 }
