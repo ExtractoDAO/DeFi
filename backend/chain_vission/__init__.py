@@ -2,7 +2,6 @@ from chain_vission.adapter.firebase import FirebaseAdapter
 from fastapi import FastAPI
 import os
 
-memory_pool = dict()
 adapter_app = FirebaseAdapter()
 app = FastAPI()
 
