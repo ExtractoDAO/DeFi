@@ -118,7 +118,13 @@ export default function Modal({
                                         sm:mt-0 
                                         sm:text-left"
                                         >
-                                            <Dialog.Title as="h3">
+                                            <Dialog.Title
+                                                as="h3"
+                                                className="text-base 
+                                             font-semibold 
+                                             leading-6 
+                                             text-gray/900"
+                                            >
                                                 {title}
                                             </Dialog.Title>
                                             <div>
