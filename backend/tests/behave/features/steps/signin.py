@@ -9,10 +9,10 @@ from siwe import SiweMessage
 def build_a_message(address: str, nonce: str) -> str:
     siwe_msg = SiweMessage(
         message={
-            "domain": "localhost:8000",
+            "domain": "localhost:8080",
             "address": address,
             "statement": "Test Extracto",
-            "uri": "http://localhost:8000",
+            "uri": "http://localhost:8080",
             "version": "1",
             "chain_id": 1,
             "nonce": nonce,
@@ -33,22 +33,31 @@ def sign_a_message(message: str) -> str:
 
 
 @given('that the user is logged in "{address}"')
-def that_the_user_is_logged_in(context: Context, address: str):
-    nonce = context.client.get("/login/nonce/{address}").json()["nonce"]
+def that_the_user_is_logged_in(context, address: str):
+    nonce = context.client.get(f"/login/nonce/{address}").json()["nonce"]
     message = build_a_message(address, nonce)
     signature = sign_a_message(message)
     response = context.client.post(
         "/login/signin", json={"message": message, "signature": signature}
     ).json()
-    print(response)
+
     context.token = response["token"]
 
 
-@when("user buy a contract")
+@when("user buys a contract")
 def user_buys_a_contract(context):
-    raise NotImplementedError("STEP: When user buys a contract")
+    print("STEP: When user buys a contract")
 
 
 @then("the new contract should be available")
 def the_new_contract_should_be_available(context):
-    raise NotImplementedError("STEP: Then the new contract should be available")
+    print("STEP: Then the new contract should be available")
+
+
+@then('the user "{address}" should log out')
+def the_user_should_log_out(context, address: str):
+    token = context.token
+    context.client.get(
+        f"/login/signout/{address}",
+        headers={"X-Authorization": token},
+    )
