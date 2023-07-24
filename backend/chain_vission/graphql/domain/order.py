@@ -29,7 +29,10 @@ class Order:
                 kg=order["kg"],
             )
         # TODO: improve this with logger module
-        warn = f"WARN: Expected dict with: investor, contract, hash and kg, but got {list(order.keys())}"
+        warn = (
+            "WARN: Expected dict with: investor, contract, hash and kg, but got"
+            f" {list(order.keys())}"
+        )
         print(warn)
         return None
 

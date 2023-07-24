@@ -1,8 +1,14 @@
-from chain_vission.graphql.domain.price import Price, get_all_buy_price, get_all_sell_price
 from chain_vission.graphql.pagination import PaginationWindow, get_pagination_window
 from chain_vission.graphql.domain.investor import Investor, get_all_investors
-from strawberry import type, field, Schema
 from typing import Optional
+from jose import jwt, JWTError
+from chain_vission import adapter_app
+from strawberry import type, mutation, field, Schema
+from chain_vission.graphql.domain.price import (
+    Price,
+    get_all_buy_price,
+    get_all_sell_price,
+)
 from chain_vission.graphql.domain.contract import (
     Contract,
     get_all_contracts,
@@ -15,6 +21,7 @@ from chain_vission.graphql.domain.order import (
     get_all_ordes_by_investor,
     get_order_by_hash,
 )
+from strawberry.types import Info
 
 
 @type
@@ -64,4 +71,56 @@ class Query:
         )
 
 
-schema = Schema(query=Query)
+SECRET_KEY = "secretkey"
+
+
+@type
+class Response:
+    success: bool = True
+    message: str
+
+
+def verify_token(token: str) -> Optional[str]:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    except JWTError as e:
+        return f"Authentication attempt rejected: {e}"
+
+    address = payload["address"]
+    stored_token = adapter_app.get_data(f"/tokens/{address}")
+
+    if stored_token is None or stored_token != token:
+        return "Authentication attempt rejected: Invalid token"
+
+    return None
+
+
+@type
+class Mutation:
+    @mutation
+    def new_contract(
+        self,
+        address: str,
+        commodity_amount: float,
+        locktime: int,
+        owner: str,
+        price: int,
+        info: Info,
+    ) -> Response:
+        token = info.context["request"].state.token
+        if (message := verify_token(token)) is not None:
+            return Response(message=message, success=False)
+
+        contract = Contract(
+            address=address,
+            burn=False,
+            kg=commodity_amount,
+            locktime=locktime,
+            owner=owner,
+            price=price,
+        )
+        adapter_app.set_data(f"/contracts/{contract.address}", contract.__dict__)
+        return Response()
+
+
+schema = Schema(query=Query, mutation=Mutation)

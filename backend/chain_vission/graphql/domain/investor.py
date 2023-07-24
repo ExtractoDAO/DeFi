@@ -1,6 +1,6 @@
 from chain_vission import adapter_app
 from typing import List, Optional
-from  strawberry import type
+from strawberry import type
 
 
 @type

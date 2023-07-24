@@ -36,9 +36,13 @@ class Contract:
             )
 
         # TODO: improve this with logger module
-        warn = f"WARN: Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
+        warn = (
+            "WARN: Expected dict with: locktime, address, owner, price, burn and kg, but"
+            f" got {list(contract.keys())}"
+        )
         print(warn)
         return None
+    
 
 
 def get_all_contracts() -> List[Contract]:
