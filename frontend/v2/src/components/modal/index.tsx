@@ -14,9 +14,10 @@ interface ModalProps {
     icon?: React.ReactNode
     message: string
     buttons: ButtonProps[]
+    open: boolean
 }
 
-export default function Modal({ title, icon, message, buttons }: ModalProps) {
+export default function Modal({ title, icon, message, buttons, open }: ModalProps) {
     return (
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
