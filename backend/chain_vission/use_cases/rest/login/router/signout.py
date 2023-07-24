@@ -1,4 +1,4 @@
-from chain_vission.login.router import router
+from chain_vission.use_cases.rest.login.router import router
 from fastapi.responses import JSONResponse
 from chain_vission import adapter_app
 from fastapi import status, Header
