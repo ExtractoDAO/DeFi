@@ -55,6 +55,7 @@ module.exports = {
             "deep-gray/500": "#171717",
             "deep-gray/600": "#0F172A",
             "deep-gray/700": "#121212",
+            "deep-gray/800": "#1B1B1B",
 
             // Slate
             "slate/50": "#F7F9FB",
