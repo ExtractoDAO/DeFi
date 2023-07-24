@@ -1,8 +1,11 @@
-from fastapi.responses import JSONResponse
 from chain_vission.login.router import router
-from chain_vission import memory_pool
+from fastapi.responses import JSONResponse
+from chain_vission import adapter_app
 from pydantic import BaseModel
+from typing import Optional
 from fastapi import status
+from jose import jwt
+import datetime
 from siwe import (
     SiweMessage,
     ExpiredMessage,
@@ -12,7 +15,18 @@ from siwe import (
     InvalidSignature,
 )
 
-DOMAIN = "http://localhost:8080"
+DOMAIN = "localhost:8080"
+SECRET_KEY = "secretkey"
+
+
+def expiration_time():
+    exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+    return int(exp.timestamp())
+
+
+class Cache(BaseModel):
+    token: Optional[str]
+    nonce: Optional[str]
 
 
 class SignIn(BaseModel):
@@ -20,21 +34,20 @@ class SignIn(BaseModel):
     signature: str
 
 
-def validate_nonce(address: str, nonce: str):
-    if memory_pool.get(address, "") != nonce:
+def validate_nonce(nonce: str):
+    if cache_memory.nonce != nonce:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED, content="Nonce Mismatch"
         )
-    del memory_pool[address]
 
 
 def validate_signature(msg: SiweMessage, signature: str):
     try:
-        msg.verify(signature, domain=DOMAIN, nonce=memory_pool.get(msg.address, ""))
+        msg.verify(signature, domain=DOMAIN, nonce=cache_memory.nonce)
     except ValueError:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            content="Authentication attempt rejected.",
+            content="Authentication attempt rejected: Unknow error",
         )
     except ExpiredMessage:
         return JSONResponse(
@@ -44,11 +57,12 @@ def validate_signature(msg: SiweMessage, signature: str):
     except DomainMismatch:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            content="Authentication attempt rejected.",
+            content="Authentication attempt rejected: Domain mismatch",
         )
     except NonceMismatch:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED, content="Nonce Mismatch"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content="Authentication attempt rejected: Nonce mismatch",
         )
     except MalformedSession as error:
         return JSONResponse(
@@ -58,16 +72,42 @@ def validate_signature(msg: SiweMessage, signature: str):
     except InvalidSignature:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            content="Authentication attempt rejected.",
+            content="Authentication attempt rejected: Invalid Signature",
         )
+
+
+def generate_jwt_token(siwe_msg: SiweMessage, signin: SignIn):
+    if cache_memory.token:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content="User already logged in",
+        )
+    if (result := validate_nonce(siwe_msg.nonce)) is not None:
+        return result
+    if (result := validate_signature(siwe_msg, signin.signature)) is not None:
+        return result
+
+    exp = expiration_time()
+    payload = {
+        "exp": exp,
+        "address": siwe_msg.address,
+        "nonce": cache_memory.nonce,
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    adapter_app.delete_data(f"/nonces/{siwe_msg.address}")
+    adapter_app.set_data(f"/tokens/{siwe_msg.address}", token)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK, content={"token": token, "expiration": exp}
+    )
 
 
 @router.post(path="/signin", status_code=status.HTTP_201_CREATED)
 async def get_sign(signin: SignIn):
     siwe_msg = SiweMessage(signin.message)
-
-    validate_nonce(siwe_msg.address, siwe_msg.nonce)
-
-    validate_signature(siwe_msg, signin.signature)
-
-    return JSONResponse(status_code=status.HTTP_200_OK, content=True)
+    global cache_memory
+    cache_memory = Cache(
+        token=adapter_app.get_data(f"/tokens/{siwe_msg.address}"),
+        nonce=adapter_app.get_data(f"/nonces/{siwe_msg.address}"),
+    )
+    return generate_jwt_token(siwe_msg, signin)
