@@ -4,7 +4,11 @@ import { Dialog, Transition } from "@headlessui/react"
 import Button from "../button"
 import classNames from "classnames"
 
-const Modal = () => {
+interface ModalProps {
+    title: string
+}
+
+export default function Modal({ title }: ModalProps) {
     return (
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -25,9 +29,10 @@ const Modal = () => {
                     leave="ease-in duration-200"
                     leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                ></Transition.Child>
+                >
+                    <Dialog.Title as="h3">{title}</Dialog.Title>
+                </Transition.Child>
             </Dialog>
         </Transition.Root>
     )
 }
-export default Modal
