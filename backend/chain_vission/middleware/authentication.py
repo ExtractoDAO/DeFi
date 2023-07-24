@@ -1,0 +1,8 @@
+from fastapi import Request
+
+
+async def get_authentication_token(request: Request, call_next):
+    token = request.headers.get("X-Authorization")
+    request.state.token = token
+    response = await call_next(request)
+    return response
