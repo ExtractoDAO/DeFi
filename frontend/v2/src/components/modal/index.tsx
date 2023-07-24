@@ -82,9 +82,19 @@ export default function Modal({
                             sm:w-full 
                             sm:max-w-lg"
                             >
-                                <div> {icon}</div>
-                                <div>
-                                    <p>{message}</p>
+                                <div
+                                    className="bg-white 
+                                px-4 
+                                pb-4 
+                                pt-5 
+                                sm:p-6 
+                                sm:pb-4"
+                                >
+                                    <div> {icon}</div>
+                                    <Dialog.Title as="h3">{title}</Dialog.Title>
+                                    <div>
+                                        <p>{message}</p>
+                                    </div>
                                 </div>
                                 {buttons.map((button, index) => (
                                     <div
@@ -102,7 +112,6 @@ export default function Modal({
                                         </Button>
                                     </div>
                                 ))}
-                                <Dialog.Title as="h3">{title}</Dialog.Title>
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
