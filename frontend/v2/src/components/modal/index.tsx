@@ -147,22 +147,33 @@ export default function Modal({
                                 sm:flex-row-reverse 
                                 sm:px-6"
                                 >
-                                    {buttons.map((button, index) => (
-                                        <div
-                                            key={index}
-                                            className={classNames({
-                                                "flex justify-center max-sm:mb-1 max-sm:ml-0":
-                                                    index === 0
-                                            })}
-                                        >
+                                    {buttons.length === 1 ? (
+                                        <div className="w-full">
                                             <Button
-                                                bgColor={button.bgColor}
-                                                onClick={button.onClick}
+                                                bgColor={buttons[0].bgColor}
+                                                onClick={buttons[0].onClick}
                                             >
-                                                {button.label}
+                                                {buttons[0].label}
                                             </Button>
                                         </div>
-                                    ))}
+                                    ) : (
+                                        buttons.map((button, index) => (
+                                            <div
+                                                key={index}
+                                                className={classNames({
+                                                    "flex justify-center max-sm:mb-1 max-sm:ml-0":
+                                                        index === 0
+                                                })}
+                                            >
+                                                <Button
+                                                    bgColor={button.bgColor}
+                                                    onClick={button.onClick}
+                                                >
+                                                    {button.label}
+                                                </Button>
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
