@@ -92,24 +92,39 @@ export default function Modal({
                                 sm:p-6 
                                 sm:pb-4"
                                 >
-                                    <div>
-                                        {icon && (
-                                            <div
-                                                className={classNames(
-                                                    "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10",
-                                                    {
-                                                        [`${iconBgColor}`]:
-                                                            iconBgColor
-                                                    }
-                                                )}
-                                            >
-                                                {icon}
+                                    <div
+                                        className="sm:flex 
+                                sm:items-start"
+                                    >
+                                        <div>
+                                            {icon && (
+                                                <div
+                                                    className={classNames(
+                                                        "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10",
+                                                        {
+                                                            [`${iconBgColor}`]:
+                                                                iconBgColor
+                                                        }
+                                                    )}
+                                                >
+                                                    {icon}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div
+                                            className="mt-3 
+                                        text-center 
+                                        sm:ml-4 
+                                        sm:mt-0 
+                                        sm:text-left"
+                                        >
+                                            <Dialog.Title as="h3">
+                                                {title}
+                                            </Dialog.Title>
+                                            <div>
+                                                <p>{message}</p>
                                             </div>
-                                        )}
-                                    </div>
-                                    <Dialog.Title as="h3">{title}</Dialog.Title>
-                                    <div>
-                                        <p>{message}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 {buttons.map((button, index) => (
