@@ -90,7 +90,8 @@ export default function Modal({
                                 pb-4 
                                 pt-5 
                                 sm:p-6 
-                                sm:pb-4"
+                                sm:pb-4
+                                dark:bg-deep-gray/100"
                                 >
                                     <div
                                         className="sm:flex 
@@ -113,6 +114,7 @@ export default function Modal({
                                         </div>
                                         <div
                                             className="mt-3 
+                                            gap-2
                                         text-center 
                                         sm:ml-4 
                                         sm:mt-0 
@@ -123,7 +125,9 @@ export default function Modal({
                                                 className="text-base 
                                              font-semibold 
                                              leading-6 
-                                             text-gray/900"
+                                             text-gray/900
+                                             dark:text-gray/300
+                                             "
                                             >
                                                 {title}
                                             </Dialog.Title>
@@ -145,7 +149,9 @@ export default function Modal({
                                 py-3 
                                 sm:flex 
                                 sm:flex-row-reverse 
-                                sm:px-6"
+                                sm:px-6
+                                dark:bg-deep-gray/700
+                                "
                                 >
                                     {buttons.length === 1 ? (
                                         <div className="w-full">
