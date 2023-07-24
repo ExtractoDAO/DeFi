@@ -15,6 +15,7 @@ interface ModalProps {
     message: string
     buttons: ButtonProps[]
     open: boolean
+    iconBgColor?: string
 }
 
 export default function Modal({
@@ -22,6 +23,7 @@ export default function Modal({
     icon,
     message,
     buttons,
+    iconBgColor,
     open
 }: ModalProps) {
     return (
@@ -90,7 +92,21 @@ export default function Modal({
                                 sm:p-6 
                                 sm:pb-4"
                                 >
-                                    <div> {icon}</div>
+                                    <div>
+                                        {icon && (
+                                            <div
+                                                className={classNames(
+                                                    "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10",
+                                                    {
+                                                        [`${iconBgColor}`]:
+                                                            iconBgColor
+                                                    }
+                                                )}
+                                            >
+                                                {icon}
+                                            </div>
+                                        )}
+                                    </div>
                                     <Dialog.Title as="h3">{title}</Dialog.Title>
                                     <div>
                                         <p>{message}</p>
