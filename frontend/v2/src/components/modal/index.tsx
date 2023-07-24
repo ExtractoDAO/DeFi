@@ -4,13 +4,19 @@ import { Dialog, Transition } from "@headlessui/react"
 import Button from "../button"
 import classNames from "classnames"
 
+interface ButtonProps {
+    label: string
+    onClick: () => void
+    bgColor?: "primary" | "secondary" | "success" | "error" | "warning"
+}
 interface ModalProps {
     title: string
     icon?: React.ReactNode
     message: string
+    buttons: ButtonProps[]
 }
 
-export default function Modal({ title, icon, message }: ModalProps) {
+export default function Modal({ title, icon, message, buttons }: ModalProps) {
     return (
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -36,6 +42,7 @@ export default function Modal({ title, icon, message }: ModalProps) {
                     <div>
                         <p>{message}</p>
                     </div>
+                   
                     <Dialog.Title as="h3">{title}</Dialog.Title>
                 </Transition.Child>
             </Dialog>
