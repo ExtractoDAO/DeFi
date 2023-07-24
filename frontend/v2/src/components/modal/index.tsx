@@ -50,45 +50,61 @@ export default function Modal({
                 z-10 
                 overflow-y-auto"
                 >
-                    <div className="flex 
+                    <div
+                        className="flex 
                     min-h-full 
                     items-end 
                     justify-center 
                     p-4 
                     text-center 
                     sm:items-center 
-                    sm:p-0">
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                        enterTo="opacity-100 translate-y-0 sm:scale-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                        leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    sm:p-0"
                     >
-                        <div> {icon}</div>
-                        <div>
-                            <p>{message}</p>
-                        </div>
-                        {buttons.map((button, index) => (
-                            <div
-                                key={index}
-                                className={classNames({
-                                    "flex justify-center max-sm:mb-1 max-sm:ml-0":
-                                        index === 0
-                                })}
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            enterTo="opacity-100 translate-y-0 sm:scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        >
+                            <Dialog.Panel
+                                className="relative 
+                            transform 
+                            overflow-hidden 
+                            rounded-lg 
+                            bg-white 
+                            text-left 
+                            shadow-xl 
+                            transition-all 
+                            sm:my-8 
+                            sm:w-full 
+                            sm:max-w-lg"
                             >
-                                <Button
-                                    bgColor={button.bgColor}
-                                    onClick={button.onClick}
-                                >
-                                    {button.label}
-                                </Button>
-                            </div>
-                        ))}
-                        <Dialog.Title as="h3">{title}</Dialog.Title>
-                    </Transition.Child>
+                                <div> {icon}</div>
+                                <div>
+                                    <p>{message}</p>
+                                </div>
+                                {buttons.map((button, index) => (
+                                    <div
+                                        key={index}
+                                        className={classNames({
+                                            "flex justify-center max-sm:mb-1 max-sm:ml-0":
+                                                index === 0
+                                        })}
+                                    >
+                                        <Button
+                                            bgColor={button.bgColor}
+                                            onClick={button.onClick}
+                                        >
+                                            {button.label}
+                                        </Button>
+                                    </div>
+                                ))}
+                                <Dialog.Title as="h3">{title}</Dialog.Title>
+                            </Dialog.Panel>
+                        </Transition.Child>
                     </div>
                 </div>
             </Dialog>
