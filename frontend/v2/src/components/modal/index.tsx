@@ -7,9 +7,10 @@ import classNames from "classnames"
 interface ModalProps {
     title: string
     icon?: React.ReactNode
+    message: string
 }
 
-export default function Modal({ title, icon }: ModalProps) {
+export default function Modal({ title, icon, message }: ModalProps) {
     return (
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -32,6 +33,9 @@ export default function Modal({ title, icon }: ModalProps) {
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <div> {icon}</div>
+                    <div>
+                        <p>{message}</p>
+                    </div>
                     <Dialog.Title as="h3">{title}</Dialog.Title>
                 </Transition.Child>
             </Dialog>
