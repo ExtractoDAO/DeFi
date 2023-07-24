@@ -29,6 +29,7 @@ module.exports = {
             "brand/secondary/600": "#42225B",
             // Gray
             "Default/gray/50": "#F9FAFB",
+            "Default/gray/100": "#F1F1F1",
             "Default/gray/200": "#E5E7EB",
             "gray/50": "#FAFAFA",
             "gray/100": "#F6F6F6",
@@ -54,6 +55,7 @@ module.exports = {
             "deep-gray/500": "#171717",
             "deep-gray/600": "#0F172A",
             "deep-gray/700": "#121212",
+            "deep-gray/800": "#1B1B1B",
 
             // Slate
             "slate/50": "#F7F9FB",
