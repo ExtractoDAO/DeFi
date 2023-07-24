@@ -7,6 +7,7 @@ adapter_app = FirebaseAdapter()
 app = FastAPI(docs_url="/")
 app.middleware("http")(get_authentication_token)
 
+
 if os.getenv("ENV") == "devnet":
     from fastapi.middleware.cors import CORSMiddleware
 
