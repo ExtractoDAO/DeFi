@@ -128,30 +128,42 @@ export default function Modal({
                                                 {title}
                                             </Dialog.Title>
                                             <div className="mt-2">
-                                                <p className="text-sm 
-                                                text-gray/500">
+                                                <p
+                                                    className="text-sm 
+                                                text-gray/500"
+                                                >
                                                     {message}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {buttons.map((button, index) => (
-                                    <div
-                                        key={index}
-                                        className={classNames({
-                                            "flex justify-center max-sm:mb-1 max-sm:ml-0":
-                                                index === 0
-                                        })}
-                                    >
-                                        <Button
-                                            bgColor={button.bgColor}
-                                            onClick={button.onClick}
+                                <div
+                                    className="bg-gray/50 
+                                gap-3 
+                                px-4 
+                                py-3 
+                                sm:flex 
+                                sm:flex-row-reverse 
+                                sm:px-6"
+                                >
+                                    {buttons.map((button, index) => (
+                                        <div
+                                            key={index}
+                                            className={classNames({
+                                                "flex justify-center max-sm:mb-1 max-sm:ml-0":
+                                                    index === 0
+                                            })}
                                         >
-                                            {button.label}
-                                        </Button>
-                                    </div>
-                                ))}
+                                            <Button
+                                                bgColor={button.bgColor}
+                                                onClick={button.onClick}
+                                            >
+                                                {button.label}
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
