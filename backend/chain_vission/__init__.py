@@ -3,7 +3,7 @@ from fastapi import FastAPI
 import os
 
 adapter_app = FirebaseAdapter()
-app = FastAPI()
+app = FastAPI(docs_url="/")
 
 if os.getenv("ENV") == "devnet":
     from fastapi.middleware.cors import CORSMiddleware
