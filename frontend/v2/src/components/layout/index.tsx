@@ -21,8 +21,8 @@ const Layout = (props: PropsWithChildren) => {
         >
             <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
             <div>
-                <Navbar/>
-                {props.children}
+                <Navbar />
+                <div className="p-6 max-md:px-4 ">{props.children}</div>
             </div>
         </div>
     )
