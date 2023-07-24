@@ -1,5 +1,4 @@
-from chain_vission.graphql.pagination import PaginationWindow, get_pagination_window
-from chain_vission.graphql.domain.investor import Investor, get_all_investors
+from chain_vission.use_cases.graphql.pagination import PaginationWindow, get_pagination_window
 from strawberry import mutation, field, Schema
 from chain_vission import adapter_app
 from strawberry.types import Info
@@ -8,18 +7,19 @@ from typing import Optional
 import strawberry
 
 
-from chain_vission.graphql.domain.price import (
+from chain_vission.domain.investor import Investor, get_all_investors
+from chain_vission.domain.price import (
     Price,
     get_all_buy_price,
     get_all_sell_price,
 )
-from chain_vission.graphql.domain.contract import (
+from chain_vission.domain.contract import (
     Contract,
     get_all_contracts,
     get_all_contracts_by_investor,
     get_contract_by_address,
 )
-from chain_vission.graphql.domain.order import (
+from chain_vission.domain.order import (
     Order,
     get_all_orders,
     get_all_ordes_by_investor,
