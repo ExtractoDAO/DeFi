@@ -26,31 +26,31 @@ const Button = ({
                 [`
                 w-full
                 justify-center
-                inline-flex 
-                py-2 
-                px-4 
-                items-center 
-                gap-[10px] 
-                text-sm 
-                not-italic 
-                font-medium 
+                inline-flex
+                py-2
+                px-4
+                items-center
+                gap-[10px]
+                text-sm
+                not-italic
+                font-medium
                 rounded-[4px]
                 `]: true,
                 [`
-                text-base/white 
-                bg-brand/secondary/500 
+                text-base/white
+                bg-brand/secondary/500
                 hover:bg-brand/secondary/600
-                focus:outline-brand/secondary/300 
+                focus:outline-brand/secondary/300
                 focus:outline
                 focus:outline-2
                 focus:outline-offset-1
                 cursor-pointer
 
-                disabled:bg-brand/secondary/100 
+                disabled:bg-brand/secondary/100
                 disabled:text-brand/secondary/300
                 disabled:cursor-default
 
-                dark:bg-brand/primary/500 
+                dark:bg-brand/primary/500
                 dark:text-deep-gray/100
                 dark:hover:bg-brand/primary/400
                 dark:focus:outline-brand/primary/200
@@ -58,23 +58,23 @@ const Button = ({
                 dark:disabled:text-brand/primary/500
                 dark:disabled:bg-brand/primary/200
                 `]: bgColor === "primary",
-                [` 
-                border 
-                border-solid 
-                bg-base/white 
-                border-gray/200 
-                hover:border-gray/300 
+                [`
+                border
+                border-solid
+                bg-base/white
+                border-gray/200
+                hover:border-gray/300
                 focus:border-gray/800
                 cursor-pointer
-                
-                disabled:bg-gray/200 
+
+                disabled:bg-gray/200
                 disabled:text-gray/500
                 disabled:cursor-default
                 disabled:border-none
-                
+
                 dark:text-gray/250
-                dark:bg-deep-gray/100 
-                dark:border-gray/700 
+                dark:bg-deep-gray/100
+                dark:border-gray/700
                 dark:hover:border-gray/400
                 dark:focus:border-gray/500
 
@@ -89,7 +89,7 @@ const Button = ({
                 focus:outline
                 focus:outline-1
                 cursor-pointer
-                
+
                 disabled:bg-green/100
                 disabled:text-green/300
                 disabled:cursor-default
