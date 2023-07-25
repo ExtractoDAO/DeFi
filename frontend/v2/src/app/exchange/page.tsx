@@ -1,3 +1,4 @@
+import ChartComponent from "@/components/chart"
 import ExchangeTopBar from "@/components/exchangeTopbar"
 
 export default function page() {
@@ -9,7 +10,7 @@ export default function page() {
                     <div className="row">
                         <div className="col-12 lg:col-7">
                             <div className="bg-white rounded-md w-full h-[600px]">
-                                Chart
+                                <ChartComponent />
                             </div>
                             <div className="row">
                                 <div className="col-12 lg:col-6">

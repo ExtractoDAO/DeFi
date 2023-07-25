@@ -3,8 +3,57 @@
 import { theme } from "@/utils/theme"
 import Chart from "@qognicafinance/react-lightweight-charts"
 
+interface StockData {
+    time: string
+    open: number
+    high: number
+    low: number
+    close: number
+}
+
 function ChartComponent() {
     const background = theme === "dark" ? "#0d0d0d" : "#ffffff"
+
+    function generateStockDataArray(
+        startDate: Date,
+        endDate: Date
+    ): StockData[] {
+        const dataArray: StockData[] = []
+        const currentDate = new Date(startDate)
+
+        let prevClose = 180.34
+
+        while (currentDate <= endDate) {
+            const dateString = currentDate.toISOString().slice(0, 10)
+            const open = prevClose
+            const high = getRandomNumberInRange(open, open + 5)
+            const low = getRandomNumberInRange(open - 5, open)
+            const close = getRandomNumberInRange(low, high)
+
+            const stockData: StockData = {
+                time: dateString,
+                open,
+                high,
+                low,
+                close
+            }
+
+            dataArray.push(stockData)
+
+            prevClose = close
+            currentDate.setDate(currentDate.getDate() + 1)
+        }
+
+        return dataArray
+    }
+
+    function getRandomNumberInRange(min: number, max: number): number {
+        return Math.random() * (max - min) + min
+    }
+
+    const startDate = new Date("2023-06-01")
+    const endDate = new Date("2023-07-31")
+    const stockDataArray = generateStockDataArray(startDate, endDate)
 
     const options = {
         alignLabels: false,
@@ -25,92 +74,7 @@ function ChartComponent() {
 
     const candlestickSeries = [
         {
-            data: [
-                {
-                    time: "2023-06-19",
-                    open: 180.34,
-                    high: 180.99,
-                    low: 178.57,
-                    close: 179.85
-                },
-                {
-                    time: "2023-06-22",
-                    open: 180.82,
-                    high: 181.4,
-                    low: 177.56,
-                    close: 178.75
-                },
-                {
-                    time: "2023-06-23",
-                    open: 175.77,
-                    high: 179.49,
-                    low: 175.44,
-                    close: 178.53
-                },
-                {
-                    time: "2023-06-24",
-                    open: 178.58,
-                    high: 182.37,
-                    low: 176.31,
-                    close: 176.97
-                },
-                {
-                    time: "2023-06-25",
-                    open: 177.52,
-                    high: 180.5,
-                    low: 176.83,
-                    close: 179.07
-                },
-                {
-                    time: "2023-06-26",
-                    open: 176.88,
-                    high: 177.34,
-                    low: 170.91,
-                    close: 172.23
-                },
-                {
-                    time: "2023-06-29",
-                    open: 173.74,
-                    high: 175.99,
-                    low: 170.95,
-                    close: 173.2
-                },
-                {
-                    time: "2023-06-30",
-                    open: 173.16,
-                    high: 176.43,
-                    low: 172.64,
-                    close: 176.24
-                },
-                {
-                    time: "2023-07-01",
-                    open: 177.98,
-                    high: 178.85,
-                    low: 175.59,
-                    close: 175.88
-                },
-                {
-                    time: "2023-07-02",
-                    open: 176.84,
-                    high: 180.86,
-                    low: 175.9,
-                    close: 180.46
-                },
-                {
-                    time: "2023-07-03",
-                    open: 182.47,
-                    high: 183.01,
-                    low: 177.39,
-                    close: 179.93
-                },
-                {
-                    time: "2023-07-04",
-                    open: 181.02,
-                    high: 182.41,
-                    low: 179.3,
-                    close: 182.19
-                }
-            ]
+            data: stockDataArray
         }
     ]
 
@@ -123,7 +87,7 @@ function ChartComponent() {
                 height={480}
                 legend="Contract@ / USD"
                 darkTheme={!!(theme === "dark")}
-                from={new Date("2023-06-23").getTime() / 1000}
+                from={new Date("2023-06-19").getTime() / 1000}
                 to={new Date().getTime() / 1000}
             />
         </div>
