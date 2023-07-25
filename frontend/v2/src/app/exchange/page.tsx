@@ -1,9 +1,9 @@
+import ExchangeTopBar from "@/components/exchangeTopbar"
+
 export default function page() {
     return (
         <>
-            <div className="p-2 border-b border-gray/200">
-                <button></button>
-            </div>
+            <ExchangeTopBar />
             <div className="p-6 max-md:px-4">
                 <div className="container-fluid">
                     <div className="row">
