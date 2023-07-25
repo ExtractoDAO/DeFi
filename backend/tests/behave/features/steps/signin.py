@@ -1,9 +1,40 @@
 from eth_account.messages import encode_defunct
 from behave import given, when, then
-from behave.runner import Context
 from eth_account import Account
 from datetime import datetime
+import pytest
 from siwe import SiweMessage
+from httpx import Response
+import json
+
+
+ADDRESS = "behavetests"
+MUTATION = """
+    mutation TestMutation($address: String!, $commodityAmount: Float!, $locktime: Int!, $owner: String!, $price: Int!) {
+        addContract(
+            address: $address
+            commodityAmount: $commodityAmount
+            locktime: $locktime
+            owner: $owner
+            price: $price
+        ) {
+            message
+            success
+        }
+    }
+"""
+QUERY = """
+    query TestMutation($address: String!) {
+        contractByAddress(address: $address) {
+            address
+            burn
+            kg
+            locktime
+            owner
+            price
+        }
+    }
+"""
 
 
 def build_a_message(address: str, nonce: str) -> str:
@@ -32,32 +63,76 @@ def sign_a_message(message: str) -> str:
     return signature.signature.hex()
 
 
+def check_response(response: Response, error_message: str):
+    assert (
+        response.is_success
+    ), f"ERROR in {error_message}\nLOG: {json.dumps(response.json())}"
+
+
+def extract_nonce(response: Response):
+    check_response(response, "extract_nonce")
+    return response.json()["nonce"]
+
+
+def extract_token(response: Response):
+    check_response(response, "extract_token")
+    return response.json()["token"]
+
+
 @given('that the user is logged in "{address}"')
 def that_the_user_is_logged_in(context, address: str):
-    nonce = context.client.get(f"/login/nonce/{address}").json()["nonce"]
+    response: Response = context.client.get(f"/login/nonce/{address}")
+    nonce = extract_nonce(response)
+
     message = build_a_message(address, nonce)
     signature = sign_a_message(message)
-    response = context.client.post(
+    response: Response = context.client.post(
         "/login/signin", json={"message": message, "signature": signature}
-    ).json()
+    )
+    context.token = extract_token(response)
 
-    context.token = response["token"]
 
+@when('user "{address}" buys a contract')
+def user_buys_a_contract(context, address: str):
+    context.new_contract = variables = {
+        "address": ADDRESS,
+        "commodityAmount": 10.5,
+        "locktime": 3600,
+        "owner": address,
+        "price": 101,
+    }
 
-@when("user buys a contract")
-def user_buys_a_contract(context):
-    print("STEP: When user buys a contract")
+    response = context.client.post(
+        "/graphql",
+        json={"query": MUTATION, "variables": variables},
+        headers={"X-Authorization": context.token},
+    )
+    check_response(response, "user_buys_a_contract")
+    assert {"data": {"addContract": {"message": "", "success": True}}} == response.json()
 
 
 @then("the new contract should be available")
 def the_new_contract_should_be_available(context):
-    print("STEP: Then the new contract should be available")
+    variables = {"address": ADDRESS}
+
+    response = context.client.post(
+        "/graphql", json={"query": QUERY, "variables": variables}
+    )
+    check_response(response, "the_new_contract_should_be_available")
+
+    contract = response.json()["data"]["contractByAddress"]
+    assert contract["address"] == context.new_contract["address"]
+    assert not contract["burn"]
+    assert contract["kg"] == context.new_contract["commodityAmount"]
+    assert contract["locktime"] == context.new_contract["locktime"]
+    assert contract["owner"] == context.new_contract["owner"]
+    assert contract["price"] == context.new_contract["price"]
 
 
 @then('the user "{address}" should log out')
 def the_user_should_log_out(context, address: str):
-    token = context.token
-    context.client.get(
+    response: Response = context.client.get(
         f"/login/signout/{address}",
-        headers={"X-Authorization": token},
+        headers={"X-Authorization": context.token},
     )
+    check_response(response, "the_user_should_log_out")
