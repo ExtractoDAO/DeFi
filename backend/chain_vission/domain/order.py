@@ -49,7 +49,7 @@ def get_order_by_hash(tx_hash) -> Optional[Order]:
     return Order.from_dict(order)
 
 
-def get_all_ordes_by_investor(investor) -> Optional[List[Order]]:
+def get_all_orders_by_investor(investor) -> Optional[List[Order]]:
     return list(
         map(
             Order.from_dict,

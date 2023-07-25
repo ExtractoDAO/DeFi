@@ -7,14 +7,13 @@ import strawberry
 
 @strawberry.type
 class Response:
-    success: bool = True
+    success: bool
     message: str
-
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def new_contract(
+    def add_contract(
         self,
         address: str,
         commodity_amount: float,
@@ -36,4 +35,4 @@ class Mutation:
             price=price,
         )
         adapter_app.set_data(f"/contracts/{contract.address}", contract.__dict__)
-        return Response()
+        return Response(message="", success=True)
