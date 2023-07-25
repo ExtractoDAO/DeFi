@@ -2,7 +2,6 @@ from eth_account.messages import encode_defunct
 from behave import given, when, then
 from eth_account import Account
 from datetime import datetime
-import pytest
 from siwe import SiweMessage
 from httpx import Response
 import json
