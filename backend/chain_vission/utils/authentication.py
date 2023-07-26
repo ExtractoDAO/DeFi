@@ -1,12 +1,10 @@
-from chain_vission import adapter_app
+from chain_vission import JWT_SECRET_KEY, adapter_app
 from jose import jwt, JWTError
 from typing import Optional
 
-SECRET_KEY = "secretkey"
-
 def verify_token(token: str) -> Optional[str]:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
     except JWTError as e:
         return f"Authentication attempt rejected: {e}"
 

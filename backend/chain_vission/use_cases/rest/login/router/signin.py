@@ -1,6 +1,6 @@
 from chain_vission.use_cases.rest.login.router import router
 from fastapi.responses import JSONResponse
-from chain_vission import adapter_app
+from chain_vission import DOMAIN, JWT_SECRET_KEY, adapter_app
 from pydantic import BaseModel
 from typing import Optional
 from fastapi import status
@@ -14,9 +14,6 @@ from siwe import (
     MalformedSession,
     InvalidSignature,
 )
-
-DOMAIN = "localhost:8080"
-SECRET_KEY = "secretkey"
 
 
 def expiration_time():
@@ -93,7 +90,7 @@ def generate_jwt_token(siwe_msg: SiweMessage, signin: SignIn):
         "address": siwe_msg.address,
         "nonce": cache_memory.nonce,
     }
-    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
     adapter_app.delete_data(f"/nonces/{siwe_msg.address}")
     adapter_app.set_data(f"/tokens/{siwe_msg.address}", token)
 
