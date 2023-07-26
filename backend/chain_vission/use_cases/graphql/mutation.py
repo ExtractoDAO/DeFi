@@ -10,6 +10,7 @@ class Response:
     success: bool
     message: str
 
+
 @strawberry.type
 class Mutation:
     @strawberry.mutation
