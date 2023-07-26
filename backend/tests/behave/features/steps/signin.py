@@ -9,11 +9,12 @@ import json
 
 ADDRESS = "behavetests"
 MUTATION = """
-    mutation TestMutation($address: String!, $commodityAmount: Float!, $locktime: Int!, $owner: String!, $price: Int!) {
+    mutation TestMutation($tx_id: String!, $address: String!, $commodityAmount: Float!, $locktime: Int!, $owner: String!, $price: Int!) {
         addContract(
-            address: $address
             commodityAmount: $commodityAmount
             locktime: $locktime
+            address: $address
+            tx_id: $tx_id
             owner: $owner
             price: $price
         ) {
@@ -25,12 +26,13 @@ MUTATION = """
 QUERY = """
     query TestQuery($address: String!) {
         contractByAddress(address: $address) {
-            address
-            burn
-            kg
+            commodityAmount
             locktime
+            address
+            status
             owner
             price
+            tx_id
         }
     }
 """
@@ -94,6 +96,7 @@ def that_the_user_is_logged_in(context, address: str):
 @when('user "{address}" buys a contract')
 def user_buys_a_contract(context, address: str):
     context.new_contract = variables = {
+        "tx_id": ADDRESS,
         "address": ADDRESS,
         "commodityAmount": 10.5,
         "locktime": 3600,
