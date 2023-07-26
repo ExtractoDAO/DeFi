@@ -1,5 +1,6 @@
 import ChartComponent from "@/components/chart"
 import ExchangeTopBar from "@/components/exchangeTopbar"
+import Orderbook from "@/components/orderbook"
 
 export default function page() {
     return (
@@ -9,7 +10,7 @@ export default function page() {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-12 lg:col-7">
-                            <div className="bg-white rounded-md w-full h-[600px]">
+                            <div className="bg-white rounded-md w-full ">
                                 <ChartComponent />
                             </div>
                             <div className="row">
@@ -26,8 +27,8 @@ export default function page() {
                             </div>
                         </div>
                         <div className="col-12 lg:col-5">
-                            <div className="bg-white rounded-md w-full h-[800px]">
-                                Orderbook
+                            <div className="rounded-md w-full">
+                                <Orderbook />
                             </div>
                         </div>
                     </div>
