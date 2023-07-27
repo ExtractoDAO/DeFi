@@ -10,7 +10,7 @@ import {
     ArrowsUpDownIcon
 } from "@heroicons/react/24/outline"
 import { useState } from "react"
-import { Button } from "../button"
+import Button from "../button"
 
 interface Props {
     setShowChart: (value: boolean) => void
@@ -93,7 +93,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                             }}
                         />
                     </div>
-                    <Button variant="primary">Confirm</Button>
+                    <Button bgColor="primary">Confirm</Button>
                 </div>
             </div>
             <div className="w-full text-center mt-2">
