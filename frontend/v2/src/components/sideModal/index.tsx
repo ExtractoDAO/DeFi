@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import Button from "../button"
+import Link from "next/link"
 
 type SideModalProps = {
     onClose: () => void
@@ -68,6 +69,13 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                             <Dialog.Title className="text-base font-semibold leading-6 text-gray/900">
                                                 Panel title
                                             </Dialog.Title>
+                                            <Link
+                                                className="text-xs font-normal text-gray/500"
+                                                href={`https://polygonscan.com/address/`}
+                                                target="_blank"
+                                            >
+                                                0x0b32337D35f8CAB81180b031D9A244E088d0c926
+                                            </Link>
                                         </div>
                                         <div className="overflow-y-auto flex p-6 flex-col items-start gap-10 self-stretch">
                                             <div className="felx w-full flex-col gap-4 items-start">
