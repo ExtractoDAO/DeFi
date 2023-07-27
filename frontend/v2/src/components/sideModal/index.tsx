@@ -64,8 +64,8 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                             </button>
                                         </div>
                                     </Transition.Child>
-                                    <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                                        <div className="px-4 sm:px-6">
+                                    <div className="flex h-full flex-col items-start shrink-0 bg-white p-6">
+                                        <div className="flex flex-col items-start gap-2 px-4 sm:px-6">
                                             <Dialog.Title className="flex items-center gap-2">
                                                 <h1 className="text-gray/900 text-[20px] not-italic font-semibold">
                                                     Panel title
