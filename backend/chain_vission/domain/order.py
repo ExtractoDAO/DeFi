@@ -1,9 +1,9 @@
-from chain_vission import adapter_app
+from chain_vission import adapter_app, logger
 from typing import List, Optional
-from strawberry import type
+import strawberry
 
 
-@type
+@strawberry.type
 class Order:
     """
     type Contract {
@@ -28,9 +28,9 @@ class Order:
                 hash=order["hash"],
                 kg=order["kg"],
             )
-        # TODO: improve this with logger module
-        warn = f"WARN: Expected dict with: investor, contract, hash and kg, but got {list(order.keys())}"
-        print(warn)
+
+        message = f"Expected dict with: investor, contract, hash and kg, but got {list(order.keys())}"
+        logger.warn(message)
         return None
 
 

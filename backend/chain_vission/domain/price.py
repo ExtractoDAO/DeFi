@@ -1,9 +1,9 @@
-from chain_vission import adapter_app
+from chain_vission import adapter_app, logger
 from typing import List, Optional
-from strawberry import type
+import strawberry
 
 
-@type
+@strawberry.type
 class Price:
     """
     type Price {
@@ -23,11 +23,9 @@ class Price:
                 timestamp=int(timestamp),
                 value=float(value),
             )
-        # TODO: improve this with logger module
-        warn = (
-            f"WARN: Expected dict with: timestamp and value, but got {list(price.keys())}"
-        )
-        print(warn)
+
+        message = f"Expected dict with: timestamp and value, but got {list(price.keys())}"
+        logger.warn(message)
         return None
 
 

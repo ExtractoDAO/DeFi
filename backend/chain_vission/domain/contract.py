@@ -1,4 +1,4 @@
-from chain_vission import adapter_app
+from chain_vission import adapter_app, logger
 from typing import List, Optional
 from enum import Enum
 import strawberry
@@ -46,9 +46,8 @@ class Contract:
                 owner=contract["owner"],
             )
 
-        # TODO: improve this with logger module
-        warn = f"WARN: Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
-        print(warn)
+        message = f"Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
+        logger.warn(message)
         return None
 
     @property
