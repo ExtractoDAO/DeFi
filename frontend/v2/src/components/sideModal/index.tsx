@@ -69,6 +69,16 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                 Panel title
                                             </Dialog.Title>
                                         </div>
+                                        <div className="overflow-y-auto flex p-6 flex-col items-start gap-10 self-stretch">
+                                            <div className="felx w-full flex-col gap-4 items-start">
+                                                <h1 className="text-gray/900 text-[20px] not-italic font-semibold">
+                                                    Titulo do contrato
+                                                </h1>
+                                                <p className="text-gray/500 text-sm font-normal not-italic">
+                                                   Contrato
+                                                </p>
+                                            </div>
+                                        </div>
                                         <div className="flex flex-col items-start gap-2 self-stretch">
                                             <Button>Withdraw</Button>
                                             <Button bgColor="secondary">
