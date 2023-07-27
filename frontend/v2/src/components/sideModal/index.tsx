@@ -66,8 +66,15 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                     </Transition.Child>
                                     <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
-                                            <Dialog.Title className="text-base font-semibold leading-6 text-gray/900">
-                                                Panel title
+                                            <Dialog.Title className="flex items-center gap-2">
+                                                <h1 className="text-gray/900 text-[20px] not-italic font-semibold">
+                                                    Panel title
+                                                </h1>
+                                                <div className="rounded-[130px] bg-brand/secondary/100 gap-[10px] flex items-center py-0 px-2">
+                                                    <p className="text-brand/secondary/500 text-sm font-semibold not-italic">
+                                                        FAT OX
+                                                    </p>
+                                                </div>
                                             </Dialog.Title>
                                             <Link
                                                 className="text-xs font-normal text-gray/500"
@@ -83,7 +90,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                     Titulo do contrato
                                                 </h1>
                                                 <p className="text-gray/500 text-sm font-normal not-italic">
-                                                   Contrato
+                                                    Contrato
                                                 </p>
                                             </div>
                                         </div>
