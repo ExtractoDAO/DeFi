@@ -1,44 +1,66 @@
-from chain_vission import adapter_app
+from chain_vission import adapter_app, logger
 from typing import List, Optional
-from strawberry import type
+from enum import Enum
+import strawberry
 
 
-@type
+@strawberry.enum
+class ContractStatus(Enum):
+    PENDING = 0
+    MINED = 1
+    BURNED = 2
+
+
+@strawberry.type
 class Contract:
     """
     type Contract {
+        tx_hash: Str!
         locktime: Int!
         address: Str!
         owner: Str!
         price: Int!
-        burn: Bool!
-        kg: Decimal!
+        status: Int!
+        commodityAmmount: Decimal!
     }
     """
 
+    commodity_amount: float
+    status: ContractStatus
     locktime: int
     address: str
     owner: str
     price: int
-    burn: bool
-    kg: float
+    tx_id: str
 
     @staticmethod
     def from_dict(contract: dict) -> Optional["Contract"]:
         if contract:
             return Contract(
+                status=ContractStatus(contract["status"]).value,
+                commodity_amount=contract["commodityAmount"],
                 locktime=contract["locktime"],
                 address=contract["address"],
+                tx_id=contract["address"],
                 price=contract["price"],
                 owner=contract["owner"],
-                burn=contract["burn"],
-                kg=contract["kg"],
             )
 
-        # TODO: improve this with logger module
-        warn = f"WARN: Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
-        print(warn)
+        message = f"Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
+        logger.warn(message)
         return None
+
+    @property
+    def to_dict(self) -> dict:
+        return {
+            "commodityAmount": self.commodity_amount,
+            "status": self.status.value,
+            "locktime": self.locktime,
+            "address": self.address,
+            "owner": self.owner,
+            "price": self.price,
+            "txId": self.tx_id,
+        }
 
 
 def get_all_contracts() -> List[Contract]:

@@ -1,17 +1,18 @@
 from typing import List, Optional, TypeVar
-from strawberry import type, field
+from chain_vission import logger
+import strawberry
 
 
 GenericType = TypeVar("GenericType")
 
 
-@type
+@strawberry.type
 class PaginationWindow(List[GenericType]):
-    items: List[GenericType] = field(
+    items: List[GenericType] = strawberry.field(
         description="The list of items in this pagination window."
     )
 
-    total_items_count: int = field(
+    total_items_count: int = strawberry.field(
         description="Total number of items in the filtered dataset."
     )
 
@@ -30,8 +31,10 @@ def matches(item, filters):
 
 def validate_total_and_at(total: int, at: int, length: int) -> None:
     if total not in range(101):
+        logger.error(f"total ({total}) must be between 0-100")
         raise Exception(f"total ({total}) must be between 0-100")
     if at != 0 and not 0 <= at < length:
+        logger.error(f"at ({at}) is out of range (0-{length - 1})")
         raise Exception(f"at ({at}) is out of range (0-{length - 1})")
 
 
