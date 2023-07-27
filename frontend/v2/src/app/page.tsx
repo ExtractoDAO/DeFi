@@ -1,20 +1,20 @@
-import { gql } from "@apollo/client"
-import { getClient } from "@/lib/client"
+// import { gql } from "@apollo/client"
+// import { getClient } from "@/lib/client"
 
-const client = getClient()
+// const client = getClient()
 
 export default async function Home() {
-    const query = gql`
-        query {
-            launchLatest {
-                mission_name
-            }
-        }
-    `
+    // const query = gql`
+    //     query {
+    //         launchLatest {
+    //             mission_name
+    //         }
+    //     }
+    // `
 
-    const { data } = await getClient().query({ query: query })
+    // const { data } = await getClient().mutate({ mutation:  })
 
-    console.log(data)
+    // console.log(process.env.GRAPHQL_URL)
 
     return (
         <main>
