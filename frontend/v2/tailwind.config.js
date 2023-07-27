@@ -18,6 +18,7 @@ module.exports = {
             transparent: "transparent",
             white: "#FFFFFF",
             "base/white": "#FFFFFF",
+            "brand/primary/100": "#FEE3D5",
             "brand/primary/200": "#FDC6AA",
             "brand/primary/400": "#ca5d25",
             "brand/primary/500": "#F9712B",
@@ -28,7 +29,9 @@ module.exports = {
             "brand/secondary/600": "#42225B",
             // Gray
             "Default/gray/50": "#F9FAFB",
+            "Default/gray/100": "#F1F1F1",
             "Default/gray/200": "#E5E7EB",
+            "gray/50": "#FAFAFA",
             "gray/100": "#F6F6F6",
             "gray/200": "#E4E6EA",
             "gray/250": "#D5DDF0",
@@ -52,6 +55,7 @@ module.exports = {
             "deep-gray/500": "#171717",
             "deep-gray/600": "#0F172A",
             "deep-gray/700": "#121212",
+            "deep-gray/800": "#1B1B1B",
 
             // Slate
             "slate/50": "#F7F9FB",
@@ -95,5 +99,5 @@ module.exports = {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
         }
     },
-    plugins: []
+    plugins: [require("tailwind-bootstrap-grid")()]
 }
