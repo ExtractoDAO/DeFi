@@ -31,12 +31,9 @@ export default function SideModal({ title, contractType, contractAddress, contra
                     <div
                         className="fixed 
                     inset-0 
-                    bg-gray/500
-                    bg-opacity-[0.4000000059604645] 
+                    bg-gray/500 
+                    bg-opacity-75 
                     transition-opacity
-
-                    dark:bg-gray/600
-                    dark:bg-opacity-[0.4000000059604645] 
                     "
                     />
                 </Transition.Child>
@@ -97,8 +94,7 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                         pr-2 
                                         pt-4 
                                         sm:-ml-10 
-                                        sm:pr-4
-                                        "
+                                        sm:pr-4"
                                         >
                                             <button
                                                 type="button"
@@ -129,7 +125,6 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                     bg-white 
                                     gap-6 
                                     p-6
-                                    max-md:h-[92%]
 
                                     dark:bg-gray/900
                                     "
