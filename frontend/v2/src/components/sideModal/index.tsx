@@ -8,9 +8,14 @@ import Link from "next/link"
 type SideModalProps = {
     onClose: () => void
     open: boolean
+    title: string
+    contractType: string
+    contractAddress: string
+    contractTitle: string
+    contract: string
 }
 
-export default function SideModal({ open, onClose }: SideModalProps) {
+export default function SideModal({ title, contractType, contractAddress, contractTitle, contract, open, onClose }: SideModalProps) {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -146,6 +151,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                 dark:text-gray/300
                                                 "
                                                 >
+                                                    {title}
                                                     Panel title
                                                 </h1>
                                                 <div
@@ -169,6 +175,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                     dark:text-brand/primary/500
                                                     "
                                                     >
+                                                        {contractType}
                                                         FAT OX
                                                     </p>
                                                 </div>
@@ -182,6 +189,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                 dark:text-gray/500
                                                 "
                                             >
+                                                {contractAddress}
                                                 0x0b32337D35f8CAB81180b031D9A244E088d0c926
                                             </Link>
                                         </div>
@@ -219,6 +227,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                 dark:text-gray/300
                                                 "
                                                 >
+                                                    {contractTitle}
                                                     Members agreement in the
                                                     form of production
                                                     cooperation by ExtractoDAO
@@ -233,6 +242,7 @@ export default function SideModal({ open, onClose }: SideModalProps) {
                                                 dark:text-gray/600
                                                 "
                                                 >
+                                                    {contract}
                                                     ExtractoDAO is a privately
                                                     owned Decentralized
                                                     Autonomous Organization,
