@@ -140,7 +140,8 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                         items-start 
                                         gap-2 
                                         px-4 
-                                        sm:px-6"
+                                        sm:px-6
+                                        "
                                         >
                                             <Dialog.Title
                                                 className="flex 
