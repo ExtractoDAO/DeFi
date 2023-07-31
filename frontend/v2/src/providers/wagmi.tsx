@@ -18,7 +18,7 @@ const config = createConfig(
         appName: "ExtractoDAO",
         alchemyId: process.env.ALCHEMY_ID,
         chains: [polygon, polygonMumbai, localhost],
-        walletConnectProjectId
+        walletConnectProjectId,
     })
 )
 

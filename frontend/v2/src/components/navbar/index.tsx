@@ -7,54 +7,36 @@ import { usePathname } from "next/navigation"
 import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
-import { ConnectKitButton } from "connectkit"
+import { theme } from "@/utils/theme"
+import { setItem } from "@/lib/storage"
 
-const getPageTitle = (pathname: string): string => {
-    switch (pathname) {
-        case "/":
-            return "Dashboard"
-        case "/buy":
-            return "Buy contracts"
-        case "/drawer":
-            return "Drawer"
-        case "/exchange":
-            return "Exchange"
-        default:
-            return ""
-    }
+import { ConnectKitButton, Avatar, useModal, SIWEButton } from "connectkit"
+import { useAccount } from "wagmi"
+
+
+const pathnames: Dictionary = {
+    "/": "Dashboard",
+    "/buy": "Buy contracts",
+    "/drawer": "Drawer",
+    "/exchange": "Exchange"
 }
 
 export default function Navbar() {
-    const [isConnected] = useState(true)
     const pathname = usePathname()
-    const pageTitle = getPageTitle(pathname)
+    const pageTitle = pathnames[pathname]
+    const { address, isConnected } = useAccount()
+    // const {  } = useModal()
 
-    const PhotoProfile = () => {
-        return (
-            <>
-                <div
-                    className={classNames(
-                        "bg-brand/primary/500", //just to represent profile picture location
-                        "w-8",
-                        "h-8",
-                        "flex",
-                        "justify-center",
-                        "items-center",
-                        "rounded-full",
-                        { hidden: isConnected === false }
-                    )}
-                ></div>
-            </>
-        )
-    }
+    const onConnect = () => fetch("/api/login")
+        .then(() => {
+            const token = "abc123xyz"
+            setItem("token", token)
+        }).catch(e => console.error(e))
 
-    const ButtonConect = () => {
-        return (
-            <>
-                <ConnectKitButton />
-            </>
-        )
-    }
+    const PhotoProfile = () => <Avatar radius={50} address={address} size={32}  />
+
+    // const ButtonConect = () => <ConnectKitButton theme={theme === "dark" ? "midnight" : "auto"} showAvatar={false} />
+    const ButtonConect = () => <ConnectKitButton theme={theme === "dark" ? "midnight" : "auto"} showAvatar={false} />
 
     return (
         <React.Fragment>
@@ -159,7 +141,7 @@ export default function Navbar() {
                                 />
                             </Link>
                         </div>
-                        <PhotoProfile />
+                        {isConnected && <PhotoProfile />}
                         <ButtonConect />
                     </div>
                 </div>
