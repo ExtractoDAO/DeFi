@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation"
 import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
+import { ConnectKitButton } from "connectkit"
+
 const getPageTitle = (pathname: string): string => {
     switch (pathname) {
         case "/":
@@ -49,28 +51,7 @@ export default function Navbar() {
     const ButtonConect = () => {
         return (
             <>
-                <button
-                    className={classNames(
-                        "flex",
-                        "dark:text-gray/300",
-                        "text-sm",
-                        "not-italic",
-                        "font-medium",
-                        "text-gray/900",
-                        "border",
-                        "border-gray/200",
-                        "py-2",
-                        "px-4",
-                        "justify-center",
-                        "items-center",
-                        "rounded",
-                        "gap-3",
-                        "leading-6",
-                        { hidden: isConnected === true }
-                    )}
-                >
-                    Connect
-                </button>
+                <ConnectKitButton />
             </>
         )
     }
