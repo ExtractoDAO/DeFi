@@ -24,9 +24,11 @@ export default function SideModal({
     open,
     onClose
 }: SideModalProps) {
+    const [ope, setOpen] = useState(true)
+
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={() => {}}>
+            <Dialog as="div" className="relative z-10" onClose={onClose}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
@@ -67,8 +69,8 @@ export default function SideModal({
                         max-w-full
                         max-sm:bottom-0 
                         max-sm:absolute 
-                        max-sm:right-auto
-                        max-sm:top-16	
+                        max-sm:top-16
+                        max-sm:w-full
                         "
                         >
                             <Transition.Child
@@ -86,6 +88,7 @@ export default function SideModal({
                                 w-screen 
                                 max-w-md
                                 max-md:h-[92%]
+                                max-sm:m-auto
                                 "
                                 >
                                     <Transition.Child
@@ -140,7 +143,7 @@ export default function SideModal({
                                     gap-6 
                                     p-6
                                     rounded
-
+                                 
                                     dark:bg-gray/900
                                     "
                                     >
@@ -151,6 +154,7 @@ export default function SideModal({
                                         gap-2 
                                         px-4 
                                         sm:px-6
+                                        
                                         "
                                         >
                                             <Dialog.Title
