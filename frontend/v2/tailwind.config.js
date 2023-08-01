@@ -93,7 +93,10 @@ module.exports = {
             "error/500": "#EF4444",
             "error/600": "#DC2626",
             "error/700": "#B91C1C",
-            "error/800": "#991B1B"
+            "error/800": "#991B1B",
+
+            "dark/purple/600": "#31263A"
+
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
