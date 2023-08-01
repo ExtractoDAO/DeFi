@@ -31,10 +31,10 @@ export default function SideModal({
             <Dialog as="div" className="relative z-10" onClose={onClose}>
                 <Transition.Child
                     as={Fragment}
-                    enter="ease-in-out duration-500"
+                    enter="duration-500"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
-                    leave="ease-in-out duration-500"
+                    leave=" duration-500"
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
@@ -69,18 +69,17 @@ export default function SideModal({
                         max-w-full
                         max-sm:bottom-0 
                         max-sm:absolute 
-                        max-sm:top-16
                         max-sm:w-full
                         "
                         >
                             <Transition.Child
                                 as={Fragment}
-                                enter="transform transition ease-in-out duration-500 sm:duration-700"
-                                enterFrom="translate-x-full"
-                                enterTo="translate-x-0"
-                                leave="transform transition ease-in-out duration-500 sm:duration-700"
-                                leaveFrom="translate-x-0"
-                                leaveTo="translate-x-full"
+                                enter="transform transition ease-in-out duration-500 sm:duration-700 max-sm:transition-all max-sm:duration-500 max-sm:delay-[200ms]"
+                                enterFrom="translate-x-full max-sm:translate-y-full max-sm:opacity-0 max-sm:translate-y-6"
+                                enterTo="translate-x-0 max-sm:translate-y-0 max-sm:opacity-100 max-sm:translate-y-0"
+                                leave="transform transition ease-in-out duration-500 max-sm:transition-all max-sm:duration-300"
+                                leaveFrom="translate-x-0 max-sm:translate-y-0 max-sm:opacity-100"
+                                leaveTo="translate-x-full max-sm:translate-y-full max-sm:opacity-0"
                             >
                                 <Dialog.Panel
                                     className="pointer-events-auto 
@@ -88,6 +87,7 @@ export default function SideModal({
                                 w-screen 
                                 max-w-md
                                 max-md:h-[92%]
+                                max-sm:h-[84%]
                                 max-sm:m-auto
                                 "
                                 >
@@ -194,7 +194,7 @@ export default function SideModal({
                                                     "
                                                     >
                                                         {contractType}
-                                                        FAT OX
+                                              
                                                     </p>
                                                 </div>
                                             </Dialog.Title>
