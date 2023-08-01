@@ -23,7 +23,7 @@ const pathnames: Dictionary = {
 
 export default function Navbar() {
     const pathname = usePathname()
-    const pageTitle = pathnames[pathname]
+    const pageTitle = pathnames[pathname || "/"]
     const { address, isConnected } = useAccount()
     // const {  } = useModal()
 
