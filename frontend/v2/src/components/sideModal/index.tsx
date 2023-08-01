@@ -74,20 +74,20 @@ export default function SideModal({
                         >
                             <Transition.Child
                                 as={Fragment}
-                                enter="transform transition ease-in-out duration-500 sm:duration-700 max-sm:transition-all max-sm:duration-500 max-sm:delay-[200ms]"
-                                enterFrom="translate-x-full max-sm:translate-y-full max-sm:opacity-0 max-sm:translate-y-6"
-                                enterTo="translate-x-0 max-sm:translate-y-0 max-sm:opacity-100 max-sm:translate-y-0"
-                                leave="transform transition ease-in-out duration-500 max-sm:transition-all max-sm:duration-300"
-                                leaveFrom="translate-x-0 max-sm:translate-y-0 max-sm:opacity-100"
-                                leaveTo="translate-x-full max-sm:translate-y-full max-sm:opacity-0"
+                                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                                enterFrom="sm:translate-x-full max-sm:translate-y-80"
+                                enterTo="sm:translate-x-0 max-sm:translate-y-0"
+                                leave="transform transition ease-in-out duration-500 "
+                                leaveFrom="sm:translate-x-0 max-sm:translate-y-0"
+                                leaveTo="sm:translate-x-full max-sm:translate-y-full"
                             >
                                 <Dialog.Panel
                                     className="pointer-events-auto 
                                 relative 
                                 w-screen 
                                 max-w-md
-                                max-md:h-[92%]
-                                max-sm:h-[84%]
+                                max-md:h-[92.6%]
+                                max-sm:h-[85%]
                                 max-sm:m-auto
                                 "
                                 >
@@ -142,7 +142,7 @@ export default function SideModal({
                                     bg-white 
                                     gap-6 
                                     p-6
-                                    rounded
+                                    max-sm:rounded
                                  
                                     dark:bg-gray/900
                                     "
