@@ -15,7 +15,15 @@ type SideModalProps = {
     contract: string
 }
 
-export default function SideModal({ title, contractType, contractAddress, contractTitle, contract, open, onClose }: SideModalProps) {
+export default function SideModal({
+    title,
+    contractType,
+    contractAddress,
+    contractTitle,
+    contract,
+    open,
+    onClose
+}: SideModalProps) {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -57,7 +65,10 @@ export default function SideModal({ title, contractType, contractAddress, contra
                         right-0 
                         flex 
                         max-w-full
-                        pl-10
+                        max-sm:bottom-0 
+                        max-sm:absolute 
+                        max-sm:right-auto
+                        max-sm:top-16	
                         "
                         >
                             <Transition.Child
@@ -74,6 +85,7 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                 relative 
                                 w-screen 
                                 max-w-md
+                                max-md:h-[92%]
                                 "
                                 >
                                     <Transition.Child
@@ -94,7 +106,9 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                         pr-2 
                                         pt-4 
                                         sm:-ml-10 
-                                        sm:pr-4"
+                                        sm:pr-4
+                                        max-sm:hidden
+                                        "
                                         >
                                             <button
                                                 type="button"
@@ -125,6 +139,7 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                     bg-white 
                                     gap-6 
                                     p-6
+                                    rounded
 
                                     dark:bg-gray/900
                                     "
@@ -200,12 +215,13 @@ export default function SideModal({ title, contractType, contractAddress, contra
                                         p-6 
                                         flex-col 
                                         items-start 
-                                        gap-10 
                                         self-stretch
                                         border
                                         border-gray/200
                                         rounded
                                         shadow-sm
+                                        max-sm:p-0
+                                        max-sm:border-none
 
                                         dark:bg-deep-gray/100
                                         dark:border-deep-gray/200
