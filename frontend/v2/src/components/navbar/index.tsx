@@ -13,7 +13,6 @@ import { setItem } from "@/lib/storage"
 import { ConnectKitButton, Avatar, useModal, SIWEButton } from "connectkit"
 import { useAccount } from "wagmi"
 
-
 const pathnames: Dictionary = {
     "/": "Dashboard",
     "/buy": "Buy contracts",
@@ -27,16 +26,25 @@ export default function Navbar() {
     const { address, isConnected } = useAccount()
     // const {  } = useModal()
 
-    const onConnect = () => fetch("/api/login")
-        .then(() => {
-            const token = "abc123xyz"
-            setItem("token", token)
-        }).catch(e => console.error(e))
+    const onConnect = () =>
+        fetch("/api/login")
+            .then(() => {
+                const token = "abc123xyz"
+                setItem("token", token)
+            })
+            .catch((e) => console.error(e))
 
-    const PhotoProfile = () => <Avatar radius={50} address={address} size={32}  />
+    // const PhotoProfile = () => (
+    //     <Avatar radius={50} address={address} size={32} />
+    // )
 
     // const ButtonConect = () => <ConnectKitButton theme={theme === "dark" ? "midnight" : "auto"} showAvatar={false} />
-    const ButtonConect = () => <ConnectKitButton theme={theme === "dark" ? "midnight" : "auto"} showAvatar={false} />
+    const ButtonConect = () => (
+        <ConnectKitButton
+            theme={theme === "dark" ? "midnight" : "auto"}
+            showAvatar={true}
+        />
+    )
 
     return (
         <React.Fragment>
@@ -141,7 +149,7 @@ export default function Navbar() {
                                 />
                             </Link>
                         </div>
-                        {isConnected && <PhotoProfile />}
+                        {/* {isConnected && <PhotoProfile />} */}
                         <ButtonConect />
                     </div>
                 </div>
