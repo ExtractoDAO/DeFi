@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Cog8ToothIcon } from "@heroicons/react/24/outline"
 import { BellIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
@@ -8,10 +8,17 @@ import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
 import { theme } from "@/utils/theme"
-import { setItem } from "@/lib/storage"
 
-import { ConnectKitButton, Avatar, useModal, SIWEButton } from "connectkit"
-import { useAccount } from "wagmi"
+import { ConnectKitButton } from "connectkit"
+import { useAccount, useSignMessage } from "wagmi"
+
+import { LockClosedIcon } from "@heroicons/react/24/outline"
+
+import { SiweMessage } from "siwe"
+import Modal from "../modal"
+import { deleteItem, getItem, setItem } from "@/lib/storage"
+
+const domain = "localhost"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -20,25 +27,105 @@ const pathnames: Dictionary = {
     "/exchange": "Exchange"
 }
 
+const messagePlainText = "We are creating the Future"
+
 export default function Navbar() {
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
-    const { address, isConnected } = useAccount()
-    // const {  } = useModal()
+    const { address, isConnected, connector } = useAccount()
+    const [modalSign, setModalSign] = useState(false)
 
-    const onConnect = () =>
-        fetch("/api/login")
-            .then(() => {
-                const token = "abc123xyz"
-                setItem("token", token)
-            })
-            .catch((e) => console.error(e))
+    const {
+        signMessage,
+        data: signature,
+        isLoading,
+        isError,
+        isSuccess
+    } = useSignMessage()
 
-    // const PhotoProfile = () => (
-    //     <Avatar radius={50} address={address} size={32} />
-    // )
+    async function fetchSaveSignature() {
+        try {
+            if (signature && isSuccess && isConnected) {
+                const res = await fetch(`/api/auth/signin`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: messagePlainText,
+                        signature: signature
+                    })
+                })
 
-    // const ButtonConect = () => <ConnectKitButton theme={theme === "dark" ? "midnight" : "auto"} showAvatar={false} />
+                const formatMessage = await res.json()
+
+                console.log("SIGNIN ", formatMessage)
+                setItem("LOGIN_SIGNATURE", signature?.toString())
+            }
+        } catch (e) {
+            console.log(e)
+            connector?.disconnect()
+        } finally {
+            setModalSign(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchSaveSignature()
+
+        if (isError) {
+            // Add error message
+        }
+    }, [signature, isError])
+
+    useEffect(() => {
+        if (!isConnected) {
+            deleteItem("LOGIN_SIGNATURE")
+        }
+    }, [isConnected])
+
+    console.log(isConnected)
+
+    useEffect(() => {
+        const savedSign = getItem("LOGIN_SIGNATURE")
+        if (isConnected && address && !savedSign) {
+            setModalSign(true)
+        } else {
+            setModalSign(false)
+        }
+    }, [isConnected, address])
+
+    async function createSiweMessage(
+        address: `0x${string}` | undefined,
+        statement: string
+    ) {
+        const nonce = await fetch(`/api/auth/nonce?address=${address}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const res = await nonce.json()
+
+        const message = new SiweMessage({
+            domain,
+            address,
+            statement,
+            uri: origin,
+            version: "1",
+            chainId: 1,
+            nonce: res.none
+        })
+
+        return message.prepareMessage()
+    }
+
+    const sign = async () => {
+        return signMessage({
+            message: await createSiweMessage(address, messagePlainText)
+        })
+    }
+
     const ButtonConect = () => (
         <ConnectKitButton
             theme={theme === "dark" ? "midnight" : "auto"}
@@ -48,6 +135,20 @@ export default function Navbar() {
 
     return (
         <React.Fragment>
+            <Modal
+                message="ExtractoDAO uses a signed message to authenticate users. Click in the button bellow and sign the requested message with your wallet."
+                open={modalSign}
+                title="Secure Login"
+                iconBgColor="bg-green/500"
+                icon={<LockClosedIcon />}
+                buttons={[
+                    {
+                        label: "Sign",
+                        onClick: () => sign(),
+                        bgColor: "success"
+                    }
+                ]}
+            />
             <nav
                 className="bg-base/white
                   dark:border-deep-gray/200
