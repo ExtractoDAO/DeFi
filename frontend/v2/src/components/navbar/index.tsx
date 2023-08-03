@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Cog8ToothIcon } from "@heroicons/react/24/outline"
 import { BellIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
@@ -7,76 +7,153 @@ import { usePathname } from "next/navigation"
 import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
-const getPageTitle = (pathname: string): string => {
-    switch (pathname) {
-        case "/":
-            return "Dashboard"
-        case "/buy":
-            return "Buy contracts"
-        case "/drawer":
-            return "Drawer"
-        case "/exchange":
-            return "Exchange"
-        default:
-            return ""
-    }
+import { theme } from "@/utils/theme"
+
+import { ConnectKitButton } from "connectkit"
+import { useAccount, useSignMessage } from "wagmi"
+
+import { LockClosedIcon } from "@heroicons/react/24/outline"
+
+import { SiweMessage } from "siwe"
+import Modal from "../modal"
+import { deleteItem, getItem, setItem } from "@/lib/storage"
+
+import { toast } from "react-toastify"
+
+const domain = "localhost"
+
+const pathnames: Dictionary = {
+    "/": "Dashboard",
+    "/buy": "Buy contracts",
+    "/drawer": "Drawer",
+    "/exchange": "Exchange"
 }
 
+const messagePlainText = "We are creating the Future"
+
 export default function Navbar() {
-    const [isConnected] = useState(true)
     const pathname = usePathname()
-    const pageTitle = getPageTitle(pathname)
+    const pageTitle = pathnames[pathname || "/"]
+    const { address, isConnected, connector } = useAccount()
+    const [modalSign, setModalSign] = useState(false)
 
-    const PhotoProfile = () => {
-        return (
-            <>
-                <div
-                    className={classNames(
-                        "bg-brand/primary/500", //just to represent profile picture location
-                        "w-8",
-                        "h-8",
-                        "flex",
-                        "justify-center",
-                        "items-center",
-                        "rounded-full",
-                        { hidden: isConnected === false }
-                    )}
-                ></div>
-            </>
-        )
+    const {
+        signMessage,
+        data: signature,
+        isError,
+        isSuccess
+    } = useSignMessage()
+
+    async function fetchSaveSignature() {
+        try {
+            if (signature && isSuccess && isConnected) {
+                const res = await fetch(`/api/auth/signin`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: messagePlainText,
+                        signature: signature
+                    })
+                })
+
+                const formatMessage = await res.json()
+
+                toast.success("Login successfully")
+                setItem("LOGIN_SIGNATURE", signature?.toString())
+                setModalSign(false)
+            }
+        } catch (e) {
+            toast.error("Error while sending signature. Please try again.")
+        }
     }
 
-    const ButtonConect = () => {
-        return (
-            <>
-                <button
-                    className={classNames(
-                        "flex",
-                        "dark:text-gray/300",
-                        "text-sm",
-                        "not-italic",
-                        "font-medium",
-                        "text-gray/900",
-                        "border",
-                        "border-gray/200",
-                        "py-2",
-                        "px-4",
-                        "justify-center",
-                        "items-center",
-                        "rounded",
-                        "gap-3",
-                        "leading-6",
-                        { hidden: isConnected === true }
-                    )}
-                >
-                    Connect
-                </button>
-            </>
-        )
+    useEffect(() => {
+        fetchSaveSignature()
+
+        if (isError) {
+            // Add error message
+        }
+    }, [signature, isError])
+
+    useEffect(() => {
+        if (!isConnected) {
+            deleteItem("LOGIN_SIGNATURE")
+        }
+    }, [isConnected])
+
+    useEffect(() => {
+        const savedSign = getItem("LOGIN_SIGNATURE")
+        if (isConnected && address && !savedSign) {
+            setModalSign(true)
+        } else {
+            setModalSign(false)
+        }
+    }, [isConnected, address])
+
+    async function createSiweMessage(
+        address: `0x${string}` | undefined,
+        statement: string
+    ) {
+        const nonce = await fetch(`/api/auth/nonce?address=${address}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const res = await nonce.json()
+
+        const message = new SiweMessage({
+            domain,
+            address,
+            statement,
+            uri: origin,
+            version: "1",
+            chainId: 1,
+            nonce: res.none
+        })
+
+        return message.prepareMessage()
     }
+
+    const sign = async () => {
+        return signMessage({
+            message: await createSiweMessage(address, messagePlainText)
+        })
+    }
+
+    const ButtonConect = () => (
+        <ConnectKitButton
+            theme={theme === "dark" ? "midnight" : "auto"}
+            showAvatar={true}
+        />
+    )
 
     return (
         <React.Fragment>
+            <Modal
+                message="ExtractoDAO uses a signed message to authenticate users. Click in the button bellow and sign the requested message with your wallet."
+                open={modalSign}
+                title="Secure Login"
+                iconBgColor="bg-green/500"
+                icon={<LockClosedIcon />}
+                buttons={[
+                    {
+                        label: "Cancel",
+                        onClick: async () => {
+                            await connector?.disconnect()
+                            setModalSign(false)
+                        },
+                        bgColor: "secondary"
+                    },
+                    {
+                        label: "Sign",
+                        onClick: () => sign(),
+                        bgColor: "success"
+                    }
+                ]}
+            />
             <nav
                 className="bg-base/white
                   dark:border-deep-gray/200
@@ -178,7 +255,7 @@ export default function Navbar() {
                                 />
                             </Link>
                         </div>
-                        <PhotoProfile />
+                        {/* {isConnected && <PhotoProfile />} */}
                         <ButtonConect />
                     </div>
                 </div>
