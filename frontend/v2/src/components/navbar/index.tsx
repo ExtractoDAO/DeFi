@@ -18,6 +18,8 @@ import { SiweMessage } from "siwe"
 import Modal from "../modal"
 import { deleteItem, getItem, setItem } from "@/lib/storage"
 
+import { toast } from "react-toastify"
+
 const domain = "localhost"
 
 const pathnames: Dictionary = {
@@ -38,7 +40,6 @@ export default function Navbar() {
     const {
         signMessage,
         data: signature,
-        isLoading,
         isError,
         isSuccess
     } = useSignMessage()
@@ -59,14 +60,12 @@ export default function Navbar() {
 
                 const formatMessage = await res.json()
 
-                console.log("SIGNIN ", formatMessage)
+                toast.success("Login successfully")
                 setItem("LOGIN_SIGNATURE", signature?.toString())
+                setModalSign(false)
             }
         } catch (e) {
-            console.log(e)
-            connector?.disconnect()
-        } finally {
-            setModalSign(false)
+            toast.error("Error while sending signature. Please try again.")
         }
     }
 
@@ -83,8 +82,6 @@ export default function Navbar() {
             deleteItem("LOGIN_SIGNATURE")
         }
     }, [isConnected])
-
-    console.log(isConnected)
 
     useEffect(() => {
         const savedSign = getItem("LOGIN_SIGNATURE")
@@ -142,6 +139,14 @@ export default function Navbar() {
                 iconBgColor="bg-green/500"
                 icon={<LockClosedIcon />}
                 buttons={[
+                    {
+                        label: "Cancel",
+                        onClick: async () => {
+                            await connector?.disconnect()
+                            setModalSign(false)
+                        },
+                        bgColor: "secondary"
+                    },
                     {
                         label: "Sign",
                         onClick: () => sign(),
