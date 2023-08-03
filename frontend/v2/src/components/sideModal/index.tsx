@@ -40,37 +40,33 @@ export default function SideModal({
                 >
                     <div
                         className="fixed 
-                    inset-0 
-                    bg-gray/500 
-                    bg-opacity-75 
-                    transition-opacity
-                    "
+                                inset-0 
+                                bg-gray/500 
+                                bg-opacity-75 
+                                transition-opacity"
                     />
                 </Transition.Child>
 
                 <div
                     className="fixed 
-                inset-0 
-                overflow-hidden
-                "
+                            inset-0 
+                            overflow-hidden"
                 >
                     <div
                         className="absolute 
-                    inset-0 
-                    overflow-hidden
-                    "
+                                inset-0 
+                                overflow-hidden"
                     >
                         <div
                             className="pointer-events-none 
-                        fixed 
-                        inset-y-0 
-                        right-0 
-                        flex 
-                        max-w-full
-                        max-sm:bottom-0 
-                        max-sm:absolute 
-                        max-sm:w-full
-                        "
+                                    fixed 
+                                    inset-y-0 
+                                    right-0 
+                                    flex 
+                                    max-w-full
+                                    max-sm:bottom-0 
+                                    max-sm:absolute 
+                                    max-sm:w-full"
                         >
                             <Transition.Child
                                 as={Fragment}
@@ -83,13 +79,12 @@ export default function SideModal({
                             >
                                 <Dialog.Panel
                                     className="pointer-events-auto 
-                                relative 
-                                w-screen 
-                                max-w-md
-                                max-md:h-[92.6%]
-                                max-sm:h-[85%]
-                                max-sm:m-auto
-                                "
+                                            relative 
+                                            w-screen 
+                                            max-w-md
+                                            max-md:h-[92.6%]
+                                            max-sm:h-[85%]
+                                            max-sm:m-auto"
                                 >
                                     <Transition.Child
                                         as={Fragment}
@@ -102,26 +97,25 @@ export default function SideModal({
                                     >
                                         <div
                                             className="absolute 
-                                        left-0 
-                                        top-0 
-                                        -ml-8 
-                                        flex 
-                                        pr-2 
-                                        pt-4 
-                                        sm:-ml-10 
-                                        sm:pr-4
-                                        max-sm:hidden
-                                        "
+                                                    left-0 
+                                                    top-0 
+                                                    -ml-8 
+                                                    flex 
+                                                    pr-2 
+                                                    pt-4 
+                                                    sm:-ml-10 
+                                                    sm:pr-4
+                                                    max-sm:hidden"
                                         >
                                             <button
                                                 type="button"
                                                 onClick={onClose}
                                                 className="rounded-md 
-                                                text-gray/300 
-                                                hover:text-white 
-                                                focus:outline-none 
-                                                focus:ring-2 
-                                                focus:ring-white"
+                                                        text-gray/300 
+                                                        hover:text-white 
+                                                        focus:outline-none 
+                                                        focus:ring-2 
+                                                        focus:ring-white"
                                             >
                                                 <span className="sr-only">
                                                     Close panel
@@ -135,66 +129,60 @@ export default function SideModal({
                                     </Transition.Child>
                                     <div
                                         className="flex 
-                                    h-full 
-                                    flex-col 
-                                    items-start 
-                                    shrink-0 
-                                    bg-white 
-                                    gap-6 
-                                    p-6
-                                    max-sm:rounded
+                                                h-full 
+                                                flex-col 
+                                                items-start 
+                                                shrink-0 
+                                                bg-white 
+                                                gap-6 
+                                                p-6
+                                                max-sm:rounded
                                  
-                                    dark:bg-gray/900
-                                    "
+                                                dark:bg-gray/900"
                                     >
                                         <div
                                             className="flex 
-                                        flex-col 
-                                        items-start 
-                                        gap-2 
-                                        px-4 
-                                        sm:px-6
-                                        "
+                                                    flex-col 
+                                                    items-start 
+                                                    gap-2 
+                                                    px-4 
+                                                    sm:px-6"
                                         >
                                             <Dialog.Title
                                                 className="flex 
-                                            items-center 
-                                            gap-2"
+                                                        items-center 
+                                                        gap-2"
                                             >
                                                 <h1
                                                     className="text-gray/900 
-                                                text-[20px] 
-                                                not-italic 
-                                                font-semibold
+                                                            text-[20px] 
+                                                            not-italic 
+                                                            font-semibold
                                                 
-                                                dark:text-gray/300
-                                                "
+                                                            dark:text-gray/300"
                                                 >
                                                     {title}
                                                 </h1>
                                                 <div
                                                     className="rounded-[130px] 
-                                                bg-brand/secondary/100 
-                                                gap-[10px] 
-                                                flex 
-                                                items-center 
-                                                py-0 
-                                                px-2
+                                                            bg-brand/secondary/100 
+                                                            gap-[10px] 
+                                                            flex 
+                                                            items-center 
+                                                            py-0 
+                                                            px-2
                                                 
-                                                dark:bg-dark/purple/600
-                                                "
+                                                            dark:bg-dark/purple/600"
                                                 >
                                                     <p
                                                         className="text-brand/secondary/500 
-                                                    text-sm 
-                                                    font-semibold 
-                                                    not-italic
+                                                                text-sm 
+                                                                font-semibold 
+                                                                not-italic
                                                     
-                                                    dark:text-brand/primary/500
-                                                    "
+                                                                dark:text-brand/primary/500"
                                                     >
                                                         {contractType}
-                                              
                                                     </p>
                                                 </div>
                                             </Dialog.Title>
@@ -212,49 +200,45 @@ export default function SideModal({
                                         </div>
                                         <div
                                             className="overflow-y-auto 
-                                        flex 
-                                        p-6 
-                                        flex-col 
-                                        items-start 
-                                        self-stretch
-                                        border
-                                        border-gray/200
-                                        rounded
-                                        shadow-sm
-                                        max-sm:p-0
-                                        max-sm:border-none
+                                                    flex 
+                                                    p-6 
+                                                    flex-col 
+                                                    items-start 
+                                                    self-stretch
+                                                    border
+                                                    border-gray/200
+                                                    rounded
+                                                    shadow-sm
+                                                    max-sm:p-0
+                                                    max-sm:border-none
 
-                                        dark:bg-deep-gray/100
-                                        dark:border-deep-gray/200
-                                        "
+                                                    dark:bg-deep-gray/100
+                                                    dark:border-deep-gray/200"
                                         >
                                             <div
                                                 className="felx 
-                                            w-full 
-                                            flex-col 
-                                            gap-4 
-                                            items-start
-                                            "
+                                                        w-full 
+                                                        flex-col 
+                                                        gap-4 
+                                                        items-start"
                                             >
                                                 <h1
                                                     className="text-gray/900 
-                                                text-[20px] 
-                                                not-italic 
-                                                font-semibold
+                                                            text-[20px] 
+                                                            not-italic 
+                                                            font-semibold
                                                 
-                                                dark:text-gray/300
-                                                "
+                                                            dark:text-gray/300"
                                                 >
                                                     {contractTitle}
                                                 </h1>
                                                 <p
                                                     className="text-gray/500 
-                                                text-sm 
-                                                font-normal 
-                                                not-italic
+                                                            text-sm 
+                                                            font-normal 
+                                                            not-italic
                                                 
-                                                dark:text-gray/600
-                                                "
+                                                            dark:text-gray/600"
                                                 >
                                                     {contract}
                                                 </p>
@@ -262,11 +246,10 @@ export default function SideModal({
                                         </div>
                                         <div
                                             className="flex 
-                                        flex-col 
-                                        items-start 
-                                        gap-2 
-                                        self-stretch
-                                        "
+                                                    flex-col 
+                                                    items-start 
+                                                    gap-2 
+                                                    self-stretch"
                                         >
                                             <Button>Withdraw</Button>
                                             <Button bgColor="secondary">
