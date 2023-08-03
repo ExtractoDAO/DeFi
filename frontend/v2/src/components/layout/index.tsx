@@ -26,7 +26,7 @@ const Layout = (props: PropsWithChildren) => {
                 <Navbar />
                 <div
                     className={classNames({
-                        "p-6 max-md:px-4": !pathname.includes("/exchange")
+                        "p-6 max-md:px-4": !pathname?.includes("/exchange")
                     })}
                 >
                     {props.children}
