@@ -93,8 +93,33 @@ def validation_request(siwe_msg: SiweMessage, signature: str) -> Optional[str]:
         return error_message
 
 
-@router.post(path="/signin", status_code=status.HTTP_201_CREATED)
-async def get_sign(signin: SignIn):
+@router.post(
+    description="""
+# Use it here to request your access token.
+- **Get your nonce here `/nonce/{address}`**
+    """,
+    path="/signin/{address}",
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        201: {
+            "description": "Successful Response",
+            "content": {
+                "application/json": {
+                    "example": {"token": "string", "expiration_time": 1234567890}
+                }
+            },
+        },
+        401: {
+            "description": "Unauthorized",
+            "content": {
+                "application/json": {
+                    "example": {"details": "Authentication attempt rejected: ..."}
+                }
+            },
+        },
+    },
+)
+async def get_signin(signin: SignIn, address: str):
     siwe_msg = SiweMessage(signin.message)
     global cache_memory
     cache_memory = Cache(
