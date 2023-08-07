@@ -26,7 +26,7 @@ logger = CustomLogger(env.LOG_PATH)
 adapter_app = FirebaseAdapter(env)
 app = FastAPI(
     title="Backend",
-    version="0.4.0",
+    version="0.5.0",
     redoc_url="/",
     openapi_tags=tags_metadata
 )
