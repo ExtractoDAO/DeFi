@@ -28,6 +28,10 @@ from chain_vission import adapter_app
 async def signout(address: str, x_authorization: str = Header(None)):
     token = adapter_app.get_data(f"/tokens/{address}")
 
+    # validate_siwe_message
+    # 1 - user must be sign the access token
+    # 2 - send token + signaure to signout
+
     if token != x_authorization or token is None:
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
