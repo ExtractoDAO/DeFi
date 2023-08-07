@@ -5,7 +5,20 @@ from fastapi import status
 import siwe
 
 
-@router.get(path="/nonce/{address}", status_code=status.HTTP_201_CREATED)
+@router.get(
+    path="/nonce/{address}",
+    status_code=status.HTTP_201_CREATED,
+    description="""
+# Pass your *addres* for get your *nonce*
+- **Next, go to `/signin/`**
+    """,
+    responses={
+        201: {
+            "description": "Successful Response",
+            "content": {"application/json": {"example": {"nonce": "string"}}},
+        }
+    },
+)
 async def get_nonce(address: str):
     nonce: str = siwe.generate_nonce()
     adapter_app.set_data(f"/nonces/{address}", nonce)
