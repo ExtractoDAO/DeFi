@@ -28,7 +28,7 @@ app = FastAPI(
     title="Backend",
     version="0.4.0",
     redoc_url="/",
-    openapi_tags=tags_metadata,
+    openapi_tags=tags_metadata
 )
 app.middleware("http")(get_authentication_token)
 
