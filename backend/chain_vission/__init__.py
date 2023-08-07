@@ -4,13 +4,31 @@ from chain_vission.utils.environment import Environment
 from chain_vission.logger.logs import CustomLogger
 from fastapi import FastAPI
 
+tags_metadata = [
+    {
+        "name": "Login",
+        "description": """
+- **Step 1**: First, you need to pass your address to get the nonce (`/nonce/{address}`).
+- **Step 2**: Add the nonce into message and sign it.
+- **Step 3**: Send the message + signature to retrieve your access token (`/signin/{address}`).
+- **Step 4**: To sign out, sign your access token.
+- **Step 5**: Send your access token along with your signature (`/signout/{address}`).
+        """,
+    },
+    {
+        "name": "GraphQL",
+        "description": "Operations related to GraphQL queries and mutations.",
+    },
+]
+
 env = Environment()
 logger = CustomLogger(env.LOG_PATH)
 adapter_app = FirebaseAdapter(env)
 app = FastAPI(
     title="Backend",
     version="0.4.0",
-    redoc_url="/"
+    redoc_url="/",
+    openapi_tags=tags_metadata,
 )
 app.middleware("http")(get_authentication_token)
 
