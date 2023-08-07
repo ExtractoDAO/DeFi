@@ -9,7 +9,7 @@ load_dotenv(".env")
 
 logger = CustomLogger("logging.log")
 adapter_app = FirebaseAdapter()
-app = FastAPI(docs_url="/")
+app = FastAPI(docs_url="/", version"0.4.0")
 app.middleware("http")(get_authentication_token)
 
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
