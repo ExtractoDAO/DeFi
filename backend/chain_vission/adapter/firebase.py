@@ -1,31 +1,29 @@
+from chain_vission.utils.environment import Environment
 from firebase_admin import credentials, db
-from dotenv import load_dotenv
 import firebase_admin
-import os
 
 
 class FirebaseAdapter:
     _instance = None
 
     @staticmethod
-    def getInstance():
+    def getInstance(env: Environment):
         """Static access method."""
         if FirebaseAdapter._instance is None:
-            FirebaseAdapter()
+            FirebaseAdapter(env)
         return FirebaseAdapter._instance
 
-    def __init__(self):
+    def __init__(self, env: Environment):
         """Virtually private constructor."""
         if FirebaseAdapter._instance is not None:
-            raise Exception("This class is a singleton!")
+            raise Exception("This class should be a singleton!")
         else:
             FirebaseAdapter._instance = self
             # to avoid the var env loaded when in mock tests
             if __name__ != "__main__":
-                load_dotenv(".env")
-                service_account_json = FirebaseAdapter._get_service_account_json()
-                base_url = os.getenv("BASE_URL")
-                prefix = os.getenv("ENV")
+                service_account_json = FirebaseAdapter._get_service_account_json(env)
+                base_url = env.BASE_URL
+                prefix = env.ENV
 
                 self.__prefix = prefix
                 self.cred = credentials.Certificate(service_account_json)
@@ -36,18 +34,18 @@ class FirebaseAdapter:
                 self._db = db
 
     @staticmethod
-    def _get_service_account_json() -> dict:
+    def _get_service_account_json(env: Environment) -> dict:
         cert = {
-            "type": os.getenv("TYPE"),
-            "project_id": os.getenv("PROJECT_ID"),
-            "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-            "private_key": os.getenv("PRIVATE_KEY"),
-            "client_email": os.getenv("CLIENT_EMAIL"),
-            "client_id": os.getenv("CLIENT_ID"),
-            "auth_uri": os.getenv("AUTH_URI"),
-            "token_uri": os.getenv("TOKEN_URI"),
-            "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
-            "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+            "auth_provider_x509_cert_url": env.AUTH_PROVIDER_X509_CERT_URL,
+            "client_x509_cert_url": env.CLIENT_X509_CERT_URL,
+            "private_key_id": env.PRIVATE_KEY_ID,
+            "client_email": env.CLIENT_EMAIL,
+            "private_key": env.PRIVATE_KEY,
+            "project_id": env.PROJECT_ID,
+            "client_id": env.CLIENT_ID,
+            "token_uri": env.TOKEN_URI,
+            "auth_uri": env.AUTH_URI,
+            "type": env.TYPE,
         }
         if all(cert.values()) is False:
             raise ValueError(f"You need a complete list of certificates: {cert}")
