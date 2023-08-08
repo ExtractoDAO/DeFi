@@ -133,12 +133,12 @@ export default function SideModal({
                                                 flex-col 
                                                 items-start 
                                                 shrink-0 
-                                                bg-white 
+                                                bg-slate/50
                                                 gap-6 
                                                 p-6
                                                 max-sm:rounded
                                  
-                                                dark:bg-gray/900"
+                                                dark:gray/sidemodal/900"
                                     >
                                         <div
                                             className="flex 
@@ -146,7 +146,7 @@ export default function SideModal({
                                                     items-start 
                                                     gap-2 
                                                     px-4 
-                                                    sm:px-6"
+                                                    sm:px-0"
                                         >
                                             <Dialog.Title
                                                 className="flex 
@@ -199,9 +199,10 @@ export default function SideModal({
                                             </Link>
                                         </div>
                                         <div
-                                            className="overflow-y-auto 
+                                            className="overflow-y-auto
+                                                    bg-white
                                                     flex 
-                                                    p-6 
+                                                    p-6
                                                     flex-col 
                                                     items-start 
                                                     self-stretch
