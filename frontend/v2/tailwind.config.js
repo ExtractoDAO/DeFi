@@ -46,7 +46,7 @@ module.exports = {
             "gray/900": "#1F2228",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
-            "gray/900": "#131313",
+            "gray/sidemodal/900": "#131313",
 
             "deep-gray/100": "#0D0D0D",
             "deep-gray/200": "#202329",
