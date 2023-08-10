@@ -14,7 +14,6 @@ import {
     UseContractWriteConfig
 } from "wagmi"
 import contractsData from "@/generated/deployedContracts"
-import scaffoldConfig from "../../scaffold.config"
 
 export type GenericContractsDeclaration = {
     [key: number]: readonly {
@@ -40,11 +39,6 @@ type ContractsDeclaration = IsContractsFileMissing<
 >
 
 export type Chain = keyof ContractsDeclaration
-
-type SelectedChainId = IsContractsFileMissing<
-    number,
-    (typeof scaffoldConfig)["targetNetwork"]["id"]
->
 
 type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"]
 
