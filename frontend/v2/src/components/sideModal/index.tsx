@@ -43,7 +43,9 @@ export default function SideModal({
                                 inset-0 
                                 bg-gray/500 
                                 bg-opacity-75 
-                                transition-opacity"
+                                transition-opacity
+                                
+                                "
                     />
                 </Transition.Child>
 
@@ -138,7 +140,7 @@ export default function SideModal({
                                                 p-6
                                                 max-sm:rounded
                                  
-                                                dark:gray/sidemodal/900"
+                                                dark:bg-gray/sidemodal/900"
                                     >
                                         <div
                                             className="flex 
@@ -198,26 +200,31 @@ export default function SideModal({
                                                 {contractAddress}
                                             </Link>
                                         </div>
+                                    
                                         <div
-                                            className="overflow-y-auto
-                                                    bg-white
-                                                    flex 
-                                                    p-6
-                                                    flex-col 
-                                                    items-start 
-                                                    self-stretch
-                                                    border
-                                                    border-gray/200
-                                                    rounded
-                                                    shadow-sm
-                                                    max-sm:p-0
-                                                    max-sm:border-none
+                                            className="overflow-y-scroll
+                                            scroll
+                                            scrolllight  
+                                            flex 
+                                            p-6
+                                            flex-col 
+                                            items-start 
+                                            self-stretch
+                                            border
+                                            border-gray/200
+                                            rounded
+                                            shadow-sm
+                                            max-sm:p-0
+                                            max-sm:border-none
 
-                                                    dark:bg-deep-gray/100
-                                                    dark:border-deep-gray/200"
+                                            dark:bg-deep-gray/100
+                                            dark:border-deep-gray/200
+                                            dark:scrolldark
+                                            "
                                         >
                                             <div
                                                 className="felx 
+                                                
                                                         w-full 
                                                         flex-col 
                                                         gap-4 
@@ -245,6 +252,7 @@ export default function SideModal({
                                                 </p>
                                             </div>
                                         </div>
+                                       
                                         <div
                                             className="flex 
                                                     flex-col 
