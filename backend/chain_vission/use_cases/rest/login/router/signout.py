@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from chain_vission import adapter_app
 
 
-@router.post(
+@router.delete(
     path="/signout/{address}",
     status_code=status.HTTP_200_OK,
     description="""
