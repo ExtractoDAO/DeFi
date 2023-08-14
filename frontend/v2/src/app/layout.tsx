@@ -12,6 +12,8 @@ import Layout from "@/components/layout"
 import { theme } from "@/utils/theme"
 import WagmiProvider from "@/providers/wagmi"
 
+import { ThirdwebProvider } from "@/providers/Thirdweb"
+
 export const metadata = {
     title: "ExtractoDAO",
     description: "The DeFi 2.0"
@@ -22,24 +24,31 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
+    // thirdwebsecret = "Qs-BcgYakeFuRu35xTzHZ9TlB0vVRk4Vc7SL-KnaXTMVRktUqnhdvnULNlsI-P6uEZmmxw5lIYw9ybHfKDlLqw"
+
     return (
         <html lang="en" className={theme}>
             <body className={`${inter.className} bg-slate/50 dark:bg-gray/900`}>
-                <WagmiProvider>
-                    <Layout>{children}</Layout>
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />
-                </WagmiProvider>
+                <ThirdwebProvider
+                    activeChain="localhost"
+                    clientId="f05daca94bc43cf8e5d93fe257fd68e8"
+                >
+                    <WagmiProvider>
+                        <Layout>{children}</Layout>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />
+                    </WagmiProvider>
+                </ThirdwebProvider>
             </body>
         </html>
     )
