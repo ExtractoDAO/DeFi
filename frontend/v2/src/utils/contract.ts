@@ -14,6 +14,7 @@ import {
     UseContractWriteConfig
 } from "wagmi"
 import contractsData from "@/generated/deployedContracts"
+import daoConfig from "../../dao.config"
 
 export type GenericContractsDeclaration = {
     [key: number]: readonly {
@@ -39,6 +40,11 @@ type ContractsDeclaration = IsContractsFileMissing<
 >
 
 export type Chain = keyof ContractsDeclaration
+
+type SelectedChainId = IsContractsFileMissing<
+    number,
+    (typeof daoConfig)["targetNetwork"]["id"]
+>
 
 type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"]
 
@@ -130,7 +136,7 @@ type RestConfigParam<TAbiStateMutability extends AbiStateMutability> = Partial<
     Omit<
         TAbiStateMutability extends ReadAbiStateMutability
             ? UseContractReadConfig
-            : UseContractWriteConfig,
+            : UseContractWriteConfig<unknown[]>,
         "chainId" | "abi" | "address" | "functionName" | "args"
     >
 >
@@ -191,7 +197,7 @@ export type UseScaffoldWriteConfig<
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void
     blockConfirmations?: number
 } & IsContractsFileMissing<
-    Partial<UseContractWriteConfig> & {
+    Partial<UseContractWriteConfig<unknown[]>> & {
         args?: unknown[]
     },
     {

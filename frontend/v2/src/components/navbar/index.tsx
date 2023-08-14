@@ -20,6 +20,8 @@ import { deleteItem, getItem, setItem } from "@/lib/storage"
 
 import { toast } from "react-toastify"
 
+import daoConfig from "../../../dao.config"
+
 const pathnames: Dictionary = {
     "/": "Dashboard",
     "/buy": "Buy contracts",
@@ -29,7 +31,7 @@ const pathnames: Dictionary = {
 
 const messagePlainText = process.env.SIWE_STATEMENT?.toString()
 const domain = process.env.DOMAIN?.toString()
-const chainId = Number(process.env.CHAIN_ID)
+const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
     const pathname = usePathname()
@@ -92,7 +94,7 @@ export default function Navbar() {
     useEffect(() => {
         const savedSign = getItem("LOGIN_SIGNATURE")
         if (isConnected && address && !savedSign) {
-            setModalSign(true)
+            // setModalSign(true)
         } else {
             setModalSign(false)
         }
