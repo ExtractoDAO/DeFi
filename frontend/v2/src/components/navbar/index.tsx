@@ -7,10 +7,14 @@ import { usePathname } from "next/navigation"
 import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
-import { theme } from "@/utils/theme"
+import {
+    ConnectWallet,
+    useAddress,
+    useConnectionStatus,
+    useSDK
+} from "@thirdweb-dev/react"
 
-import { ConnectKitButton } from "connectkit"
-import { useAccount, useSignMessage } from "wagmi"
+import { useSignMessage } from "wagmi"
 
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
@@ -21,6 +25,7 @@ import { deleteItem, getItem, setItem } from "@/lib/storage"
 import { toast } from "react-toastify"
 
 import daoConfig from "../../../dao.config"
+import { shortAddress } from "@/utils/mask"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -34,9 +39,11 @@ const domain = process.env.DOMAIN?.toString()
 const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
+    const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
-    const { address, isConnected, connector } = useAccount()
+    const connectionStatus = useConnectionStatus()
+    const isConnected = connectionStatus === "connected"
     const [modalSign, setModalSign] = useState(false)
     const [showNotificationIcon, setShowNotificationIcon] = useState(false)
 
@@ -136,9 +143,49 @@ export default function Navbar() {
     }
 
     const ButtonConect = () => (
-        <ConnectKitButton
-            theme={theme === "dark" ? "midnight" : "auto"}
-            showAvatar={true}
+        <ConnectWallet
+            className={classNames(
+                "flex",
+                "dark:text-gray/300",
+                "text-sm",
+                "not-italic",
+                "font-medium",
+                "text-gray/900",
+                "border",
+                "border-gray/200",
+                "py-2",
+                "px-6",
+                "justify-center",
+                "items-center",
+                "rounded",
+                "gap-3",
+                "leading-6",
+                "dark:bg-deep-gray/200"
+            )}
+            detailsBtn={() => {
+                return (
+                    <button
+                        className={classNames(
+                            "flex",
+                            "dark:text-gray/300",
+                            "text-sm",
+                            "not-italic",
+                            "font-medium",
+                            "text-gray/900",
+                            "py-2",
+                            "px-6",
+                            "justify-center",
+                            "items-center",
+                            "rounded",
+                            "gap-3",
+                            "leading-6",
+                            "dark:bg-deep-gray/200"
+                        )}
+                    >
+                        {address ? shortAddress(address) : ""}
+                    </button>
+                )
+            }}
         />
     )
 
@@ -154,7 +201,6 @@ export default function Navbar() {
                     {
                         label: "Cancel",
                         onClick: async () => {
-                            await connector?.disconnect()
                             setModalSign(false)
                         },
                         bgColor: "secondary"
