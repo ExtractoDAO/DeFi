@@ -46,7 +46,7 @@ module.exports = {
             "gray/900": "#1F2228",
             "cool-gray/900": "#111827",
             "Default/gray/900": "#111827",
-            "gray/900": "#131313",
+            "gray/sidemodal/900": "#131313",
 
             "deep-gray/100": "#0D0D0D",
             "deep-gray/200": "#202329",
@@ -93,7 +93,10 @@ module.exports = {
             "error/500": "#EF4444",
             "error/600": "#DC2626",
             "error/700": "#B91C1C",
-            "error/800": "#991B1B"
+            "error/800": "#991B1B",
+
+            "dark/purple/600": "#31263A"
+
         },
         data: {
             tokenSelectOpen: 'ui~="tokenSelectOpen"'
