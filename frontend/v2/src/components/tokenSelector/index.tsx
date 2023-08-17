@@ -12,18 +12,54 @@ import DAI from "@/assets/img/icons/currencies/dai.svg"
 
 import classnames from "classnames"
 import { useClickAnyWhere } from "usehooks-ts"
+import { getContractNames } from "@/utils/contractNames"
+import { ContractName } from "@/utils/contract"
 
-interface IObj {
-    [key: string]: string
+export interface Token {
+    name: string
+    symbol: ContractName
+    icon: any
 }
 
-function TokenSelector() {
-    const [selected, setSelected] = useState("Tether")
+const contractNames = getContractNames()
+
+export const list: Token[] = [
+    {
+        name: "Tether",
+        symbol: "USDT" as ContractName,
+        icon: USDT
+    },
+    {
+        name: "USD Coin",
+        symbol: "USDC" as ContractName,
+        icon: USDC
+    },
+    {
+        name: "Binance USD",
+        symbol: "BUSD" as ContractName,
+        icon: BUSD
+    },
+    {
+        name: "Dai",
+        symbol: "DAI" as ContractName,
+        icon: DAI
+    }
+]
+
+export const tokens = list.filter((item) =>
+    contractNames.includes(item.symbol as ContractName)
+)
+
+interface TokenSelectorProps {
+    onSelect: (item: Token) => void
+}
+
+function TokenSelector({ onSelect }: TokenSelectorProps) {
+    const [selected, setSelected] = useState(tokens[0])
     const [open, setOpen] = useState(false)
     const [state, setState] = useState(0)
 
     useClickAnyWhere(() => {
-        console.log("AQUIII")
         if (state === 1) {
             setState(state + 1)
         }
@@ -33,18 +69,12 @@ function TokenSelector() {
         }
     })
 
-    const icons: IObj = {
-        Tether: USDT,
-        "USD Coin": USDC,
-        "Binance USD": BUSD,
-        DAI: DAI
-    }
-
-    const ListItem = ({ item }: { item: string }) => (
+    const ListItem = ({ item }: { item: Token }) => (
         <span
             onClick={() => {
                 setSelected(item)
                 setOpen(false)
+                onSelect(item)
             }}
             className={`
                 px-4 py-1
@@ -60,8 +90,8 @@ function TokenSelector() {
                 last-of-type:rounded-b
             `}
         >
-            <Image src={icons[item]} alt="usdt" className="w-4" />
-            {item}
+            <Image src={item.icon} alt="usdt" className="w-4" />
+            {item.name}
             <div className="w-1" />
         </span>
     )
@@ -87,8 +117,8 @@ function TokenSelector() {
                     setState(state + 1)
                 }}
             >
-                <Image src={icons[selected]} alt="" className="w-4" />
-                {selected}
+                <Image src={selected.icon} alt="" className="w-4" />
+                {selected.name}
                 <ChevronDownIcon
                     className={classnames({
                         "w-8": true,
@@ -108,8 +138,8 @@ function TokenSelector() {
                     rounded-sm
                 `}
             >
-                {["Tether", "USD Coin", "Binance USD", "DAI"].map((item) => (
-                    <ListItem key={item} item={item} />
+                {tokens.map((item) => (
+                    <ListItem key={item.symbol} item={item} />
                 ))}
             </div>
         </div>

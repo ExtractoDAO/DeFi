@@ -6,6 +6,7 @@ import { WagmiConfig, createConfig } from "wagmi"
 import { polygon, polygonMumbai, localhost } from "wagmi/chains"
 
 import { ConnectKitProvider, getDefaultConfig } from "connectkit"
+import daoConfig from "../../dao.config"
 
 interface Props {
     children: ReactNode
@@ -17,8 +18,8 @@ const config = createConfig(
     getDefaultConfig({
         appName: "ExtractoDAO",
         alchemyId: process.env.ALCHEMY_ID,
-        chains: [polygon, polygonMumbai, localhost],
-        walletConnectProjectId,
+        chains: [daoConfig.targetNetwork],
+        walletConnectProjectId
     })
 )
 
