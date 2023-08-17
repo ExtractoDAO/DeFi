@@ -33,6 +33,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
     const [userBalance, setUserBalance] = useState(0)
 
     const [usdValue, setUsdValue] = useState("")
+    const [kgAmount, setKgAmount] = useState("")
 
     useEffect(() => {
         async function getBalance() {
@@ -52,13 +53,22 @@ export default function Buy({ setShowChart, showChart }: Props) {
     useEffect(() => {
         async function getBuyPrice() {
             const res = await read("getBuyPrice")
+
             setPrice(Number(res) / 10 ** 18)
         }
 
         getBuyPrice()
-    }, [address])
+    }, [address, read])
 
     const [inverted, setInverted] = useState(false)
+
+    function updateAmount(numberValue: number) {
+        setKgAmount((numberValue / price).toFixed(2).toString())
+    }
+
+    function updateValue(numberAmount: number) {
+        setUsdValue(Math.ceil(numberAmount * price).toString())
+    }
 
     return (
         <div className="flex flex-col items-start gap-2 max-md:w-full max-w-2xl mx-auto">
@@ -101,7 +111,10 @@ export default function Buy({ setShowChart, showChart }: Props) {
                         <ValueInput
                             label="From"
                             value={usdValue}
-                            onChange={(e) => setUsdValue(e.target.value)}
+                            onChange={(event) => {
+                                setUsdValue(event.target.value)
+                                updateAmount(Number(event.target.value))
+                            }}
                             insideElement={{
                                 element: () => (
                                     <TokenSelector
@@ -138,6 +151,12 @@ export default function Buy({ setShowChart, showChart }: Props) {
                             conversion={{
                                 value: `$ ${price}`,
                                 variation: "(+ 0.189%)"
+                            }}
+                            value={kgAmount}
+                            onChange={(event) => {
+                                setKgAmount(event.target.value)
+                                setUsdValue(event.target.value)
+                                updateValue(Number(event.target.value))
                             }}
                         />
                     </div>
