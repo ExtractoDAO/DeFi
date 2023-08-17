@@ -2,7 +2,7 @@
 import classnames from "classnames"
 import { ReactElement, ReactNode, useState } from "react"
 
-interface ValueInputProps {
+interface ValueInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
     insideElement?: {
         element: () => JSX.Element
@@ -21,9 +21,10 @@ export default function ValueInput({
     insideElement,
     showMaxButton,
     labelRightContent,
-    conversion
+    conversion,
+    value = "",
+    ...props
 }: ValueInputProps) {
-    const [value, setValue] = useState("")
     const [focus, setFocus] = useState(false)
 
     return (
@@ -78,12 +79,14 @@ export default function ValueInput({
                             onFocus={() => setFocus(true)}
                             onBlur={() => setFocus(false)}
                             value={value}
-                            onChange={(e) => setValue(e.target.value)}
+                            {...props}
                             maxLength={16}
                             style={
                                 showMaxButton
                                     ? {
-                                          width: `${value.length + 2}ch`
+                                          width: `${
+                                              value?.toString().length + 2
+                                          }ch`
                                       }
                                     : undefined
                             }
