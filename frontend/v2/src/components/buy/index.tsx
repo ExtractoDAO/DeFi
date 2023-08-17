@@ -1,6 +1,5 @@
-"use client"
 import ValueInput from "../valueInput"
-import tokenSelector from "../tokenSelector"
+import TokenSelector, { Token, tokens } from "../tokenSelector"
 
 import classnames from "classnames"
 
@@ -9,8 +8,13 @@ import {
     DocumentTextIcon,
     ArrowsUpDownIcon
 } from "@heroicons/react/24/outline"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Button from "../button"
+
+import { useAccount } from "wagmi"
+
+import useContract from "@/hooks/useContract"
+import useBalance from "@/hooks/useBalance"
 
 interface Props {
     setShowChart: (value: boolean) => void
@@ -18,6 +22,42 @@ interface Props {
 }
 
 export default function Buy({ setShowChart, showChart }: Props) {
+    const [price, setPrice] = useState<any>(0)
+    const { read, write } = useContract("Commodity")
+    const { address } = useAccount()
+
+    const [selectedToken, setSelectedToken] = useState<Token>(tokens[0])
+    const { read: readToken } = useContract(selectedToken.symbol)
+
+    const { fetchBalance } = useBalance(selectedToken.symbol)
+    const [userBalance, setUserBalance] = useState(0)
+
+    const [usdValue, setUsdValue] = useState("")
+
+    useEffect(() => {
+        async function getBalance() {
+            if (address) {
+                const res = await fetchBalance(address)
+                const decimals = await readToken("decimals")
+                const response = Number(res) / 10 ** decimals
+                if (typeof response === "number") {
+                    setUserBalance(Number(res) / 10 ** decimals)
+                }
+            }
+        }
+
+        getBalance()
+    }, [address, selectedToken, readToken])
+
+    useEffect(() => {
+        async function getBuyPrice() {
+            const res = await read("getBuyPrice")
+            setPrice(Number(res) / 10 ** 18)
+        }
+
+        getBuyPrice()
+    }, [address])
+
     const [inverted, setInverted] = useState(false)
 
     return (
@@ -60,11 +100,19 @@ export default function Buy({ setShowChart, showChart }: Props) {
                     >
                         <ValueInput
                             label="From"
+                            value={usdValue}
+                            onChange={(e) => setUsdValue(e.target.value)}
                             insideElement={{
-                                element: tokenSelector
+                                element: () => (
+                                    <TokenSelector
+                                        onSelect={(token) =>
+                                            setSelectedToken(token)
+                                        }
+                                    />
+                                )
                             }}
                             showMaxButton
-                            labelRightContent="Balance: 300"
+                            labelRightContent={`Balance: ${userBalance.toString()}`}
                         />
                         <button
                             onClick={() => setInverted(!inverted)}
@@ -88,7 +136,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                         <ValueInput
                             label="To (Estimated)"
                             conversion={{
-                                value: "$ 1000",
+                                value: `$ ${price}`,
                                 variation: "(+ 0.189%)"
                             }}
                         />

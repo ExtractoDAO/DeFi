@@ -7,10 +7,14 @@ import { usePathname } from "next/navigation"
 import LogoDAO from "@/assets/img/logo-dao.svg"
 import Image from "next/image"
 
-import { theme } from "@/utils/theme"
+import {
+    ConnectWallet,
+    useAddress,
+    useConnectionStatus,
+    useSDK
+} from "@thirdweb-dev/react"
 
-import { ConnectKitButton } from "connectkit"
-import { useAccount, useSignMessage } from "wagmi"
+import { useSignMessage } from "wagmi"
 
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
@@ -20,7 +24,8 @@ import { deleteItem, getItem, setItem } from "@/lib/storage"
 
 import { toast } from "react-toastify"
 
-const domain = "localhost"
+import daoConfig from "../../../dao.config"
+import { shortAddress } from "@/utils/mask"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -29,13 +34,18 @@ const pathnames: Dictionary = {
     "/exchange": "Exchange"
 }
 
-const messagePlainText = "We are creating the Future"
+const messagePlainText = process.env.SIWE_STATEMENT?.toString()
+const domain = process.env.DOMAIN?.toString()
+const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
+    const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
-    const { address, isConnected, connector } = useAccount()
+    const connectionStatus = useConnectionStatus()
+    const isConnected = connectionStatus === "connected"
     const [modalSign, setModalSign] = useState(false)
+    const [showNotificationIcon, setShowNotificationIcon] = useState(false)
 
     const {
         signMessage,
@@ -44,16 +54,20 @@ export default function Navbar() {
         isSuccess
     } = useSignMessage()
 
+    useEffect(() => {
+        setShowNotificationIcon(isConnected)
+    }, [isConnected])
+
     async function fetchSaveSignature() {
         try {
             if (signature && isSuccess && isConnected) {
-                const res = await fetch(`/api/auth/signin`, {
+                const res = await fetch(`/api/auth/signin?address=${address}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        message: messagePlainText,
+                        message: process.env.SIWE_STATEMENT,
                         signature: signature
                     })
                 })
@@ -65,6 +79,7 @@ export default function Navbar() {
                 setModalSign(false)
             }
         } catch (e) {
+            console.log(e)
             toast.error("Error while sending signature. Please try again.")
         }
     }
@@ -86,47 +101,91 @@ export default function Navbar() {
     useEffect(() => {
         const savedSign = getItem("LOGIN_SIGNATURE")
         if (isConnected && address && !savedSign) {
-            setModalSign(true)
+            // setModalSign(true)
         } else {
             setModalSign(false)
         }
     }, [isConnected, address])
 
-    async function createSiweMessage(
-        address: `0x${string}` | undefined,
-        statement: string
-    ) {
-        const nonce = await fetch(`/api/auth/nonce?address=${address}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        const res = await nonce.json()
+    async function createSiweMessage() {
+        try {
+            const nonce = await fetch(`/api/auth/nonce?address=${address}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
 
-        const message = new SiweMessage({
-            domain,
-            address,
-            statement,
-            uri: origin,
-            version: "1",
-            chainId: 1,
-            nonce: res.none
-        })
+            const res = await nonce.json()
 
-        return message.prepareMessage()
+            const message = new SiweMessage({
+                domain,
+                address,
+                statement: messagePlainText,
+                uri: origin,
+                version: "1",
+                chainId: chainId,
+                nonce: res.nonce
+            })
+
+            return message.prepareMessage()
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     const sign = async () => {
+        const message = await createSiweMessage()
+        if (!message) return
         return signMessage({
-            message: await createSiweMessage(address, messagePlainText)
+            message
         })
     }
 
     const ButtonConect = () => (
-        <ConnectKitButton
-            theme={theme === "dark" ? "midnight" : "auto"}
-            showAvatar={true}
+        <ConnectWallet
+            className={classNames(
+                "flex",
+                "dark:text-gray/300",
+                "text-sm",
+                "not-italic",
+                "font-medium",
+                "text-gray/900",
+                "border",
+                "border-gray/200",
+                "py-2",
+                "px-6",
+                "justify-center",
+                "items-center",
+                "rounded",
+                "gap-3",
+                "leading-6",
+                "dark:bg-deep-gray/200"
+            )}
+            detailsBtn={() => {
+                return (
+                    <button
+                        className={classNames(
+                            "flex",
+                            "dark:text-gray/300",
+                            "text-sm",
+                            "not-italic",
+                            "font-medium",
+                            "text-gray/900",
+                            "py-2",
+                            "px-6",
+                            "justify-center",
+                            "items-center",
+                            "rounded",
+                            "gap-3",
+                            "leading-6",
+                            "dark:bg-deep-gray/200"
+                        )}
+                    >
+                        {address ? shortAddress(address) : ""}
+                    </button>
+                )
+            }}
         />
     )
 
@@ -142,7 +201,6 @@ export default function Navbar() {
                     {
                         label: "Cancel",
                         onClick: async () => {
-                            await connector?.disconnect()
                             setModalSign(false)
                         },
                         bgColor: "secondary"
@@ -154,6 +212,7 @@ export default function Navbar() {
                     }
                 ]}
             />
+
             <nav
                 className="bg-base/white
                   dark:border-deep-gray/200
@@ -220,15 +279,14 @@ export default function Navbar() {
                         >
                             <Link
                                 href={""}
-                                className={classNames(
-                                    "flex",
-                                    "px-3",
-                                    "py-2.5",
-                                    "items-center",
-                                    {
-                                        hidden: isConnected === false
-                                    }
-                                )}
+                                className={classNames({
+                                    flex: true,
+                                    "px-3": true,
+                                    "py-2.5": true,
+                                    "items-center": true,
+                                    hidden: !showNotificationIcon,
+                                    block: showNotificationIcon
+                                })}
                             >
                                 <BellIcon
                                     className="w-6
@@ -239,13 +297,13 @@ export default function Navbar() {
                             </Link>
                             <Link
                                 href={""}
-                                className={classNames(
-                                    "flex",
-                                    "px-3",
-                                    "py-2.5",
-                                    "items-center",
-                                    { "max-md:hidden": true }
-                                )}
+                                className={classNames({
+                                    flex: true,
+                                    "px-3": true,
+                                    "py-2.5": true,
+                                    "items-center": true,
+                                    "max-md:hidden": true
+                                })}
                             >
                                 <Cog8ToothIcon
                                     className="w-6
