@@ -15,7 +15,6 @@ import { useAccount } from "wagmi"
 
 import useContract from "@/hooks/useContract"
 import useBalance from "@/hooks/useBalance"
-import { ethers } from "ethers"
 
 interface Props {
     setShowChart: (value: boolean) => void
@@ -32,6 +31,8 @@ export default function Buy({ setShowChart, showChart }: Props) {
 
     const { fetchBalance } = useBalance(selectedToken.symbol)
     const [userBalance, setUserBalance] = useState(0)
+
+    const [usdValue, setUsdValue] = useState("")
 
     useEffect(() => {
         async function getBalance() {
@@ -99,6 +100,8 @@ export default function Buy({ setShowChart, showChart }: Props) {
                     >
                         <ValueInput
                             label="From"
+                            value={usdValue}
+                            onChange={(e) => setUsdValue(e.target.value)}
                             insideElement={{
                                 element: () => (
                                     <TokenSelector
@@ -133,7 +136,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                         <ValueInput
                             label="To (Estimated)"
                             conversion={{
-                                value: "$ 1000",
+                                value: `$ ${price}`,
                                 variation: "(+ 0.189%)"
                             }}
                         />
