@@ -93,17 +93,20 @@ export default function Buy({ setShowChart, showChart }: Props) {
     }
 
     async function handleApprove() {
+        if (Number(usdValue) < 10) {
+            toast.error("Value in USD must be greather than U$ 10")
+            return
+        }
         setModal("approving")
+
         const decimals = await readToken("decimals")
+
         const formattedValue = ethers.utils.parseUnits(
             usdValue,
             Number(decimals)
         )
 
         if (!contractAddress || !formattedValue) return
-        if (Number(usdValue) < 10) {
-            toast.error("Value in USD must be greather than U$ 10")
-        }
 
         try {
             await tokenInteraction("approve", contractAddress, formattedValue)
@@ -232,6 +235,7 @@ export default function Buy({ setShowChart, showChart }: Props) {
                             insideElement={{
                                 element: () => (
                                     <TokenSelector
+                                        selectedToken={selectedToken}
                                         onSelect={(token) =>
                                             setSelectedToken(token)
                                         }
