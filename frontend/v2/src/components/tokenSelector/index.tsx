@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { ChevronDownIcon } from "@heroicons/react/20/solid"
 import Image from "next/image"
@@ -52,12 +52,17 @@ export const tokens = list.filter((item) =>
 
 interface TokenSelectorProps {
     onSelect: (item: Token) => void
+    selectedToken: Token
 }
 
-function TokenSelector({ onSelect }: TokenSelectorProps) {
-    const [selected, setSelected] = useState(tokens[0])
+function TokenSelector({ onSelect, selectedToken }: TokenSelectorProps) {
+    const [selected, setSelected] = useState<Token>({} as Token)
     const [open, setOpen] = useState(false)
     const [state, setState] = useState(0)
+
+    useEffect(() => {
+        setSelected(selectedToken)
+    }, [selectedToken])
 
     useClickAnyWhere(() => {
         if (state === 1) {
@@ -90,7 +95,7 @@ function TokenSelector({ onSelect }: TokenSelectorProps) {
                 last-of-type:rounded-b
             `}
         >
-            <Image src={item.icon} alt="usdt" className="w-4" />
+            {item.icon && <Image src={item.icon} alt="usdt" className="w-4" />}
             {item.name}
             <div className="w-1" />
         </span>
@@ -117,7 +122,9 @@ function TokenSelector({ onSelect }: TokenSelectorProps) {
                     setState(state + 1)
                 }}
             >
-                <Image src={selected.icon} alt="" className="w-4" />
+                {selected.icon && (
+                    <Image src={selected.icon} alt="" className="w-4" />
+                )}
                 {selected.name}
                 <ChevronDownIcon
                     className={classnames({
