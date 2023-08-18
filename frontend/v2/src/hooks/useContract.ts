@@ -15,6 +15,7 @@ import { useContractRead } from "wagmi"
 import { FunctionFragment } from "ethers/lib/utils"
 import { ethers } from "ethers"
 import { useState } from "react"
+import { getParsedEthersError } from "@/utils/utilsContract"
 
 const useContract = <TContractName extends ContractName>(
     contractName: TContractName
@@ -49,33 +50,38 @@ const useContract = <TContractName extends ContractName>(
 
     const write = async (
         functionName: FunctionNamesWithInputs<ContractAbi<typeof contractName>>,
-        inputs: AbiFunctionArguments<ContractAbi, typeof functionName>
-    ) => {
-        if (!window.ethereum) return
-        if (!contractData) return
+        ...args: any[]
+    ) =>
+        // args: AbiFunctionArguments<ContractAbi, typeof functionName>
+        {
+            if (!window.ethereum) return
+            if (!contractData) return
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const signer = provider.getSigner()
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
 
-        const contract = new ethers.Contract(
-            contractData.address,
-            contractData.abi,
-            signer
-        )
+            const contract = new ethers.Contract(
+                contractData.address,
+                contractData.abi,
+                signer
+            )
 
-        try {
-            const txn = await contract[functionName](inputs)
-            setHash(txn.hash)
-            await txn.wait(1)
-            return txn
-        } catch (error) {
-            return error
+            try {
+                const txn = await contract[functionName](...args)
+                setHash(txn.hash)
+                await txn.wait(1)
+                return txn
+            } catch (error) {
+                const message = getParsedEthersError(error)
+                throw new Error(`${message}`)
+            }
         }
-    }
 
     return {
         read,
-        write
+        write,
+        hash,
+        contractAddress: contractData?.address
     }
 }
 
