@@ -10,9 +10,7 @@ import {
     contracts
 } from "@/utils/contract"
 import useDeployedContractInfo from "./useDeployedContractInfo"
-import { useContractRead } from "wagmi"
 
-import { FunctionFragment } from "ethers/lib/utils"
 import { ethers } from "ethers"
 import { useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
