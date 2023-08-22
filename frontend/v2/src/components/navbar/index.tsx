@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react"
 import { Cog8ToothIcon } from "@heroicons/react/24/outline"
 import { BellIcon } from "@heroicons/react/24/outline"
@@ -14,8 +15,6 @@ import {
     useSDK
 } from "@thirdweb-dev/react"
 
-import { useSignMessage } from "wagmi"
-
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
 import { SiweMessage } from "siwe"
@@ -26,6 +25,10 @@ import { toast } from "react-toastify"
 
 import daoConfig from "../../../dao.config"
 import { shortAddress } from "@/utils/mask"
+
+import { Login } from "@/services/backend/login"
+import env from "@/services/environment"
+import AxiosService from "@/services/axios"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -39,6 +42,7 @@ const domain = process.env.DOMAIN?.toString()
 const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
+    const login = new Login(env, new AxiosService(env))
     const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
@@ -47,50 +51,9 @@ export default function Navbar() {
     const [modalSign, setModalSign] = useState(false)
     const [showNotificationIcon, setShowNotificationIcon] = useState(false)
 
-    const {
-        signMessage,
-        data: signature,
-        isError,
-        isSuccess
-    } = useSignMessage()
-
     useEffect(() => {
         setShowNotificationIcon(isConnected)
     }, [isConnected])
-
-    async function fetchSaveSignature() {
-        try {
-            if (signature && isSuccess && isConnected) {
-                const res = await fetch(`/api/auth/signin?address=${address}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: process.env.SIWE_STATEMENT,
-                        signature: signature
-                    })
-                })
-
-                const formatMessage = await res.json()
-
-                toast.success("Login successfully")
-                setItem("LOGIN_SIGNATURE", signature?.toString())
-                setModalSign(false)
-            }
-        } catch (e) {
-            console.log(e)
-            toast.error("Error while sending signature. Please try again.")
-        }
-    }
-
-    useEffect(() => {
-        fetchSaveSignature()
-
-        if (isError) {
-            // Add error message
-        }
-    }, [signature, isError])
 
     useEffect(() => {
         if (!isConnected) {
@@ -101,45 +64,14 @@ export default function Navbar() {
     useEffect(() => {
         const savedSign = getItem("LOGIN_SIGNATURE")
         if (isConnected && address && !savedSign) {
-            // setModalSign(true)
+            setModalSign(true)
         } else {
             setModalSign(false)
         }
     }, [isConnected, address])
 
-    async function createSiweMessage() {
-        try {
-            const nonce = await fetch(`/api/auth/nonce?address=${address}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-
-            const res = await nonce.json()
-
-            const message = new SiweMessage({
-                domain,
-                address,
-                statement: messagePlainText,
-                uri: origin,
-                version: "1",
-                chainId: chainId,
-                nonce: res.nonce
-            })
-
-            return message.prepareMessage()
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
     const sign = async () => {
-        const message = await createSiweMessage()
-        if (!message) return
-        return signMessage({
-            message
-        })
+        login.signIn("teste")
     }
 
     const ButtonConect = () => (
@@ -199,16 +131,16 @@ export default function Navbar() {
                 icon={<LockClosedIcon />}
                 buttons={[
                     {
+                        label: "Sign",
+                        onClick: () => sign(),
+                        bgColor: "success"
+                    },
+                    {
                         label: "Cancel",
                         onClick: async () => {
                             setModalSign(false)
                         },
                         bgColor: "secondary"
-                    },
-                    {
-                        label: "Sign",
-                        onClick: () => sign(),
-                        bgColor: "success"
                     }
                 ]}
             />

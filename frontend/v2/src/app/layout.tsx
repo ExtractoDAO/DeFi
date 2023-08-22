@@ -10,7 +10,6 @@ import "./globals.css"
 
 import Layout from "@/components/layout"
 import { theme } from "@/utils/theme"
-import WagmiProvider from "@/providers/wagmi"
 
 import { ThirdwebProvider } from "@/providers/Thirdweb"
 
@@ -33,21 +32,19 @@ export default function RootLayout({
                     activeChain="localhost"
                     clientId="f05daca94bc43cf8e5d93fe257fd68e8"
                 >
-                    <WagmiProvider>
-                        <Layout>{children}</Layout>
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="colored"
-                        />
-                    </WagmiProvider>
+                    <Layout>{children}</Layout>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="colored"
+                    />
                 </ThirdwebProvider>
             </body>
         </html>

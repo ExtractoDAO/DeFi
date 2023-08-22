@@ -25,20 +25,30 @@ export class Environment {
 
     constructor() {
         dotenv.config()
-        this.BACKEND_ADDRESS = this.ensure("BACKEND_ADDRESS")
-        this.SIGNOUT_MESSAGE = this.ensure("SIGNOUT_MESSAGE")
-        this.SIGNIN_MESSAGE = this.ensure("SIGNIN_MESSAGE")
-        this.SIWE_VERSION = this.ensure("SIWE_VERSION")
-        this.CHAIN_ID = parseInt(this.ensure("CHAIN_ID"))
-        this.DOMAIN = this.ensure("DOMAIN")
-        this.ORIGIN = this.ensure("ORIGIN")
+        this.BACKEND_ADDRESS = this.ensure(
+            "BACKEND_ADDRESS",
+            process.env.BACKEND_ADDRESS
+        )
+        this.SIGNOUT_MESSAGE = this.ensure(
+            "SIGNOUT_MESSAGE",
+            process.env.SIGNOUT_MESSAGE
+        )
+        this.SIGNIN_MESSAGE = this.ensure(
+            "SIGNIN_MESSAGE",
+            process.env.SIGNIN_MESSAGE
+        )
+        this.SIWE_VERSION = this.ensure(
+            "SIWE_VERSION",
+            process.env.SIWE_VERSION
+        )
+        this.CHAIN_ID = parseInt(this.ensure("CHAIN_ID", process.env.CHAIN_ID))
+        this.DOMAIN = this.ensure("DOMAIN", process.env.DOMAIN)
+        this.ORIGIN = this.ensure("ORIGIN", process.env.ORIGIN)
     }
 
-    ensure(name: string): string {
-        const value = process.env[name]
-
+    ensure(key: string, value?: string): string {
         if (!value) {
-            throw new MissingEnvironmentVariableError(name)
+            throw new MissingEnvironmentVariableError(key)
         }
 
         return value
