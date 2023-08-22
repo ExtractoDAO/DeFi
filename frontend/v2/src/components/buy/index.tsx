@@ -11,15 +11,17 @@ import {
 import { useEffect, useState } from "react"
 import Button from "../button"
 
-import { useAccount } from "wagmi"
-
 import { ShoppingCartIcon } from "@heroicons/react/24/solid"
 
 import useContract from "@/hooks/useContract"
 import useBalance from "@/hooks/useBalance"
 
 import { toast } from "react-toastify"
-import { useConnectionStatus, ConnectWallet } from "@thirdweb-dev/react"
+import {
+    useConnectionStatus,
+    ConnectWallet,
+    useAddress
+} from "@thirdweb-dev/react"
 import classNames from "classnames"
 import { ethers } from "ethers"
 import Modal from "../modal"
@@ -34,7 +36,7 @@ interface Props {
 export default function Buy({ setShowChart, showChart }: Props) {
     const [price, setPrice] = useState<any>(0)
     const { read, write, contractAddress, hash } = useContract("Commodity")
-    const { address } = useAccount()
+    const address = useAddress() as `0x${string}`
 
     const connectionStatus = useConnectionStatus()
     const isConnected = connectionStatus === "connected"
