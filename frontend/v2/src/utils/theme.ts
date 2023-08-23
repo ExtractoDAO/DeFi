@@ -1,1 +1,1 @@
-export const theme: "light" | "dark" = "light"
+export const theme: "light" | "dark" = "dark"
