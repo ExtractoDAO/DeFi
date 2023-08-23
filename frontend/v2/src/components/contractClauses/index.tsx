@@ -30,6 +30,7 @@ const ContractClauses = () => {
       </div>
     </div>
   );
+  
 };
 
 export default ContractClauses;
