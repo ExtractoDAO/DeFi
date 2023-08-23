@@ -1,20 +1,34 @@
+import AxiosService from "@/services/axios"
+import env from "@/services/environment"
 import { NextApiRequest, NextApiResponse } from "next"
 
-import axios from "axios"
+const { BACKEND_ADDRESS } = env
+
+const axiosInstance = new AxiosService(env)
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const response = await axios.post(
-        `${process.env.API_URL}/login/signin/${req.query.address}`,
-        {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: req.body
-        }
-    )
+    try {
+        const { address } = req.query
+        const route = `${BACKEND_ADDRESS}/login/signin/${address}`
+        const response = await axiosInstance.post(
+            route,
+            { message: req.body.message, signature: req.body.signature },
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
 
-    res.status(response.status).json(response.data)
+        res.status(201).json({
+            token: response.data.token,
+            expirationTime: response.data.expiration_time
+        })
+    } catch (err: any) {
+        console.log(err)
+        res.status(err.response.status).json(err.response.data)
+    }
 }

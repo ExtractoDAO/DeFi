@@ -12,7 +12,8 @@ import {
     ConnectWallet,
     useAddress,
     useConnectionStatus,
-    useSDK
+    useSDK,
+    useSigner
 } from "@thirdweb-dev/react"
 
 import { LockClosedIcon } from "@heroicons/react/24/outline"
@@ -42,6 +43,7 @@ const domain = process.env.DOMAIN?.toString()
 const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
+    const sdk = useSDK()
     const login = new Login(env, new AxiosService(env))
     const address = useAddress()
     const pathname = usePathname()
@@ -71,7 +73,12 @@ export default function Navbar() {
     }, [isConnected, address])
 
     const sign = async () => {
-        login.signIn("teste")
+        if (address && sdk?.wallet.sign) {
+            login.signIn({
+                address,
+                signMessage: (message: string) => sdk?.wallet.sign(message)
+            })
+        }
     }
 
     const ButtonConect = () => (

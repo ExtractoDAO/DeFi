@@ -31,30 +31,37 @@ export class Login {
     }
 
     private async getNonce(address: string): Promise<string> {
-        const route = `${this.BACKEND_ADDRESS}/login/nonce/${address}`
-        const data = await this.axiosInstance.get(route)
-        return data.nonce
+        const route = `/api/auth/nonce/?address=${address}`
+        const data = await fetch(route, {
+            method: "GET"
+        })
+
+        const res = await data.json()
+
+        return res.nonce
     }
 
     private async getToken(
         address: string,
         message: string,
         signature: string
-    ): Promise<Token> {
-        const route = `${this.BACKEND_ADDRESS}/login/signin/${address}`
-        const data = await this.axiosInstance.post(
-            route,
-            { message: message, signature: signature },
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        )
+    ) {
+        try {
+            const route = `/api/auth/signin/?address=${address}`
 
-        return {
-            token: data.token,
-            expirationTime: data.expiration_time
+            const data = await fetch(route, {
+                method: "POST",
+                body: JSON.stringify({ message: message, signature: signature })
+            })
+
+            const res = await data.json()
+
+            return {
+                token: res.token,
+                expirationTime: res.expiration_time
+            }
+        } catch (err: any) {
+            throw new Error(err)
         }
     }
 
@@ -68,21 +75,26 @@ export class Login {
             chainId: this.CHAIN_ID,
             statement: statement,
             domain: this.DOMAIN,
-            uri: this.ORIGIN,
             address: address,
             nonce: nonce
         })
     }
 
-    async signIn(signer: string): Promise<Token> {
-        const address = signer //.address
+    async signIn(signer: {
+        address: string
+        signMessage: (message: string) => Promise<string>
+    }) {
+        const address = signer.address
         const nonce = await this.getNonce(address)
+
         const message = this.getMessage(
             address,
             nonce,
             this.SIGNIN_MESSAGE
         ).prepareMessage()
-        const signature = signer //.signMessage(message)
+
+        const signature = await signer.signMessage(message)
+
         return await this.getToken(address, message, signature)
     }
 
@@ -114,7 +126,7 @@ export class Login {
             }
         )
 
-        return data.message
+        return data.data.message
     }
 
     extractNonce(token: string): string {
