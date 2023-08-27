@@ -29,7 +29,6 @@ import { shortAddress } from "@/utils/mask"
 
 import { Login } from "@/services/backend/login"
 import env from "@/services/environment"
-import AxiosService from "@/services/axios"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -44,7 +43,7 @@ const chainId = daoConfig.targetNetwork.id
 
 export default function Navbar() {
     const sdk = useSDK()
-    const login = new Login(env, new AxiosService(env))
+    const login = new Login(env)
     const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
