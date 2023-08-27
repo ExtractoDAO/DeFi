@@ -22,7 +22,7 @@ tags_metadata = [
 ]
 
 env = Environment()
-logger = CustomLogger(env.LOG_PATH)
+logger = CustomLogger(env.LOG_FILE)
 adapter_app = FirebaseAdapter(env)
 app = FastAPI(
     title="Backend",
@@ -38,7 +38,7 @@ if env.ENV == "devnet":
 
     env.JWT_SECRET_KEY = "JWT_SECRET_KEY"
     env.DOMAIN = "localhost:8080"
-    logger = CustomLogger(env.LOG_PATH, True)
+    logger = CustomLogger(env.LOG_FILE, True)
 
     origins = [
         "http://localhost",
