@@ -13,7 +13,7 @@ contract DeployE2E is Script {
 
     // bytes32 privateKey = hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
     bytes32 privateKey = vm.envBytes32("LOCAL_PRIVATE_KEY");
-    address dao = vm.addr(bytes2uint(privateKey));
+    address controller = vm.addr(bytes2uint(privateKey));
     uint256 buyKgPrice = 1_91 * 1e16;
     uint256 sellKgPrice = 1_91 * 1e16;
     uint256 supply = 1_000_000;
@@ -49,8 +49,10 @@ contract DeployE2E is Script {
 
         cow = new COW();
 
-        Commodity extracto =
-        new Commodity(tokens, decimals, locktime, supply * 1e18, buyKgPrice, sellKgPrice, activateSells, dao, address(cow));
+        Commodity extracto = new Commodity();
+        extracto.init(tokens,decimals,locktime,supply * 1e18,buyKgPrice,sellKgPrice,yield,activateSells,controller,
+            address(cow)
+        );
         cow.setDao(address(extracto));
         extracto.updateYieldFarming(yield);
 
