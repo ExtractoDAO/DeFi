@@ -35,7 +35,7 @@ class SignIn(BaseModel):
 def validate_siwe_message(siwe_msg: SiweMessage) -> Optional[str]:
     if (
         siwe_msg.domain != env.DOMAIN
-        or siwe_msg.chain_id != env.CHAIN_ID
+        or int(siwe_msg.chain_id) != env.CHAIN_ID
         or siwe_msg.statement != env.SIWE_STATEMENT
         or siwe_msg.version != env.SIWE_VERSION
     ):

@@ -24,7 +24,7 @@ class Environment(BaseModel):
     JWT_SECRET_KEY: str
     SIWE_STATEMENT: str
     SIWE_VERSION: str
-    CHAIN_ID: str
+    CHAIN_ID: int
     LOG_PATH: str
     DOMAIN: str
     ENV: str
