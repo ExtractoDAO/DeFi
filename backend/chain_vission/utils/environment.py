@@ -25,7 +25,7 @@ class Environment(BaseModel):
     SIWE_STATEMENT: str
     SIWE_VERSION: str
     CHAIN_ID: str
-    LOG_PATH: str
+    LOG_FILE: str
     DOMAIN: str
     ENV: str
 
