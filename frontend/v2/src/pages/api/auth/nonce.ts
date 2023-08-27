@@ -1,10 +1,9 @@
-import AxiosService from "@/services/axios"
+import api from "@/services/axios"
 import env from "@/services/environment"
-import { AxiosError } from "axios"
+
 import { NextApiRequest, NextApiResponse } from "next"
 
 const { BACKEND_ADDRESS } = env
-const axiosInstance = new AxiosService(env)
 
 export default async function handler(
     req: NextApiRequest,
@@ -13,9 +12,8 @@ export default async function handler(
     try {
         const { address } = req.query
         const route = `${BACKEND_ADDRESS}/login/nonce/${address}`
-        const data = await axiosInstance.get(route)
-
-        return res.status(200).json(data)
+        const { status, data } = await api.get(route)
+        return res.status(status).json(data)
     } catch (e: any) {
         res.status(e.response.status).json(e.response.data)
     }
