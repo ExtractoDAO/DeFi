@@ -95,7 +95,10 @@ module.exports = {
             "error/700": "#B91C1C",
             "error/800": "#991B1B",
 
-            "dark/purple/600": "#31263A"
+            "dark/purple/600": "#31263A",
+
+            "clauses/section/active": "#181818",
+            "clauses/section/hover": "#242424cb"
 
         },
         data: {
