@@ -32,13 +32,9 @@ export class Login {
 
     private async getNonce(address: string): Promise<string> {
         const route = `/api/auth/nonce/?address=${address}`
-        const data = await fetch(route, {
-            method: "GET"
-        })
-
-        const res = await data.json()
-
-        return res.nonce
+        return await fetch(route)
+            .then((respose) => respose.json())
+            .then((data) => data.nonce)
     }
 
     private async getToken(
@@ -75,6 +71,7 @@ export class Login {
             chainId: this.CHAIN_ID,
             statement: statement,
             domain: this.DOMAIN,
+            uri: this.ORIGIN,
             address: address,
             nonce: nonce
         })

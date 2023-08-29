@@ -14,7 +14,7 @@ export default class AxiosService {
         })
         this.initializeResponseInterceptor()
     }
-    private handleResponse = ({ data }: AxiosResponse) => data
+    private handleResponse = (data: AxiosResponse) => data
     private handleError = (error: any) => Promise.reject(error)
     private initializeResponseInterceptor = () => {
         this.instance.interceptors.response.use(
@@ -25,9 +25,7 @@ export default class AxiosService {
 
     public async get(url: string, config?: AxiosRequestConfig) {
         try {
-            const response = await this.instance.get(url, config)
-
-            return response
+            return await this.instance.get(url, config)
         } catch (error) {
             throw error
         }
@@ -35,8 +33,7 @@ export default class AxiosService {
 
     public async post(url: string, data?: any, config?: AxiosRequestConfig) {
         try {
-            const response = await this.instance.post(url, data, config)
-            return response
+            return await this.instance.post(url, data, config)
         } catch (error) {
             throw error
         }
