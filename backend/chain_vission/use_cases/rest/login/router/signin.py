@@ -36,7 +36,7 @@ def validate_siwe_message(siwe_msg: SiweMessage) -> Optional[str]:
     if (
         siwe_msg.domain != env.DOMAIN
         or siwe_msg.chain_id != int(env.CHAIN_ID)
-        or siwe_msg.statement != env.SIWE_STATEMENT
+        or siwe_msg.statement != env.SIGNIN_MESSAGE
         or siwe_msg.version != env.SIWE_VERSION
     ):
         return "Authentication attempt rejected: Invalid Message"
@@ -85,11 +85,11 @@ def generate_jwt_token(siwe_msg: SiweMessage, signin: SignIn) -> (str, int):
 def validation_request(siwe_msg: SiweMessage, signature: str) -> Optional[str]:
     if cache_memory.token:
         return "User already logged in"
-    if (error_message := validate_siwe_message(siwe_msg)) is not None:
+    if (error_message := validate_siwe_message(siwe_msg)):
         return error_message
-    if (error_message := validate_nonce(siwe_msg.nonce)) is not None:
+    if (error_message := validate_nonce(siwe_msg.nonce)):
         return error_message
-    if (error_message := validate_signature(siwe_msg, signature)) is not None:
+    if (error_message := validate_signature(siwe_msg, signature)):
         return error_message
 
 
@@ -127,7 +127,7 @@ async def get_signin(signin: SignIn, address: str):
         nonce=adapter_app.get_data(f"/nonces/{address}"),
     )
 
-    if (error_message := validation_request(siwe_msg, signin.signature)) is not None:
+    if (error_message := validation_request(siwe_msg, signin.signature)):
         print(error_message)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail=error_message
