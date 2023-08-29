@@ -13,10 +13,21 @@ export default async function handler(
     try {
         const { address } = req.query
         const route = `${BACKEND_ADDRESS}/login/nonce/${address}`
-        const data = await axiosInstance.get(route)
+        const response = await axiosInstance.get(route)
 
-        return res.status(200).json(data)
-    } catch (e: any) {
-        res.status(e.response.status).json(e.response.data)
+        if (response.status === 201) {
+            res.status(200).json(response.data)
+        } else {
+            res.status(response.status).json({
+                detail: response.data.detail
+            })
+        }
+    } catch (err: any) {
+        if (err.response) {
+            const { status, data } = err.response
+            res.status(status).json({ status_code: status, details: data })
+        } else {
+            res.status(500)
+        }
     }
 }

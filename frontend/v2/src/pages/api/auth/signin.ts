@@ -13,22 +13,26 @@ export default async function handler(
     try {
         const { address } = req.query
         const route = `${BACKEND_ADDRESS}/login/signin/${address}`
-        const response = await axiosInstance.post(
-            route,
-            { message: req.body.message, signature: req.body.signature },
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        )
 
-        res.status(201).json({
-            token: response.data.token,
-            expirationTime: response.data.expiration_time
+        const response = await axiosInstance.post(route, req.body, {
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
+        if (response.status === 200) {
+            const { token, expiration_time } = response.data
+            res.status(200).json({ token, expiration_time })
+        } else {
+            res.status(response.status).json({
+                detail: response.data.detail
+            })
+        }
     } catch (err: any) {
-        console.log(err)
-        res.status(err.response.status).json(err.response.data)
+        if (err.response) {
+            const { status, data } = err.response
+            res.status(status).json({ status_code: status, details: data })
+        } else {
+            res.status(500)
+        }
     }
 }
