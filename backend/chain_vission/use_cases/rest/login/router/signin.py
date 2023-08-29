@@ -35,7 +35,7 @@ class SignIn(BaseModel):
 def validate_siwe_message(siwe_msg: SiweMessage) -> Optional[str]:
     if (
         siwe_msg.domain != env.DOMAIN
-        or siwe_msg.chain_id != env.CHAIN_ID
+        or siwe_msg.chain_id != int(env.CHAIN_ID)
         or siwe_msg.statement != env.SIWE_STATEMENT
         or siwe_msg.version != env.SIWE_VERSION
     ):
@@ -128,7 +128,8 @@ async def get_signin(signin: SignIn, address: str):
     )
 
     if (error_message := validation_request(siwe_msg, signin.signature)) is not None:
-        return HTTPException(
+        print(error_message)
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail=error_message
         )
     else:
