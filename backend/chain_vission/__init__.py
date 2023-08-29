@@ -37,7 +37,7 @@ if env.ENV == "devnet":
     from fastapi.middleware.cors import CORSMiddleware
 
     env.JWT_SECRET_KEY = "JWT_SECRET_KEY"
-    env.DOMAIN = "localhost:8080"
+    env.DOMAIN = "localhost"
     logger = CustomLogger(env.LOG_FILE, True)
 
     origins = [

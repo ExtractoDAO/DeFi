@@ -25,7 +25,7 @@ from chain_vission import adapter_app
         },
     },
 )
-async def signout(address: str, x_authorization: str = Header(None)):
+async def get_signout(address: str, x_authorization: str = Header(None)):
     token = adapter_app.get_data(f"/tokens/{address}")
 
     # validate_siwe_message
@@ -33,7 +33,7 @@ async def signout(address: str, x_authorization: str = Header(None)):
     # 2 - send token + signaure to signout
 
     if token != x_authorization or token is None:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication attempt rejected: Invalid Token",
         )
