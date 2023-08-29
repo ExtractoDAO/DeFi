@@ -8,17 +8,14 @@ interface Token {
 }
 
 export class Login {
-    private readonly BACKEND_ADDRESS: string
     private readonly SIGNIN_MESSAGE: string
     private readonly SIGNOUT_MESSAGE: string
     private readonly SIWE_VERSION: string
     private readonly CHAIN_ID: number
     private readonly DOMAIN: string
     private readonly ORIGIN: string
-    private readonly axiosInstance: AxiosService
 
     constructor(env: Environment, axiosService: AxiosService) {
-        this.BACKEND_ADDRESS = env.BACKEND_ADDRESS
         this.SIGNIN_MESSAGE = env.SIGNIN_MESSAGE
         this.SIGNOUT_MESSAGE = env.SIGNOUT_MESSAGE
 
@@ -26,8 +23,6 @@ export class Login {
         this.CHAIN_ID = env.CHAIN_ID
         this.DOMAIN = env.DOMAIN
         this.ORIGIN = env.ORIGIN
-
-        this.axiosInstance = axiosService
     }
 
     private async getNonce(address: string): Promise<string> {
@@ -43,19 +38,17 @@ export class Login {
         signature: string
     ) {
         try {
-            const route = `/api/auth/signin/?address=${address}`
-
-            const data = await fetch(route, {
+            return await fetch(`/api/auth/signin/?address=${address}`, {
                 method: "POST",
                 body: JSON.stringify({ message: message, signature: signature })
             })
-
-            const res = await data.json()
-
-            return {
-                token: res.token,
-                expirationTime: res.expiration_time
-            }
+                .then((response) => response.json())
+                .then((data) => {
+                    return {
+                        token: data.token,
+                        expirationTime: data.expiration_time
+                    }
+                })
         } catch (err: any) {
             throw new Error(err)
         }
@@ -95,15 +88,19 @@ export class Login {
         return await this.getToken(address, message, signature)
     }
 
-    async signOut(signer: string, token: string): Promise<boolean> {
-        const address = signer //.address
-        const nonce = this.extractNonce(token)
+    async signOut(signer: {
+        address: string
+        token: string
+        signMessage: (message: string) => Promise<string>
+    }): Promise<boolean> {
+        const address = signer.address
+        const nonce = this.extractNonce(signer.token)
         const message = this.getMessage(
             address,
             nonce,
             this.SIGNOUT_MESSAGE
         ).prepareMessage()
-        const signature = signer //.signMessage(message)
+        const signature = await signer.signMessage(message)
         return await this.removeToken(address, message, signature)
     }
 
@@ -112,18 +109,12 @@ export class Login {
         message: string,
         signature: string
     ): Promise<boolean> {
-        const route = `${this.BACKEND_ADDRESS}/login/signout/${address}`
-        const data = await this.axiosInstance.post(
-            route,
-            { message: message, signature: signature },
-            {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        )
-
-        return data.data.message
+        return await fetch(`/api/auth/signout/?address=${address}`, {
+            method: "POST",
+            body: JSON.stringify({ message: message, signature: signature })
+        })
+            .then((response) => response.json())
+            .then((data) => data.message)
     }
 
     extractNonce(token: string): string {
