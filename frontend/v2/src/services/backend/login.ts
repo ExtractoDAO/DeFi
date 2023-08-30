@@ -15,7 +15,7 @@ export class Login {
     private readonly DOMAIN: string
     private readonly ORIGIN: string
 
-    constructor(env: Environment) {
+    constructor(env: Environment, axiosService: AxiosService) {
         this.SIGNIN_MESSAGE = env.SIGNIN_MESSAGE
         this.SIGNOUT_MESSAGE = env.SIGNOUT_MESSAGE
 
