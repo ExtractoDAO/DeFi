@@ -1,7 +1,11 @@
+from chain_vission.logger.logs import CustomLogger
 from chain_vission.utils.environment import Environment
 from firebase_admin import credentials, db
 import firebase_admin
 
+class FirebaseConnectionError(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Failed to connect to Firebase: {message}")
 
 class FirebaseAdapter:
     _instance = None
@@ -13,7 +17,7 @@ class FirebaseAdapter:
             FirebaseAdapter(env)
         return FirebaseAdapter._instance
 
-    def __init__(self, env: Environment):
+    def __init__(self, env: Environment, logger: CustomLogger):
         """Virtually private constructor."""
         if FirebaseAdapter._instance is not None:
             raise Exception("This class should be a singleton!")
@@ -32,6 +36,9 @@ class FirebaseAdapter:
                 )
                 self.base_url = base_url
                 self._db = db
+                self.logger = logger
+
+                self.test_connection()
 
     @staticmethod
     def _get_service_account_json(env: Environment) -> dict:
@@ -77,3 +84,16 @@ class FirebaseAdapter:
     def delete_data(self, route):
         ref = self._get_reference(route)
         ref.delete()
+
+    def test_connection(self):
+        try:
+            # Get the root node or some specific node that you know always exists.
+            # If this node doesn't exist, replace '' with a node that does.
+            ref = self._get_reference('devnet')
+            ref.get()
+            self.logger.info("Connected successfully to Firebase.")
+            print("Connected successfully to Firebase.")
+        except Exception as message:
+            self.logger.info(f"Failed to connect to Firebase")
+            print(f"Failed to connect to Firebase")
+            raise FirebaseConnectionError(message)

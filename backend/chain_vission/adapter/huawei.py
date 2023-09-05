@@ -1,5 +1,11 @@
 from pymongo import MongoClient
+from chain_vission.logger.logs import CustomLogger
 from chain_vission.utils.environment import Environment
+
+
+class MongoDBConnectionError(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Failed to connect to MongoDB: {message}")
 
 
 class MongoAdapter:
@@ -12,7 +18,7 @@ class MongoAdapter:
             MongoAdapter(env)
         return MongoAdapter._instance
 
-    def __init__(self, env: Environment):
+    def __init__(self, env: Environment, logger: CustomLogger):
         """Virtually private constructor."""
         if MongoAdapter._instance is not None:
             raise Exception("This class should be a singleton!")
@@ -21,6 +27,8 @@ class MongoAdapter:
             # To avoid the variable env loaded when in mock tests
             if __name__ != "__main__":
                 self._connect(env)
+            self.logger = logger
+            self.test_connection()
 
     def _connect(self, env: Environment):
         """Establish a connection to the MongoDB server."""
@@ -52,3 +60,13 @@ class MongoAdapter:
         """Delete data from the specified collection."""
         collection = self.db[collection_name]
         return collection.delete_one(query)
+
+    def test_connection(self):
+        try:
+            self.client.server_info()
+            self.logger.info("Connected successfully to MongoDB.")
+            print("Connected successfully to MongoDB.")
+        except Exception as message:
+            self.logger.info("Failed to connect to MongoDB")
+            print("Failed to connect to MongoDB")
+            raise MongoDBConnectionError(message)

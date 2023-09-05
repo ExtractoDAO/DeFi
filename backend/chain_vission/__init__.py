@@ -1,6 +1,6 @@
 from chain_vission.middleware.authentication import get_authentication_token
-from chain_vission.adapter.firebase import FirebaseAdapter
 from chain_vission.utils.environment import Environment
+from chain_vission.adapter.huawei import MongoAdapter
 from chain_vission.logger.logs import CustomLogger
 from fastapi import FastAPI
 
@@ -23,7 +23,7 @@ tags_metadata = [
 
 env = Environment()
 logger = CustomLogger(env.LOG_FILE)
-adapter_app = FirebaseAdapter(env)
+adapter_app = MongoAdapter(env, logger)
 app = FastAPI(
     title="Backend",
     version="0.5.0",
