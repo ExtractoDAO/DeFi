@@ -19,9 +19,8 @@ export default async function handler(
                 "Content-Type": "application/json"
             }
         })
-        if (response.status === 200) {
-            const { token, expiration_time } = response.data
-            res.status(200).json({ token, expiration_time })
+        if (response.status >= 200 && response.status <= 299) {
+            res.status(response.status).json(response.data)
         } else {
             res.status(response.status).json({
                 detail: response.data.detail
