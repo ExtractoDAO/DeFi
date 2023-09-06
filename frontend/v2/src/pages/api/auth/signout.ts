@@ -19,13 +19,8 @@ export default async function handler(
                 "Content-Type": "application/json"
             }
         })
-        if (response.status === 200) {
-            res.status(200)
-        } else {
-            res.status(response.status).json({
-                detail: response.data.detail
-            })
-        }
+
+        res.status(response.status).json(response.data)
     } catch (err: any) {
         if (err.response) {
             const { status, data } = err.response

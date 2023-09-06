@@ -97,13 +97,17 @@ def remove_token(address: str):
         },
     },
 )
-async def get_signout(signin: SignOut, address: str):
-    siwe_msg = SiweMessage(signin.message)
-
-    if error_message := validation_request(siwe_msg, signin.signature):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail=error_message
-        )
-    else:
+async def get_signout(address: str):
         remove_token(address)
-        return JSONResponse(status_code=status.HTTP_200_OK, content={})
+
+
+# async def get_signout(signin: SignOut, address: str):
+#     siwe_msg = SiweMessage(signin.message)
+
+#     if error_message := validation_request(siwe_msg, signin.signature):
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED, detail=error_message
+#         )
+#     else:
+#         remove_token(address)
+#         return JSONResponse(status_code=status.HTTP_200_OK, content={})
