@@ -105,7 +105,7 @@ def validation_request(siwe_msg: SiweMessage, signature: str) -> Optional[str]:
             "description": "Successful Response",
             "content": {
                 "application/json": {
-                    "example": {"token": "string", "expiration_time": 1234567890}
+                    "example": {"token": "string", "expiration": 1234567890}
                 }
             },
         },
