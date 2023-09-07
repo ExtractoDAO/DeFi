@@ -2,11 +2,6 @@ import { SiweMessage } from "siwe"
 import AxiosService from "../axios"
 import { Environment } from "../environment"
 
-interface Token {
-    token: string
-    expirationTime: string
-}
-
 export class Login {
     private readonly SIGNIN_MESSAGE: string
     private readonly SIGNOUT_MESSAGE: string
@@ -26,10 +21,15 @@ export class Login {
     }
 
     private async getNonce(address: string): Promise<string> {
-        const route = `/api/auth/nonce/?address=${address}`
-        return await fetch(route)
-            .then((respose) => respose.json())
-            .then((data) => data.nonce)
+        try {
+            const res = await fetch(`/api/auth/nonce/?address=${address}`, {
+                method: "GET"
+            })
+            const data = await res.json()
+            return data.nonce
+        } catch (e: any) {
+            throw new Error(e)
+        }
     }
 
     private async getToken(
@@ -38,17 +38,23 @@ export class Login {
         signature: string
     ) {
         try {
-            return await fetch(`/api/auth/signin/?address=${address}`, {
-                method: "POST",
-                body: JSON.stringify({ message: message, signature: signature })
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    return {
-                        token: data.token,
-                        expirationTime: data.expiration_time
-                    }
-                })
+            const response = await fetch(
+                `/api/auth/signin/?address=${address}`,
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        message: message,
+                        signature: signature
+                    })
+                }
+            )
+
+            const data = await response.json()
+
+            return {
+                token: data.token,
+                expirationTime: data.expiration
+            }
         } catch (err: any) {
             throw new Error(err)
         }
@@ -84,37 +90,28 @@ export class Login {
         ).prepareMessage()
 
         const signature = await signer.signMessage(message)
-
         return await this.getToken(address, message, signature)
     }
 
-    async signOut(signer: {
-        address: string
-        token: string
-        signMessage: (message: string) => Promise<string>
-    }): Promise<boolean> {
+    async signOut(signer: { address: string }): Promise<boolean> {
         const address = signer.address
-        const nonce = this.extractNonce(signer.token)
-        const message = this.getMessage(
-            address,
-            nonce,
-            this.SIGNOUT_MESSAGE
-        ).prepareMessage()
-        const signature = await signer.signMessage(message)
-        return await this.removeToken(address, message, signature)
+        return await this.removeToken(address)
     }
 
-    async removeToken(
-        address: string,
-        message: string,
-        signature: string
-    ): Promise<boolean> {
-        return await fetch(`/api/auth/signout/?address=${address}`, {
-            method: "POST",
-            body: JSON.stringify({ message: message, signature: signature })
-        })
-            .then((response) => response.json())
-            .then((data) => data.message)
+    private async removeToken(address: string): Promise<boolean> {
+        try {
+            const response = await fetch(
+                `/api/auth/signout/?address=${address}`
+            )
+
+            if (response.status >= 200 && response.status <= 299) {
+                return true
+            } else {
+                return false
+            }
+        } catch (error) {
+            return false
+        }
     }
 
     extractNonce(token: string): string {

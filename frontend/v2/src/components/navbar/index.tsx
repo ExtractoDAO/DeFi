@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Cog8ToothIcon } from "@heroicons/react/24/outline"
 import { BellIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
@@ -12,24 +12,22 @@ import {
     ConnectWallet,
     useAddress,
     useConnectionStatus,
-    useSDK,
-    useSigner
+    useSDK
 } from "@thirdweb-dev/react"
 
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
-import { SiweMessage } from "siwe"
 import Modal from "../modal"
 import { deleteItem, getItem, setItem } from "@/lib/storage"
 
-import { toast } from "react-toastify"
-
-import daoConfig from "../../../dao.config"
 import { shortAddress } from "@/utils/mask"
 
 import { Login } from "@/services/backend/login"
 import env from "@/services/environment"
 import AxiosService from "@/services/axios"
+
+import { switchTheme } from "@/utils/theme"
+import { Backend } from "@/services/backend/backend"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -38,46 +36,79 @@ const pathnames: Dictionary = {
     "/exchange": "Exchange"
 }
 
-const messagePlainText = process.env.SIWE_STATEMENT?.toString()
-const domain = process.env.DOMAIN?.toString()
-const chainId = daoConfig.targetNetwork.id
-
 export default function Navbar() {
+    const savedToken = getItem("TOKEN")
     const sdk = useSDK()
-    const login = new Login(env, new AxiosService(env))
+
+    const backend = new Backend(env, new AxiosService(env))
     const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
     const connectionStatus = useConnectionStatus()
-    const isConnected = connectionStatus === "connected"
+    const [isConnected, setIsConnected] = useState(false)
     const [modalSign, setModalSign] = useState(false)
     const [showNotificationIcon, setShowNotificationIcon] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        setShowNotificationIcon(isConnected)
-    }, [isConnected])
+        const oldState = isConnected
+        const newState = connectionStatus === "connected"
 
-    useEffect(() => {
-        if (!isConnected) {
-            deleteItem("LOGIN_SIGNATURE")
+        if (oldState === true && newState === false) {
+            signout()
         }
-    }, [isConnected])
+
+        setIsConnected(newState)
+        setShowNotificationIcon(newState)
+    }, [connectionStatus])
 
     useEffect(() => {
-        const savedSign = getItem("LOGIN_SIGNATURE")
-        if (isConnected && address && !savedSign) {
+        const newState = connectionStatus === "connected"
+
+        if (newState && address && !savedToken) {
             setModalSign(true)
-        } else {
-            setModalSign(false)
         }
-    }, [isConnected, address])
+    }, [address, connectionStatus])
+
+    const signout = async () => {
+        if (!address || !savedToken || !sdk?.wallet.sign) {
+            return
+        }
+
+        const isSuccess = await login.signOut({
+            address
+        })
+
+        if (isSuccess) {
+            deleteItem("TOKEN")
+            deleteItem("TOKEN_EXPIRES_AT")
+        }
+    }
 
     const sign = async () => {
         if (address && sdk?.wallet.sign) {
-            login.signIn({
+            setLoading(true)
+            const { token, expirationTime } = await backend.login.signIn({
                 address,
                 signMessage: (message: string) => sdk?.wallet.sign(message)
             })
+
+            const newContract = {
+                txId: "acasdfasdfa",
+                address: "0xcccc",
+                commodityAmount: 100,
+                locktime: 3600,
+                owner: "0xabcdef1234567890",
+                price: 5000
+            }
+            const data = await backend.graphql.addContract(newContract, token)
+            console.log(data)
+
+            setModalSign(false)
+
+            setItem("TOKEN", token)
+            setItem("TOKEN_EXPIRES_AT", expirationTime)
+            setLoading(false)
         }
     }
 
@@ -139,7 +170,12 @@ export default function Navbar() {
                 buttons={[
                     {
                         label: "Sign",
-                        onClick: () => sign(),
+                        onClick: () => {
+                            if (loading) {
+                                return
+                            }
+                            sign()
+                        },
                         bgColor: "success"
                     },
                     {
@@ -243,6 +279,7 @@ export default function Navbar() {
                                     "items-center": true,
                                     "max-md:hidden": true
                                 })}
+                                onClick={() => switchTheme()}
                             >
                                 <Cog8ToothIcon
                                     className="w-6
