@@ -16,6 +16,7 @@ class MissingEnvironmentVariableError extends Error {
 
 export class Environment {
     BACKEND_ADDRESS: string
+    GRAPHQL_ADDRESS: string
     SIGNOUT_MESSAGE: string
     SIGNIN_MESSAGE: string
     SIWE_VERSION: string
@@ -28,6 +29,10 @@ export class Environment {
         this.BACKEND_ADDRESS = this.ensure(
             "BACKEND_ADDRESS",
             process.env.BACKEND_ADDRESS
+        )
+        this.GRAPHQL_ADDRESS = this.ensure(
+            "GRAPHQL_ADDRESS",
+            process.env.GRAPHQL_ADDRESS
         )
         this.SIGNOUT_MESSAGE = this.ensure(
             "SIGNOUT_MESSAGE",
