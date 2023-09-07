@@ -1,6 +1,6 @@
 "use client"
 
-import { getItem, setItem } from "@/lib/storage"
+import { getItem, setItem } from "@/services/storage"
 
 export const theme = getItem("THEME") || "dark"
 
