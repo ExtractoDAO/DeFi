@@ -11,13 +11,24 @@ export class GraphQL {
     async addContract(contract: Contract, token: string) {
         return await fetch("/api/graphql/write", {
             method: "POST",
+            body: JSON.stringify(contract),
             headers: {
-                "Content-Type": "application/json",
-                Authorization: token
-            },
-            body: JSON.stringify(contract)
+                authorization: token,
+                "Content-Type": "application/json"
+            }
         })
-            .then((response) => response.json())
-            .then((data) => data)
+            .then((response) => {
+                console.log(response)
+                return response.json()
+            })
+            .then((data) => {
+                return {
+                    token: data.token,
+                    expirationTime: data.expiration_time
+                }
+            })
+            .catch((error) => {
+                throw new Error(error)
+            })
     }
 }
