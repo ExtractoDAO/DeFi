@@ -1,0 +1,22 @@
+{
+  "name": "defi",
+  "version": "1.0.0",
+  "scripts": {
+    "anvil": "anvil",
+    "local_deploy": "cd ./blockchain/smartcontracts && ./local_deploy.sh",
+    "backend_dev": "cd ./backend && poetry run dev",
+    "frontend_dev": "cd ./frontend/v2 && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExtractoDAO/DeFi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ExtractoDAO/DeFi/issues"
+  },
+  "homepage": "https://github.com/ExtractoDAO/DeFi#readme"
+}

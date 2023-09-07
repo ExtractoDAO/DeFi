@@ -41,6 +41,7 @@ export default function Navbar() {
     const sdk = useSDK()
 
     const backend = new Backend(env, new AxiosService(env))
+    const login = new Login(env, new AxiosService(env))
     const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
