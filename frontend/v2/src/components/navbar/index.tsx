@@ -93,17 +93,6 @@ export default function Navbar() {
                 signMessage: (message: string) => sdk?.wallet.sign(message)
             })
 
-            const newContract = {
-                txId: "acasdfasdfa",
-                address: "0xcccc",
-                commodityAmount: 100,
-                locktime: 3600,
-                owner: "0xabcdef1234567890",
-                price: 5000
-            }
-            const data = await backend.graphql.addContract(newContract, token)
-            console.log(data)
-
             setModalSign(false)
 
             setItem("TOKEN", token)
