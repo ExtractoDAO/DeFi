@@ -8,8 +8,11 @@ interface Contract {
 }
 
 export class GraphQL {
-    async addContract(contract: Contract, token: string) {
-        return await fetch("/api/graphql/write", {
+    async addContract(
+        contract: Contract,
+        token: string
+    ): Promise<{ sucess: boolean; message: string }> {
+        return await fetch("/api/graphql/write/addContract", {
             method: "POST",
             body: JSON.stringify(contract),
             headers: {
@@ -17,15 +20,19 @@ export class GraphQL {
                 "Content-Type": "application/json"
             }
         })
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
+            .then((response) => response.json())
             .then((data) => {
-                return {
-                    token: data.token,
-                    expirationTime: data.expiration_time
-                }
+                return data
+            })
+            .catch((error) => {
+                throw new Error(error)
+            })
+    }
+    async sellPrices() {
+        return await fetch("/api/graphql/read/sellPrice")
+            .then((response) => response.json())
+            .then((data) => {
+                return data
             })
             .catch((error) => {
                 throw new Error(error)

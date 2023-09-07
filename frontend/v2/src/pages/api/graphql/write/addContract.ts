@@ -1,20 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { gql, HttpLink } from "@apollo/client"
-import {
-    NextSSRApolloClient,
-    NextSSRInMemoryCache
-} from "@apollo/experimental-nextjs-app-support/ssr"
+import { gql } from "@apollo/client"
+import { client } from "../apolloClient"
 
-interface Contract {
-    txId: string
-    address: string
-    commodityAmount: number
-    locktime: number
-    owner: string
-    price: number
-}
-
-const ADD_CONTRACT_MUTATION = gql`
+export const ADD_CONTRACT_MUTATION = gql`
     mutation AddContract(
         $txId: String!
         $address: String!
@@ -37,16 +25,20 @@ const ADD_CONTRACT_MUTATION = gql`
     }
 `
 
-// Configuração do Apollo Client
-const link = new HttpLink({ uri: "http://127.0.0.1:8000/graphql" })
-const cache = new NextSSRInMemoryCache()
-const client = new NextSSRApolloClient({ link, cache })
+export interface Contract {
+    txId: string
+    address: string
+    commodityAmount: number
+    locktime: number
+    owner: string
+    price: number
+}
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const response = await client.mutate<
+    const result = await client.mutate<
         { addContract: { success: boolean; message: string } },
         Contract
     >({
@@ -59,12 +51,17 @@ export default async function handler(
         }
     })
 
-    if (response.data?.addContract.success === true) {
-        return res.status(200).send({ message: "Success" })
+    const response = result.data?.addContract
+
+    if (response && response.success === true) {
+        res.status(200).json({
+            sucess: true,
+            message: ""
+        })
     } else {
-        console.log(response.data?.addContract.message)
-        return res
-            .status(400)
-            .json({ message: response.data?.addContract.message })
+        return res.status(400).json({
+            sucess: false,
+            message: response?.message
+        })
     }
 }
