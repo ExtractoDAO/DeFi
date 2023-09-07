@@ -18,7 +18,7 @@ import {
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
 import Modal from "../modal"
-import { deleteItem, getItem, setItem } from "@/lib/storage"
+import { deleteItem, getItem, setItem } from "@/services/storage"
 
 import { shortAddress } from "@/utils/mask"
 
