@@ -28,6 +28,9 @@ import AxiosService from "@/services/axios"
 
 import { switchTheme } from "@/utils/theme"
 import { Backend } from "@/services/backend/backend"
+import Button from "../button"
+
+import graphQl from "@/services/backend/graphql"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -100,6 +103,23 @@ export default function Navbar() {
             setItem("TOKEN_EXPIRES_AT", expirationTime)
             setLoading(false)
         }
+    }
+
+    const handleSaveTestContract = () => {
+        if (!savedToken) {
+            return
+        }
+        graphQl.addContract(
+            {
+                address: "0xabcTeste123Contract",
+                commodityAmount: 1200000,
+                locktime: 12333,
+                owner: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+                price: 199999,
+                txId: "0x321abc123aaaaTxID"
+            },
+            savedToken
+        )
     }
 
     const ButtonConect = () => (
@@ -279,7 +299,9 @@ export default function Navbar() {
                                 />
                             </Link>
                         </div>
-                        {/* {isConnected && <PhotoProfile />} */}
+                        <Button onClick={handleSaveTestContract}>
+                            Test save Contract
+                        </Button>
                         <ButtonConect />
                     </div>
                 </div>
