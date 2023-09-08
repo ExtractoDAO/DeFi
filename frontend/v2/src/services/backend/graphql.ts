@@ -39,3 +39,6 @@ export class GraphQL {
             })
     }
 }
+
+const graphQl = new GraphQL()
+export default graphQl
