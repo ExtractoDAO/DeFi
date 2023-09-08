@@ -16,7 +16,7 @@ class Mutation:
     @strawberry.mutation
     def add_contract(
         self,
-        tx_id: str,
+        txId: str,
         address: str,
         commodity_amount: float,
         locktime: int,
@@ -25,7 +25,7 @@ class Mutation:
         info: Info,
     ) -> Response:
         if (token := info.context["request"].state.token) is None:
-            message = "Authentication attempt rejected: X-Authorization header not found"
+            message = "Authentication attempt rejected:      header not found"
             return Response(message=message, success=False)
         if (message := verify_token(token)) is not None:
             return Response(message=message, success=False)
@@ -35,7 +35,7 @@ class Mutation:
             commodity_amount=commodity_amount,
             locktime=locktime,
             address=address,
-            tx_id=tx_id,
+            tx_id=txId,
             owner=owner,
             price=price,
         )

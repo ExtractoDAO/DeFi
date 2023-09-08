@@ -54,9 +54,9 @@ class Contract:
     def to_dict(self) -> dict:
         return {
             "commodityAmount": self.commodity_amount,
-            "status": self.status.value,
             "locktime": self.locktime,
             "address": self.address,
+            "status": self.status,
             "owner": self.owner,
             "price": self.price,
             "txId": self.tx_id,
