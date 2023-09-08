@@ -1,7 +1,5 @@
-// pages/api/graphql/read/contractsByInvestor/[investor].ts
-
 import { NextApiRequest, NextApiResponse } from "next"
-import { Response, readerql } from "../readerql" // Certifique-se de que o caminho para 'readerql' esteja correto
+import { Response, readerql } from "../../readerql"
 import { gql } from "@apollo/client"
 
 export const CONTRACTS_BY_INVESTOR_QUERY = gql`

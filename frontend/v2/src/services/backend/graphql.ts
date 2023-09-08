@@ -62,7 +62,20 @@ export class GraphQL {
     }
 
     async contractByInvestor(investor: string) {
-        return this.fetchData(`/api/graphql/read/contracts/${investor}`)
+        return this.fetchData(
+            `/api/graphql/read/contracts/byInvestor/${investor}`
+        )
+    }
+
+    async orders() {
+        return this.fetchData("/api/graphql/read/orders/all")
+    }
+    async ordersByHash(hash: string) {
+        return this.fetchData(`/api/graphql/read/orders/byHash/${hash}`)
+    }
+
+    async ordersByInvestor(investor: string) {
+        return this.fetchData(`/api/graphql/read/orders/byInvestor/${investor}`)
     }
 
     async investors() {

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { Response, readerql } from "../readerql" // Certifique-se de que o caminho para 'readerql' esteja correto
+import { Response, readerql } from "../readerql"
 import { gql } from "@apollo/client"
 
 export const ALL_CONTRACTS_QUERY = gql`

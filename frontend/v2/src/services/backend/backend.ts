@@ -9,7 +9,7 @@ export class Backend {
 
     constructor(env: Environment, axiosInstance: AxiosService) {
         this.login = new Login(env, axiosInstance)
-        this.graphql = new GraphQL(env)
+        this.graphql = new GraphQL()
     }
 }
 

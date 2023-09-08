@@ -104,22 +104,37 @@ export default function Navbar() {
     }
 
     const handleSaveTestContract = () => {
-        backend.graphql.contractByInvestor("0xff").then((r) => {
-            console.log(r)
-        })
-        backend.graphql.contractByAddress("0xff").then((r) => {
-            console.log(r)
-        })
-        backend.graphql.buyPrices().then((r) => {
-            console.log(r)
-        })
-        backend.graphql.sellPrices().then((r) => {
+        backend.graphql
+            .ordersByInvestor("0xf0862d81bd4c6ccc115536d19ac0f5e6b1b02d71")
+            .then((r) => {
+                console.log(r)
+            })
+        backend.graphql
+            .ordersByHash(
+                "0x42bce2258ab1ebe311d4a8af4ae58e304d1c5f0951d331cc6e3ce6f68501036c"
+            )
+            .then((r) => {
+                console.log(r)
+            })
+        backend.graphql.orders().then((r) => {
             console.log(r)
         })
         backend.graphql.contracts().then((r) => {
             console.log(r)
         })
         backend.graphql.investors().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contractByAddress("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contractByInvestor("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.buyPrices().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.sellPrices().then((r) => {
             console.log(r)
         })
     }
