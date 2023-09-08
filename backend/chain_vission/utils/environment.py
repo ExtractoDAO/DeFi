@@ -22,8 +22,6 @@ class Environment(BaseModel):
     TYPE: str
 
     JWT_SECRET_KEY: str
-    SIGNOUT_MESSAGE: str
-    SIGNIN_MESSAGE: str
     SIWE_VERSION: str
     CHAIN_ID: str
     LOG_FILE: str
