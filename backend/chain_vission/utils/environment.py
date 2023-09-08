@@ -21,6 +21,7 @@ class Environment(BaseModel):
     AUTH_URI: str
     TYPE: str
 
+    SIWE_STATEMENT: str
     JWT_SECRET_KEY: str
     SIWE_VERSION: str
     CHAIN_ID: str
