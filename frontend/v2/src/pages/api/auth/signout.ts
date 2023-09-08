@@ -10,23 +10,31 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    try {
+    return new Promise<void>(async (resolve, reject) => {
         const { address } = req.query
         const route = `${BACKEND_ADDRESS}/login/signout/${address}`
 
-        const response = await axiosInstance.post(route, req.body, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
-        res.status(response.status).json(response.data)
-    } catch (err: any) {
-        if (err.response) {
-            const { status, data } = err.response
-            res.status(status).json({ status_code: status, details: data })
-        } else {
-            res.status(500)
-        }
-    }
+        return axiosInstance
+            .post(route, req.body, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => {
+                if (response.status >= 200 && response.status <= 299) {
+                    res.end(response.data)
+                    resolve()
+                }
+            })
+            .catch((e) => {
+                if (e.response) {
+                    const { status, data } = e.response
+                    res.status(status).end(data)
+                    reject()
+                } else {
+                    res.status(500)
+                    reject()
+                }
+            })
+    })
 }
