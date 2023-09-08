@@ -30,8 +30,6 @@ import { switchTheme } from "@/utils/theme"
 import { Backend } from "@/services/backend/backend"
 import Button from "../button"
 
-import graphQl from "@/services/backend/graphql"
-
 const pathnames: Dictionary = {
     "/": "Dashboard",
     "/buy": "Buy contracts",
@@ -106,20 +104,24 @@ export default function Navbar() {
     }
 
     const handleSaveTestContract = () => {
-        if (!savedToken) {
-            return
-        }
-        graphQl.addContract(
-            {
-                address: "0xabcTeste123Contract",
-                commodityAmount: 1200000,
-                locktime: 12333,
-                owner: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-                price: 199999,
-                txId: "0x321abc123aaaaTxID"
-            },
-            savedToken
-        )
+        backend.graphql.contractByInvestor("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contractByAddress("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.buyPrices().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.sellPrices().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contracts().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.investors().then((r) => {
+            console.log(r)
+        })
     }
 
     const ButtonConect = () => (

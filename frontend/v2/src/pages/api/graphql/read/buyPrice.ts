@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { Response, readerql } from "./readerql"
 import { gql } from "@apollo/client"
 
-export const ALL_SELL_PRICES_QUERY = gql`
-    query GetAllSellPrices($at: Int!, $total: Int!) {
-        allSellPrices(at: $at, total: $total) {
+export const ALL_BUY_PRICES_QUERY = gql`
+    query GetAllBuyPrices($at: Int!, $total: Int!) {
+        allBuyPrices(at: $at, total: $total) {
             items {
                 value
                 timestamp
@@ -14,13 +14,13 @@ export const ALL_SELL_PRICES_QUERY = gql`
     }
 `
 
-export default async function allSellPricesHandler(
+export default async function allBuyPricesHandler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     type I = { at: number; total: number }
     type O = {
-        allSellPrices: {
+        allBuyPrices: {
             items: Array<{ timestamp: number; value: number }>
             totalItemsCount: number
         }
@@ -28,17 +28,17 @@ export default async function allSellPricesHandler(
 
     try {
         const result = await readerql<I, O>(
-            ALL_SELL_PRICES_QUERY,
+            ALL_BUY_PRICES_QUERY,
             {
                 at: 0,
                 total: 100
             },
-            "allSellPrices"
+            "allBuyPrices"
         )
         res.status(200).json(new Response(true, result, ""))
     } catch (e) {
         return res
             .status(400)
-            .json(new Response(false, {}, "Failed to fetch sell prices."))
+            .json(new Response(false, {}, "Failed to fetch buy prices."))
     }
 }
