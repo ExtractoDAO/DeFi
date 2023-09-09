@@ -18,7 +18,7 @@ import {
 import { LockClosedIcon } from "@heroicons/react/24/outline"
 
 import Modal from "../modal"
-import { deleteItem, getItem, setItem } from "@/lib/storage"
+import { deleteItem, getItem, setItem } from "@/services/storage"
 
 import { shortAddress } from "@/utils/mask"
 
@@ -27,6 +27,8 @@ import env from "@/services/environment"
 import AxiosService from "@/services/axios"
 
 import { switchTheme } from "@/utils/theme"
+import { Backend } from "@/services/backend/backend"
+import Button from "../button"
 
 const pathnames: Dictionary = {
     "/": "Dashboard",
@@ -39,6 +41,7 @@ export default function Navbar() {
     const savedToken = getItem("TOKEN")
     const sdk = useSDK()
 
+    const backend = new Backend(env, new AxiosService(env))
     const login = new Login(env, new AxiosService(env))
     const address = useAddress()
     const pathname = usePathname()
@@ -87,7 +90,7 @@ export default function Navbar() {
     const sign = async () => {
         if (address && sdk?.wallet.sign) {
             setLoading(true)
-            const { token, expirationTime } = await login.signIn({
+            const { token, expirationTime } = await backend.login.signIn({
                 address,
                 signMessage: (message: string) => sdk?.wallet.sign(message)
             })
@@ -98,6 +101,42 @@ export default function Navbar() {
             setItem("TOKEN_EXPIRES_AT", expirationTime)
             setLoading(false)
         }
+    }
+
+    const handleSaveTestContract = () => {
+        backend.graphql
+            .ordersByInvestor("0xf0862d81bd4c6ccc115536d19ac0f5e6b1b02d71")
+            .then((r) => {
+                console.log(r)
+            })
+        backend.graphql
+            .ordersByHash(
+                "0x42bce2258ab1ebe311d4a8af4ae58e304d1c5f0951d331cc6e3ce6f68501036c"
+            )
+            .then((r) => {
+                console.log(r)
+            })
+        backend.graphql.orders().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contracts().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.investors().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contractByAddress("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.contractByInvestor("0xff").then((r) => {
+            console.log(r)
+        })
+        backend.graphql.buyPrices().then((r) => {
+            console.log(r)
+        })
+        backend.graphql.sellPrices().then((r) => {
+            console.log(r)
+        })
     }
 
     const ButtonConect = () => (
@@ -277,7 +316,9 @@ export default function Navbar() {
                                 />
                             </Link>
                         </div>
-                        {/* {isConnected && <PhotoProfile />} */}
+                        <Button onClick={handleSaveTestContract}>
+                            Test save Contract
+                        </Button>
                         <ButtonConect />
                     </div>
                 </div>
