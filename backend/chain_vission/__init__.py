@@ -35,9 +35,8 @@ app.middleware("http")(get_authentication_token)
 
 if env.ENV == "devnet":
     from fastapi.middleware.cors import CORSMiddleware
-
     env.JWT_SECRET_KEY = "JWT_SECRET_KEY"
-    env.DOMAIN = "localhost:8080"
+    env.DOMAIN = "localhost"
     logger = CustomLogger(env.LOG_FILE, True)
 
     origins = [
@@ -54,3 +53,6 @@ if env.ENV == "devnet":
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    link = '<h1 style="color: black;">Looking for <a href="http://localhost:8000/graphql">Graphql</a>?</h1>'
+    app.description=link
