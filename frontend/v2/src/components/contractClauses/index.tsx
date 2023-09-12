@@ -18,6 +18,7 @@ const ContractClauses = () => {
                     shrink-0
                     rounded
                     border
+                    border-solid
                     border-deep-gray/200
                     bg-deep-gray/100"
             >
@@ -34,7 +35,7 @@ const ContractClauses = () => {
                             not-italic
                             leading-normal"
                     >
-                        Sumário
+                        Sumary
                     </h1>
                     <div
                         className="
@@ -47,15 +48,17 @@ const ContractClauses = () => {
                                     className="flex
                                     overflow-y-auto
                                     max-w-[264px]
-                                    py-4
-                                    px-2
-                                    items-start
-                                    rounded
+                                    gap-1
                                     "
                                 >
                                     <Link
                                         className="hover:bg-clauses/section/hover
-                                    focus:bg-clauses/section/active"
+                                    focus:bg-clauses/section/active
+                                    py-2
+                                    px-2
+                                    items-start
+                                    w-full
+                                    rounded"
                                         href={`#${section.id}`}
                                     >
                                         {section.title}
