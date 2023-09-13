@@ -8,19 +8,23 @@ const ContractClauses = () => {
     return (
         <div className="flex">
             <div
-                className="text-white 
+                className="
+                text-gray/900
                     max-w-[312px] 
+                    flex
                     items-start
                     p-6
-                    flex
                     flex-col
                     gap-10
                     shrink-0
                     rounded
                     border
                     border-solid
-                    border-deep-gray/200
-                    bg-deep-gray/100"
+                    border-gray/200
+
+                    dark:border-deep-gray/200
+                    dark:bg-deep-gray/100
+                    dark:text-white"
             >
                 <div
                     className="flex
@@ -39,26 +43,33 @@ const ContractClauses = () => {
                     </h1>
                     <div
                         className="
-                        overflow-y-auto"
+          
+                        "
                     >
-                        <ol className="overflow-y-auto">
+                        <ol className="list-decimal">
                             {ContractData.map((section) => (
                                 <li
                                     key={section.id}
                                     className="flex
-                                    overflow-y-auto
+                            
                                     max-w-[264px]
-                                    gap-1
+                                    pb-1
                                     "
                                 >
                                     <Link
-                                        className="hover:bg-clauses/section/hover
-                                    focus:bg-clauses/section/active
-                                    py-2
-                                    px-2
-                                    items-start
-                                    w-full
-                                    rounded"
+                                        className="
+                                        hover:bg-slate/200
+                                        focus:bg-slate/100
+                                        focus:text-gray/900
+                                        py-2
+                                        px-2
+                                        items-start
+                                        w-full
+                                        rounded
+                                        text-gray/500
+                                    
+                                        dark:hover:bg-clauses/section/hover
+                                        dark:focus:bg-clauses/section/active"
                                         href={`#${section.id}`}
                                     >
                                         {section.title}
