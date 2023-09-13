@@ -1,32 +1,24 @@
-import ValueInput from "../valueInput"
-import TokenSelector, { Token, tokens } from "../tokenSelector"
+import { useState } from "react"
+import { useConnectionStatus, ConnectWallet } from "@thirdweb-dev/react"
+
+import {
+    ArrowsUpDownIcon,
+    ChartBarIcon,
+    DocumentTextIcon,
+    ShoppingCartIcon
+} from "@heroicons/react/24/solid"
 
 import classnames from "classnames"
 
-import {
-    ChartBarIcon,
-    DocumentTextIcon,
-    ArrowsUpDownIcon
-} from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react"
-import Button from "../button"
-
-import { ShoppingCartIcon } from "@heroicons/react/24/solid"
-
-import useContract from "@/hooks/useContract"
-import useBalance from "@/hooks/useBalance"
-
-import { toast } from "react-toastify"
-import {
-    useConnectionStatus,
-    ConnectWallet,
-    useAddress
-} from "@thirdweb-dev/react"
 import classNames from "classnames"
-import { ethers } from "ethers"
+
+import Button from "../button"
 import Modal from "../modal"
 import ModalLoading from "./modalLoading"
 import ModalSuccess from "./modalSuccess"
+import ValueInput from "../valueInput"
+import TokenSelector from "../tokenSelector"
+import useContractBuy from "@/hooks/useContractBuy"
 
 interface Props {
     setShowChart: (value: boolean) => void
@@ -34,117 +26,27 @@ interface Props {
 }
 
 export default function Buy({ setShowChart, showChart }: Props) {
-    const [price, setPrice] = useState<any>(0)
-    const { read, write, contractAddress, hash } = useContract("Commodity")
-    const address = useAddress() as `0x${string}`
-
-    const connectionStatus = useConnectionStatus()
-    const isConnected = connectionStatus === "connected"
-
-    const [selectedToken, setSelectedToken] = useState<Token>({} as Token)
-    const [modal, setModal] = useState("")
-
-    useEffect(() => {
-        setSelectedToken(tokens[0])
-    }, [])
-
     const {
-        read: readToken,
-        contractAddress: tokenAddress,
-        write: tokenInteraction
-    } = useContract(selectedToken.symbol)
-
-    const { fetchBalance } = useBalance(selectedToken.symbol)
-    const [userBalance, setUserBalance] = useState(0)
-
-    const [usdValue, setUsdValue] = useState("")
-    const [kgAmount, setKgAmount] = useState("")
-
-    useEffect(() => {
-        async function getBalance() {
-            if (address) {
-                const res = await fetchBalance(address)
-                const decimals = await readToken("decimals")
-                const response = Number(res) / 10 ** decimals
-                if (typeof response === "number") {
-                    setUserBalance(Number(res) / 10 ** decimals)
-                }
-            }
-        }
-
-        getBalance()
-    }, [address, selectedToken, readToken])
-
-    useEffect(() => {
-        async function getBuyPrice() {
-            const res = await read("getBuyPrice")
-            setPrice(Number(res) / 10 ** 18)
-        }
-
-        getBuyPrice()
-    }, [address, read])
+        modal,
+        setModal,
+        usdValue,
+        setUsdValue,
+        kgAmount,
+        setKgAmount,
+        selectedToken,
+        setSelectedToken,
+        handleApprove,
+        handleDeploy,
+        updateAmount,
+        updateValue,
+        hash,
+        userBalance,
+        price
+    } = useContractBuy()
 
     const [inverted, setInverted] = useState(false)
-
-    function updateAmount(numberValue: number) {
-        setKgAmount((numberValue / price).toFixed(2).toString())
-    }
-
-    function updateValue(numberAmount: number) {
-        setUsdValue(Math.ceil(numberAmount * price).toString())
-    }
-
-    async function handleApprove() {
-        if (Number(usdValue) < 10) {
-            toast.error("Value in USD must be greather than U$ 10")
-            return
-        }
-        setModal("approving")
-
-        const decimals = await readToken("decimals")
-
-        const formattedValue = ethers.utils.parseUnits(
-            usdValue,
-            Number(decimals)
-        )
-
-        if (!contractAddress || !formattedValue) return
-
-        try {
-            await tokenInteraction("approve", contractAddress, formattedValue)
-
-            setModal("confirm")
-        } catch (e) {
-            toast.error(`Failed to approve: ${e}`)
-            setModal("")
-        }
-    }
-
-    async function handleDeploy() {
-        setModal("loading")
-        const decimals = await readToken("decimals")
-        const formattedValue = ethers.utils.parseUnits(
-            usdValue,
-            Number(decimals)
-        )
-
-        try {
-            // TODO: Save response tx to drawer
-            const response = await write(
-                "createFuture",
-                tokenAddress,
-                formattedValue,
-                {
-                    gasLimit: 10000000
-                }
-            )
-
-            setModal("success")
-        } catch (e) {
-            toast.error(`Error in contract purchase: ${e}`)
-            setModal("confirm")
-        }
-    }
+    const connectionStatus = useConnectionStatus()
+    const isConnected = connectionStatus === "connected"
 
     return (
         <div className="flex flex-col items-start gap-2 max-md:w-full max-w-2xl mx-auto">
