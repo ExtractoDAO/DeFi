@@ -1,6 +1,6 @@
-from pymongo import MongoClient
-from chain_vission.logger.logs import CustomLogger
 from chain_vission.utils.environment import Environment
+from chain_vission.logger.logs import CustomLogger
+from pymongo import MongoClient
 
 
 class MongoDBConnectionError(Exception):
@@ -12,10 +12,10 @@ class MongoAdapter:
     _instance = None
 
     @staticmethod
-    def getInstance(env: Environment):
+    def getInstance(env: Environment, logger: CustomLogger):
         """Static access method."""
         if MongoAdapter._instance is None:
-            MongoAdapter(env)
+            MongoAdapter(env, logger)
         return MongoAdapter._instance
 
     def __init__(self, env: Environment, logger: CustomLogger):
@@ -69,4 +69,4 @@ class MongoAdapter:
         except Exception as message:
             self.logger.info("Failed to connect to MongoDB")
             print("Failed to connect to MongoDB")
-            raise MongoDBConnectionError(message)
+            raise MongoDBConnectionError(message) from message

@@ -1,4 +1,5 @@
 from chain_vission.middleware.authentication import get_authentication_token
+from chain_vission.adapter.firebase import FirebaseAdapter
 from chain_vission.utils.environment import Environment
 from chain_vission.adapter.huawei import MongoAdapter
 from chain_vission.logger.logs import CustomLogger
@@ -23,13 +24,16 @@ tags_metadata = [
 
 env = Environment()
 logger = CustomLogger(env.LOG_FILE)
-adapter_app = MongoAdapter(env, logger)
+adapter_app = (
+    FirebaseAdapter(env, logger) if env.DB == "FIRE" else MongoAdapter(env, logger)
+)
 app = FastAPI(title="Backend", version="0.5.0", redoc_url="/", openapi_tags=tags_metadata)
 app.middleware("http")(get_authentication_token)
 
 
 if env.ENV == "devnet":
     from fastapi.middleware.cors import CORSMiddleware
+
     env.JWT_SECRET_KEY = "JWT_SECRET_KEY"
     env.DOMAIN = "localhost"
     logger = CustomLogger(env.LOG_FILE, True)
@@ -50,7 +54,7 @@ if env.ENV == "devnet":
     )
 
     link = '<h1 style="color: black;">Looking for <a href="http://localhost:8000/graphql">Graphql</a>?</h1>'
-    app.description=link
+    app.description = link
 
     # TODO: remove this test POC
     id = adapter_app.add_data(

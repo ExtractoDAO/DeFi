@@ -32,6 +32,8 @@ class Environment(BaseModel):
     MONGO_IP_PORT: str
     PASSWORD: str
 
+    DB: str
+
     @validator("*", pre=True)
     def check_none(cls, value, field):
         if value is None:
