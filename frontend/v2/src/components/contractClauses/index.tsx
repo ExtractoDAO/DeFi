@@ -132,7 +132,10 @@ const ContractClauses = () => {
                         pr-3
                         w-full
                         h-[90%]
-                        
+                        flex
+                        flex-col
+                        items-start
+
                         dark:scrolldark
                      ">
                     {ContractData.map((section) => (
