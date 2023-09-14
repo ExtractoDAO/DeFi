@@ -6,11 +6,13 @@ import ContractData from "./contractData"
 
 const ContractClauses = () => {
     return (
-        <div className="flex">
+        <div className="flex
+            ">
             <div
                 className="text-gray/900
                   bg-white
-                    max-w-[312px] 
+                    max-w-[312px]
+                    max-h-[478px]
                     flex
                     items-start
                     p-6
@@ -31,7 +33,12 @@ const ContractClauses = () => {
                         flex-col
                         items-start
                         gap-4
-                        self-stretch"
+                        self-stretch
+                        scroll-smooth
+                        scroll
+                        scrolllight
+                        overflow-y-auto
+                        "
                 >
                     <h1
                         className="text-lg
@@ -41,12 +48,10 @@ const ContractClauses = () => {
                     >
                         Sumary
                     </h1>
-                    <div
-                        className="
-          
-                        "
-                    >
-                        <ol className="list-decimal">
+                   
+                        <ol className="list-decimal
+                        
+                        ">
                             {ContractData.map((section) => (
                                 <li
                                     key={section.id}
@@ -73,14 +78,13 @@ const ContractClauses = () => {
                                         {section.title}
                                     </Link>
                                 </li>
-                            ))} 
+                            ))}
                         </ol>
-                    </div>
+               
                 </div>
             </div>
             <div id="contract" className="flex
                                     w-[71%]
-                                    max-h-[603px]
                                     flex-col
                                     items-start
                                     gap-10
@@ -93,18 +97,34 @@ const ContractClauses = () => {
                                     bg-white
                                     p-6
                                     ml-6
+                                    
                                     ">
-                <h1 className="text-2xl
-                        not-italic
-                        leading-normal
-                        font-semibold
-                        text-gray/900
-                ">CONTRATO</h1>
+                <div className="flex
+                        flex-col
+                        items-start">
+                    <h1 className="text-2xl
+                            not-italic
+                            leading-normal
+                            font-semibold
+                            text-gray/900
+                ">Fat OX Contract</h1>
+                    <Link
+                        href={`https://polygonscan.com/address/`}
+                        target="_blank"
+                        className="text-xs 
+                                                font-normal 
+                                                text-gray/500
+                                                dark:text-gray/500
+                                                "
+                    >
+                        0x0b32337D35f8CAB81180b031D9A244E088d0c926
+                    </Link>
+                </div>
                 <div className="scroll-smooth
                         scroll
                         scrolllight
-                        border-0
                         overflow-y-auto 
+                        border-0
                         border-gray/500 
                         text-white 
                         h-full
