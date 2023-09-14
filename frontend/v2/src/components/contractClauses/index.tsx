@@ -6,7 +6,7 @@ import ContractData from "./contractData"
 
 const ContractClauses = () => {
     return (
-        <div className="flex
+        <div className="flex flex-row
             ">
             <div
                 className="text-gray/900
@@ -83,10 +83,11 @@ const ContractClauses = () => {
                
                 </div>
             </div>
-            <div id="contract" className="flex
-                                    w-[71%]
+            <div id="contract" className="
+                                    flex
                                     flex-col
-                                    items-start
+                                    max-h-[658px]
+                                    max-w-[958px]
                                     gap-10
                                     shrink-0
                                     rounded
@@ -100,8 +101,8 @@ const ContractClauses = () => {
                                     
                                     ">
                 <div className="flex
-                        flex-col
-                        items-start">
+                         flex-col
+                         items-start">
                     <h1 className="text-2xl
                             not-italic
                             leading-normal
@@ -127,15 +128,11 @@ const ContractClauses = () => {
                         border-0
                         border-gray/500 
                         text-white 
-                        h-full
-                        w-full
-                        flex
-                        flex-col
-                        items-start
-                        flex-[1_0_0]
                         gap-10
                         pr-3
-
+                        w-full
+                        h-[90%]
+                        
                         dark:scrolldark
                      ">
                     {ContractData.map((section) => (
