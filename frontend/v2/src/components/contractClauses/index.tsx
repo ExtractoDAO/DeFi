@@ -38,13 +38,16 @@ const ContractClauses = () => {
                         scroll
                         scrolllight
                         overflow-y-auto
-                        "
-                >
+
+                        dark:scrolldark
+                        ">
                     <h1
                         className="text-lg
                             font-semibold
                             not-italic
-                            leading-normal"
+                            leading-normal
+
+                            dark:text-gray/300"
                     >
                         Sumary
                     </h1>
@@ -73,7 +76,8 @@ const ContractClauses = () => {
                                             text-gray/500
                                     
                                             dark:hover:bg-clauses/section/hover
-                                            dark:focus:bg-clauses/section/active"
+                                            dark:focus:bg-clauses/section/active
+                                            dark:focus:text-gray/300"
                                         href={`#${section.id}`}
                                     >
                                         {section.title}
@@ -100,6 +104,8 @@ const ContractClauses = () => {
                                     p-6
                                     ml-6
                                     
+                                    dark:border-deep-gray/200
+                                    dark:bg-deep-gray/100
                                     ">
                 <div className="flex
                          flex-col
@@ -109,6 +115,8 @@ const ContractClauses = () => {
                             leading-normal
                             font-semibold
                             text-gray/900
+
+                            dark:text-white
                 ">Fat OX Contract</h1>
                     <Link
                         href={`https://polygonscan.com/address/`}
@@ -116,7 +124,6 @@ const ContractClauses = () => {
                         className="text-xs 
                            font-normal 
                            text-gray/500
-                           dark:text-gray/500
                            ">
                         0x0b32337D35f8CAB81180b031D9A244E088d0c926
                     </Link>
@@ -127,7 +134,6 @@ const ContractClauses = () => {
                         overflow-y-auto 
                         border-0
                         border-gray/500 
-                        text-white 
                         gap-10
                         pr-3
                         w-full
@@ -148,12 +154,16 @@ const ContractClauses = () => {
                                                     not-italic
                                                     font-semibold
                                                     leading-normal
+
+                                                    dark:text-white
                                                 ">{section.title}</h2>
                             <p className="items-stretch
                                     text-sm
                                     font-normal
                                     not-italic
                                     text-gray/600
+
+                                    dark:text-gray/200
                                ">{section.content}</p>
                         </div>
                     ))}
