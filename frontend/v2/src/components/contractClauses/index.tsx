@@ -80,12 +80,49 @@ const ContractClauses = () => {
                     </div>
                 </div>
             </div>
-            <div id="contract">
-                <h1>CONTRATO</h1>
-                <div className="scroll-smooth overflow-y-auto border border-gray/500 text-white h-[600px] w-[600px]">
+            <div id="contract" className="flex
+                                w-[71%]
+                                max-h-[603px]
+                                flex-col
+                                items-start
+                                gap-10
+                                shrink-0
+                                rounded
+                                border
+                                border-solid
+                                border-gray/200
+                                box-shadow
+                                bg-white
+                                p-6
+                                ml-6
+            ">
+                <h1 className="text-2xl
+                    not-italic
+                    leading-normal
+                    font-semibold
+                    text-gray/900
+                
+                ">CONTRATO</h1>
+                <div className="scroll-smooth
+                     border-0
+                     overflow-y-auto 
+                     border-gray/500 
+                     text-white 
+                     h-full
+                     w-full
+                     flex
+                     flex-col
+                     items-start
+                     flex-[1_0_0]
+                     gap-10
+                     ">
                     {ContractData.map((section) => (
                         <div key={section.id}>
-                            <h2 id={section.id}>{section.title}</h2>
+                            <h2 id={section.id} className="text-gray/900
+                                                text-xl
+                                                not-italic
+                                                font-semibold
+                                                leading-normal">{section.title}</h2>
                             <p className="text-red/500">{section.content}</p>
                         </div>
                     ))}
