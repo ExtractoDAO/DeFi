@@ -11,7 +11,7 @@ const ContractClauses = () => {
             <div
                 className="text-gray/900
                   bg-white
-                    max-w-[312px]
+                    w-[24%]
                     max-h-[478px]
                     flex
                     items-start
@@ -58,6 +58,7 @@ const ContractClauses = () => {
                                     className="flex
                                         max-w-[264px]
                                         pb-1
+                                        pr-1
                                             ">
                                     <Link
                                         className="
@@ -113,11 +114,10 @@ const ContractClauses = () => {
                         href={`https://polygonscan.com/address/`}
                         target="_blank"
                         className="text-xs 
-                                                font-normal 
-                                                text-gray/500
-                                                dark:text-gray/500
-                                                "
-                    >
+                           font-normal 
+                           text-gray/500
+                           dark:text-gray/500
+                           ">
                         0x0b32337D35f8CAB81180b031D9A244E088d0c926
                     </Link>
                 </div>
