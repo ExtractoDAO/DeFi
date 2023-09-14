@@ -1,19 +1,25 @@
 from chain_vission.utils.environment import Environment
+from chain_vission.logger.logs import CustomLogger
 from firebase_admin import credentials, db
 import firebase_admin
+
+
+class FirebaseConnectionError(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(f"Failed to connect to Firebase: {message}")
 
 
 class FirebaseAdapter:
     _instance = None
 
     @staticmethod
-    def getInstance(env: Environment):
+    def getInstance(env: Environment, logger: CustomLogger):
         """Static access method."""
         if FirebaseAdapter._instance is None:
-            FirebaseAdapter(env)
+            FirebaseAdapter(env, logger)
         return FirebaseAdapter._instance
 
-    def __init__(self, env: Environment):
+    def __init__(self, env: Environment, logger: CustomLogger):
         """Virtually private constructor."""
         if FirebaseAdapter._instance is not None:
             raise Exception("This class should be a singleton!")
@@ -22,16 +28,16 @@ class FirebaseAdapter:
             # to avoid the var env loaded when in mock tests
             if __name__ != "__main__":
                 service_account_json = FirebaseAdapter._get_service_account_json(env)
-                base_url = env.BASE_URL
-                prefix = env.ENV
-
-                self.__prefix = prefix
                 self.cred = credentials.Certificate(service_account_json)
-                self.app = firebase_admin.initialize_app(
-                    self.cred, {"databaseUrl": base_url}
-                )
-                self.base_url = base_url
+                self.base_url = env.BASE_URL
+                self.__prefix = env.ENV
+                self.logger = logger
                 self._db = db
+                self.app = firebase_admin.initialize_app(
+                    self.cred, {"databaseUrl": self.base_url}
+                )
+
+                self.test_connection()
 
     @staticmethod
     def _get_service_account_json(env: Environment) -> dict:
@@ -77,3 +83,16 @@ class FirebaseAdapter:
     def delete_data(self, route):
         ref = self._get_reference(route)
         ref.delete()
+
+    def test_connection(self):
+        try:
+            # Get the root node or some specific node that you know always exists.
+            # If this node doesn't exist, replace '' with a node that does.
+            ref = self._get_reference(self.__prefix)
+            ref.get()
+            self.logger.info("Connected successfully to Firebase.")
+            print("Connected successfully to Firebase.")
+        except Exception as message:
+            self.logger.info("Failed to connect to Firebase")
+            print("Failed to connect to Firebase")
+            raise FirebaseConnectionError(message) from message

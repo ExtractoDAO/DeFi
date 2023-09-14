@@ -21,12 +21,18 @@ class Environment(BaseModel):
     AUTH_URI: str
     TYPE: str
 
+    SIWE_STATEMENT: str
     JWT_SECRET_KEY: str
     SIWE_VERSION: str
     CHAIN_ID: str
     LOG_FILE: str
     DOMAIN: str
     ENV: str
+
+    MONGO_IP_PORT: str
+    PASSWORD: str
+
+    DB: str
 
     @validator("*", pre=True)
     def check_none(cls, value, field):
