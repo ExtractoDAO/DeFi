@@ -36,7 +36,7 @@ def validate_siwe_message(siwe_msg: SiweMessage) -> Optional[str]:
     if (
         siwe_msg.domain != env.DOMAIN
         or siwe_msg.chain_id != int(env.CHAIN_ID)
-        or siwe_msg.statement != env.SIGNIN_MESSAGE
+        or siwe_msg.statement != env.SIWE_STATEMENT
         or siwe_msg.version != env.SIWE_VERSION
     ):
         return "Authentication attempt rejected: Invalid Message"
