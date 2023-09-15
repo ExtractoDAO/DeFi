@@ -3,6 +3,7 @@
 import Link from "next/link"
 import React from "react"
 import ContractData from "./contractData"
+import DropDown from "../dropDown"
 
 const ContractClauses = () => {
     return (
@@ -10,7 +11,7 @@ const ContractClauses = () => {
             ">
             <div
                 className="text-gray/900
-                  bg-white
+                   bg-white
                     w-[24%]
                     max-h-[478px]
                     flex
@@ -51,20 +52,20 @@ const ContractClauses = () => {
                     >
                         Sumary
                     </h1>
-                   
-                        <ol className="list-decimal
+
+                    <ol className="list-decimal
                         
                         ">
-                            {ContractData.map((section) => (
-                                <li
-                                    key={section.id}
-                                    className="flex
+                        {ContractData.map((section) => (
+                            <li
+                                key={section.id}
+                                className="flex
                                         max-w-[264px]
                                         pb-1
                                         pr-1
                                             ">
-                                    <Link
-                                        className="
+                                <Link
+                                    className="
                                             hover:bg-slate/200
                                             focus:bg-slate/100
                                             focus:text-gray/900
@@ -78,14 +79,14 @@ const ContractClauses = () => {
                                             dark:hover:bg-clauses/section/hover
                                             dark:focus:bg-clauses/section/active
                                             dark:focus:text-gray/300"
-                                        href={`#${section.id}`}
-                                    >
-                                        {section.title}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ol>
-               
+                                    href={`#${section.id}`}
+                                >
+                                    {section.title}
+                                </Link>
+                            </li>
+                        ))}
+                    </ol>
+
                 </div>
             </div>
             <div id="contract" className="
@@ -108,9 +109,12 @@ const ContractClauses = () => {
                                     dark:bg-deep-gray/100
                                     ">
                 <div className="flex
-                         flex-col
-                         items-start">
-                    <h1 className="text-2xl
+                         flex-row
+                         items-start
+                         justify-between">
+                    <div className="flex
+                             flex-col">
+                        <h1 className="text-2xl
                             not-italic
                             leading-normal
                             font-semibold
@@ -118,15 +122,17 @@ const ContractClauses = () => {
 
                             dark:text-white
                 ">Fat OX Contract</h1>
-                    <Link
-                        href={`https://polygonscan.com/address/`}
-                        target="_blank"
-                        className="text-xs 
+                        <Link
+                            href={`https://polygonscan.com/address/`}
+                            target="_blank"
+                            className="text-xs 
                            font-normal 
                            text-gray/500
                            ">
-                        0x0b32337D35f8CAB81180b031D9A244E088d0c926
-                    </Link>
+                            0x0b32337D35f8CAB81180b031D9A244E088d0c926
+                        </Link>
+                    </div>
+                    <DropDown/>
                 </div>
                 <div className="scroll-smooth
                         scroll
