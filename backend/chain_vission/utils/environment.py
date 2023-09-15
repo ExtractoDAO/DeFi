@@ -29,9 +29,7 @@ class Environment(BaseModel):
     DOMAIN: str
     ENV: str
 
-    MONGO_IP_PORT: str
-    PASSWORD: str
-
+    MONGO_CONNECT_STRING: str
     DB: str
 
     @validator("*", pre=True)

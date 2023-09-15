@@ -32,8 +32,7 @@ class MongoAdapter:
 
     def _connect(self, env: Environment):
         """Establish a connection to the MongoDB server."""
-        connection_string = f"mongodb://rwuser:{env.PASSWORD}@{env.MONGO_IP_PORT}/{env.ENV}?authSource=admin&replicaSet=replica"
-        self.client = MongoClient(connection_string, connectTimeoutMS=5000)
+        self.client = MongoClient(env.MONGO_CONNECT_STRING, connectTimeoutMS=5000)
         self.db = self.client[env.ENV]
 
     def get_data(self, collection_name: str, query: dict = {}) -> dict:
