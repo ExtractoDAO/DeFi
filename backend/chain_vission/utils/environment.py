@@ -5,7 +5,8 @@ import os
 
 class MissingEnvironmentVarError(Exception):
     def __init__(self, name: str) -> None:
-        super().__init__(f"Env var: '{name}' not found!\nAPPLICATION NEED THIS FOR START")
+        super().__init__(
+            f"Env var: '{name}' not found!\nAPPLICATION NEED THIS FOR START")
 
 
 class Environment(BaseModel):
@@ -20,7 +21,6 @@ class Environment(BaseModel):
     BASE_URL: str
     AUTH_URI: str
     TYPE: str
-
     SIWE_STATEMENT: str
     JWT_SECRET_KEY: str
     SIWE_VERSION: str

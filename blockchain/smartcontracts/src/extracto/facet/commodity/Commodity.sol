@@ -9,6 +9,7 @@ import {Math} from "./Commodity.Math.sol";
 
 contract Commodity is Math {
     event TokensMinted(uint256 amount, address investor);
+    event FutureCreated(address future, address owner, uint256 amount, uint256 locktime);
 
     /*//////////////////////////////////////////////////////////////
                                CONSTRUCTOR
@@ -95,6 +96,8 @@ contract Commodity is Math {
         lib.drawer.push(future);
 
         validatePayment(tokenAddress, amount);
+
+        emit FutureCreated(future, msg.sender, kg, lib.locktime);
     }
 
     /**

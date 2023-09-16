@@ -1,3 +1,5 @@
+import { getItem } from "../storage"
+
 interface Contract {
     txId: string
     address: string
@@ -8,19 +10,22 @@ interface Contract {
 }
 
 export class GraphQL {
+    TOKEN: string
+
+    constructor() {
+        this.TOKEN = getItem("TOKEN") || ""
+    }
+
     private async fetchData(
         endpoint: string,
         method: "GET" | "POST" = "GET",
-        body?: any,
-        token?: string
+        body?: any
     ): Promise<any> {
         const headers: any = {
             "Content-Type": "application/json"
         }
 
-        if (token) {
-            headers.authorization = token
-        }
+        headers.authorization = this.TOKEN
 
         return await fetch(endpoint, {
             method,
@@ -34,14 +39,12 @@ export class GraphQL {
     }
 
     async addContract(
-        contract: Contract,
-        token: string
+        contract: Contract
     ): Promise<{ sucess: boolean; message: string }> {
         return this.fetchData(
             "/api/graphql/write/addContract",
             "POST",
-            contract,
-            token
+            contract
         )
     }
 
