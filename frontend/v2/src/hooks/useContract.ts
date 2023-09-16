@@ -1,13 +1,8 @@
 import {
-    AbiFunctionArguments,
-    AbiFunctionInputs,
-    Contract,
     ContractAbi,
-    ContractCodeStatus,
     ContractName,
     FunctionNamesWithInputs,
-    FunctionNamesWithoutInputs,
-    contracts
+    FunctionNamesWithoutInputs
 } from "@/utils/contract"
 import useDeployedContractInfo from "./useDeployedContractInfo"
 
@@ -16,12 +11,13 @@ import { useEffect, useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
 
 import abiDecoder from "abi-decoder"
+import { useConnectionStatus } from "@thirdweb-dev/react"
 
 const useContract = <TContractName extends ContractName>(
     contractName: TContractName
 ) => {
-    const { data: contractData, isLoading: isLoadingContractData } =
-        useDeployedContractInfo(contractName)
+    const connectStatus = useConnectionStatus()
+    const { data: contractData } = useDeployedContractInfo(contractName)
     const [hash, setHash] = useState("")
     const [contract, setContract] = useState<ethers.Contract>()
 
@@ -46,9 +42,8 @@ const useContract = <TContractName extends ContractName>(
         >
     ): Promise<ethers.ContractTransaction | any | undefined> => {
         try {
-            if (!contract) return
+            if (!contract || connectStatus !== "connected") return
             const response = await contract[functionName]()
-
             return response
         } catch (error) {
             const message = getParsedEthersError(error)
@@ -117,7 +112,8 @@ const useContract = <TContractName extends ContractName>(
                 newEvents.push(log)
             }
 
-            console.log(newEvents)
+            const response = newEvents[0].args
+            return response
         } catch (err) {
             console.log("ERROR in decode ", err)
         }

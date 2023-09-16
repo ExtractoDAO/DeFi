@@ -2,11 +2,11 @@ import { useState, useEffect } from "react"
 import useContract from "@/hooks/useContract"
 import useBalance from "@/hooks/useBalance"
 
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 
 import { toast } from "react-toastify"
 import { Token, tokens } from "@/components/tokenSelector"
-import { useAddress } from "@thirdweb-dev/react"
+import { useAddress, useConnectionStatus } from "@thirdweb-dev/react"
 
 import { Backend } from "@/services/backend/backend"
 import env from "@/services/environment"
@@ -15,6 +15,7 @@ import AxiosService from "@/services/axios"
 const backend = new Backend(env, new AxiosService(env))
 
 const useContractBuy = () => {
+    const connectionStatus = useConnectionStatus()
     const { read, write, contractAddress, hash, decodeContractDeployedData } =
         useContract("Commodity")
     const [modal, setModal] = useState("")
@@ -38,7 +39,7 @@ const useContractBuy = () => {
 
     useEffect(() => {
         async function getBalance() {
-            if (address) {
+            if (connectionStatus === "connected" && address) {
                 const res = await fetchBalance(address)
                 const decimals = await readToken("decimals")
 
@@ -50,22 +51,27 @@ const useContractBuy = () => {
         }
 
         getBalance()
-    }, [address, selectedToken, readToken])
+    }, [address, selectedToken, readToken, connectionStatus])
 
     useEffect(() => {
         async function getBuyPrice() {
+            if (connectionStatus !== "connected") {
+                return
+            }
             const res = await read("getBuyPrice")
             setPrice(Number(res) / 10 ** 18)
         }
 
         getBuyPrice()
-    }, [address, read])
+    }, [connectionStatus, read])
 
     function updateAmount(numberValue: number) {
+        if (connectionStatus !== "connected") return
         setKgAmount((numberValue / price).toFixed(2).toString())
     }
 
     function updateValue(numberAmount: number) {
+        if (connectionStatus !== "connected") return
         setUsdValue(Math.ceil(numberAmount * price).toString())
     }
 
@@ -75,19 +81,15 @@ const useContractBuy = () => {
             return
         }
         setModal("approving")
-
         const decimals = await readToken("decimals")
-
         const formattedValue = ethers.utils.parseUnits(
             usdValue,
             Number(decimals)
         )
 
         if (!contractAddress || !formattedValue) return
-
         try {
             await tokenInteraction("approve", contractAddress, formattedValue)
-
             setModal("confirm")
         } catch (e) {
             toast.error(`Failed to approve: ${e}`)
@@ -117,12 +119,21 @@ const useContractBuy = () => {
                 return
             }
 
-            // backend.graphql.addContract({
-            //     address
-            // })
+            const decodedResponse: {
+                future: string
+                owner: string
+                amount: BigNumber
+                locktime: BigNumber
+            } = await decodeContractDeployedData(response)
 
-            const decodedResponse = await decodeContractDeployedData(response)
-            console.log("RESPONSE ", decodedResponse)
+            backend.graphql.addContract({
+                address: decodedResponse.future,
+                commodityAmount: Number(decodedResponse.amount),
+                owner: decodedResponse.owner,
+                locktime: Number(decodedResponse.locktime),
+                price: 0,
+                txId: response.hash
+            })
 
             setModal("success")
         } catch (e: any) {
