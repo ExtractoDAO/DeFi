@@ -1,6 +1,7 @@
 import { SiweMessage } from "siwe"
 import AxiosService from "../axios"
 import { Environment } from "../environment"
+import { toast } from "react-toastify"
 
 export class Login {
     private readonly SIGNIN_MESSAGE: string
@@ -50,6 +51,11 @@ export class Login {
             )
 
             const data = await response.json()
+            if (response.status !== 201) {
+                toast(data.details.detail, {
+                    type: "error"
+                })
+            }
 
             return {
                 token: data.token,
