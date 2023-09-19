@@ -3,9 +3,16 @@
 import Link from "next/link"
 import React from "react"
 import ContractData from "./contractData"
-import DropDown from "../dropDown"
+import Dropdown from "../dropDown"
+
 
 const ContractClauses = () => {
+    const DropdownOptions = [
+        { name: 'Alias for contract', link: '#' },
+        { name: 'Withdraw', link: '#' },
+        { name: 'Download in PDF', link: '#' },
+      ];
+
     return (
         <div className="flex flex-row
             ">
@@ -132,7 +139,7 @@ const ContractClauses = () => {
                             0x0b32337D35f8CAB81180b031D9A244E088d0c926
                         </Link>
                     </div>
-                    <DropDown/>
+                    <Dropdown options={DropdownOptions}/>
                 </div>
                 <div className="scroll-smooth
                         scroll
