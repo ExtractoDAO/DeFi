@@ -1,12 +1,19 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+import { useState } from 'react';
+import Link from 'next/link';
+interface DropdownOption {
+  name: string;
+  link: string;
 }
 
-export default function DropDown() {
+interface DropdownProps {
+  options: DropdownOption[];
+}
+
+export default function Dropdown({ options }: DropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -25,61 +32,19 @@ export default function DropDown() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg border border-gray/200">
-          <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray/100 text-gray/400' : 'text-gray/400',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  More options
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray/100 text-gray/900' : 'text-gray/700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  Alias for contract
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray/100 text-gray/900' : 'text-gray/700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  Withdraw
-                </a>
-              )}
-            </Menu.Item>
-            <form method="POST" action="#">
-              <Menu.Item>
+        <div className="py-1">
+            {options.map((option, index) => (
+              <Menu.Item key={index}>
                 {({ active }) => (
-                  <button
-                    type="submit"
-                    className={classNames(
-                      active ? 'bg-gray/100 text-gray/900' : 'text-gray/700',
-                      'block w-full px-4 py-2 text-left text-sm'
-                    )}
+                  <Link
+                    href={option.link}
+                    className={`block px-4 py-2 text-sm ${active ? 'bg-gray/100 text-gray/400' : 'text-gray/400'}`}
                   >
-                    Download in PDF
-                  </button>
+                    {option.name}
+                  </Link>
                 )}
               </Menu.Item>
-            </form>
+            ))}
           </div>
         </Menu.Items>
       </Transition>
