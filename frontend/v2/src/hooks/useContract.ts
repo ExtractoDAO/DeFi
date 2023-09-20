@@ -10,8 +10,7 @@ import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
 
-import abiDecoder from "abi-decoder"
-import { useConnectionStatus } from "@thirdweb-dev/react"
+import { getBlockNumber, useConnectionStatus } from "@thirdweb-dev/react"
 
 const useContract = <TContractName extends ContractName>(
     contractName: TContractName
@@ -68,13 +67,6 @@ const useContract = <TContractName extends ContractName>(
             const message = getParsedEthersError(error)
             throw new Error(`${message}`)
         }
-    }
-
-    const decodeTransactionData = (data: string) => {
-        if (!contractData) return
-        abiDecoder.addABI(contractData.abi)
-        const decodedData = abiDecoder.decodeMethod(data)
-        return decodedData
     }
 
     const decodeContractDeployedData = async (
