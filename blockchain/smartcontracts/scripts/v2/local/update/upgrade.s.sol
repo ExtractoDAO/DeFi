@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "../../../lib/forge-std/src/Script.sol";
-import {Facet, Action} from "../../../src/extracto/diamond/interfaces/Types.sol";
-import {Diamond} from "../../../src/extracto/diamond/Diamond.sol";
+import "../../../../lib/forge-std/src/Script.sol";
+import {Facet, Action} from "../../../../src/extracto/diamond/interfaces/Types.sol";
+import {Diamond} from "../../../../src/extracto/diamond/Diamond.sol";
 import {NewContract} from "./NewContract.sol";
 
 abstract contract Data is Script {
