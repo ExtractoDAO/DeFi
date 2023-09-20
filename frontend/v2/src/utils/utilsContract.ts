@@ -1,3 +1,15 @@
+const sumsPredictYield = async (percent: number, price: number, kg: number): 
+Promise<{ 
+    resultDollar: number; 
+    resultCows: number 
+}> => {
+    const resultDollar = kg * price;
+    const resultCows = resultDollar * 10;
+    const increasedResultDollar = resultDollar * (1 + (percent / 100));
+    const increasedResultCows = resultCows * (1 + (percent / 100));
+    return { resultDollar: increasedResultDollar, resultCows: increasedResultCows };
+}
+
 const getParsedEthersError = (e: any): string => {
     let message =
         e.data && e.data.message
