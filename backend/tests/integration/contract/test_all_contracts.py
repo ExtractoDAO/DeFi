@@ -24,6 +24,7 @@ class TestDomain(unittest.TestCase):
         assert "price" in contracts["data"]["allContracts"]["items"][0]
         assert "burn" in contracts["data"]["allContracts"]["items"][0]
         assert "kg" in contracts["data"]["allContracts"]["items"][0]
+        assert "block" in contracts["data"]["allContracts"]["items"][0]
         assert len(contracts["data"]["allContracts"]["items"]) == 18
 
     @patch.object(FirebaseAdapter, "get_data", return_value=raw_data)

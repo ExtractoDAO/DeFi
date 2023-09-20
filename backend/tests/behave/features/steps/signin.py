@@ -9,7 +9,7 @@ import json
 
 ADDRESS = "behavetests"
 MUTATION = """
-    mutation TestMutation($tx_id: String!, $address: String!, $commodityAmount: Float!, $locktime: Int!, $owner: String!, $price: Int!) {
+    mutation TestMutation($tx_id: String!, $address: String!, $commodityAmount: Float!, $locktime: Int!, $owner: String!, $price: Int!, $block: Int!) {
         addContract(
             commodityAmount: $commodityAmount
             locktime: $locktime
@@ -17,6 +17,7 @@ MUTATION = """
             tx_id: $tx_id
             owner: $owner
             price: $price
+            block: $block
         ) {
             message
             success
@@ -33,6 +34,7 @@ QUERY = """
             owner
             price
             tx_id
+            block
         }
     }
 """
@@ -102,6 +104,7 @@ def user_buys_a_contract(context, address: str):
         "locktime": 3600,
         "owner": address,
         "price": 101,
+        "block": 22
     }
 
     response = context.client.post(

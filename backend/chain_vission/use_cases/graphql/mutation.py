@@ -23,6 +23,7 @@ class Mutation:
         owner: str,
         price: int,
         info: Info,
+        block: int
     ) -> Response:
         if (token := info.context["request"].state.token) is None:
             message = "Authentication attempt rejected: header not found"
@@ -30,14 +31,16 @@ class Mutation:
         if (message := verify_token(token)) is not None:
             return Response(message=message, success=False)
 
+
         contract = Contract(
-            status=ContractStatus.PENDING.value,
+            status=ContractStatus.MINED.value,
             commodity_amount=commodity_amount,
             locktime=locktime,
             address=address,
             tx_id=txId,
             owner=owner,
             price=price,
+            block=block
         )
         adapter_app.set_data(f"/contracts/{contract.address}", contract.to_dict)
         return Response(message="", success=True)
