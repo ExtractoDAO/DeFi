@@ -10,6 +10,7 @@ export const ADD_CONTRACT_MUTATION = gql`
         $locktime: Int!
         $owner: String!
         $price: Int!
+        $block: Int!
     ) {
         addContract(
             txId: $txId
@@ -18,6 +19,7 @@ export const ADD_CONTRACT_MUTATION = gql`
             locktime: $locktime
             owner: $owner
             price: $price
+            block: $block
         ) {
             success
             message
@@ -32,6 +34,7 @@ export interface Contract {
     locktime: number
     owner: string
     price: number
+    block: number
 }
 
 export default async function handler(

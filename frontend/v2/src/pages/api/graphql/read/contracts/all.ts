@@ -13,6 +13,7 @@ export const ALL_CONTRACTS_QUERY = gql`
                 price
                 status
                 txId
+                block
             }
             totalItemsCount
         }
@@ -34,6 +35,7 @@ export default async function allContractsHandler(
                 price: number
                 status: string
                 txId: string
+                block: number
             }>
             totalItemsCount: number
         }

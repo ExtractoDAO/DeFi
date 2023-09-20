@@ -11,6 +11,7 @@ import { useAddress, useConnectionStatus } from "@thirdweb-dev/react"
 import { Backend } from "@/services/backend/backend"
 import env from "@/services/environment"
 import AxiosService from "@/services/axios"
+import useNetwork from "./useNetwork"
 
 const backend = new Backend(env, new AxiosService(env))
 
@@ -18,6 +19,8 @@ const useContractBuy = () => {
     const connectionStatus = useConnectionStatus()
     const { read, write, contractAddress, hash, decodeContractDeployedData } =
         useContract("Commodity")
+    const { getCurrentBlock } = useNetwork()
+
     const [modal, setModal] = useState("")
     const [price, setPrice] = useState<any>(0)
     const address = useAddress() as `0x${string}`
@@ -126,13 +129,16 @@ const useContractBuy = () => {
                 locktime: BigNumber
             } = await decodeContractDeployedData(response)
 
+            const block = await getCurrentBlock()
+
             backend.graphql.addContract({
                 address: decodedResponse.future,
                 commodityAmount: Number(decodedResponse.amount),
                 owner: decodedResponse.owner,
                 locktime: Number(decodedResponse.locktime),
                 price: 0,
-                txId: response.hash
+                txId: response.hash,
+                block: block
             })
 
             setModal("success")
