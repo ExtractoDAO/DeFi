@@ -49,6 +49,7 @@ export default function Navbar() {
                 "leading-6",
                 "dark:bg-deep-gray/200"
             )}
+            switchToActiveChain
             detailsBtn={() => {
                 return (
                     <button
