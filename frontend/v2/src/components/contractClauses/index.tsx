@@ -31,6 +31,8 @@ const ContractClauses = () => {
                     border
                     border-solid
                     border-gray/200
+                    max-lg:hidden
+                    
 
                     dark:border-deep-gray/200
                     dark:bg-deep-gray/100
@@ -96,25 +98,30 @@ const ContractClauses = () => {
 
                 </div>
             </div>
-            <div id="contract" className="
-                                    flex
-                                    flex-col
-                                    max-h-[658px]
-                                    max-w-[958px]
-                                    gap-10
-                                    shrink-0
-                                    rounded
-                                    border
-                                    border-solid
-                                    border-gray/200
-                                    box-shadow
-                                    bg-white
-                                    p-6
-                                    ml-6
+            <div id="contract" 
+                 className="
+                     flex
+                     flex-col
+                     max-lg:w-[98%]
+                     max-[1405px]:h-[589px]
+                     max-md:max-h-[550px]
+
+                     w-[74%]
+                     gap-10
+                     shrink-0
+                     rounded
+                     border
+                     border-solid
+                     border-gray/200
+                     box-shadow
+                     bg-white
+                     p-6
+                     ml-6
+                     max-lg:ml-2
                                     
-                                    dark:border-deep-gray/200
-                                    dark:bg-deep-gray/100
-                                    ">
+                     dark:border-deep-gray/200
+                     dark:bg-deep-gray/100
+                     ">
                 <div className="flex
                          flex-row
                          items-start
@@ -135,6 +142,7 @@ const ContractClauses = () => {
                             className="text-xs 
                            font-normal 
                            text-gray/500
+                           max-sm:max-w-[120px]
                            ">
                             0x0b32337D35f8CAB81180b031D9A244E088d0c926
                         </Link>
