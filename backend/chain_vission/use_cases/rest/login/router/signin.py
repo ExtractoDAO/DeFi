@@ -83,8 +83,6 @@ def generate_jwt_token(siwe_msg: SiweMessage, signin: SignIn) -> (str, int):
 
 
 def validation_request(siwe_msg: SiweMessage, signature: str) -> Optional[str]:
-    if cache_memory.token:
-        return "User already logged in"
     if (error_message := validate_siwe_message(siwe_msg)):
         return error_message
     if (error_message := validate_nonce(siwe_msg.nonce)):

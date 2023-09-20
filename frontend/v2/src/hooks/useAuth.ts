@@ -2,7 +2,12 @@ import { useEffect, useState } from "react"
 
 import { usePathname } from "next/navigation"
 
-import { useAddress, useConnectionStatus, useSDK } from "@thirdweb-dev/react"
+import {
+    useAddress,
+    useConnectionStatus,
+    useSDK,
+    useDisconnect
+} from "@thirdweb-dev/react"
 
 import { deleteItem, getItem, setItem } from "@/services/storage"
 
@@ -28,6 +33,7 @@ const useAuth = () => {
     const address = useAddress()
     const pathname = usePathname()
     const pageTitle = pathnames[pathname || "/"]
+    const disconnect = useDisconnect()
     const connectionStatus = useConnectionStatus()
     const [isConnected, setIsConnected] = useState(false)
     const [modalSign, setModalSign] = useState(false)
@@ -53,11 +59,13 @@ const useAuth = () => {
 
     useEffect(() => {
         const newState = connectionStatus === "connected"
-
         const tokenExp = getItem("TOKEN_EXPIRES_AT")
+
         if (tokenExp) {
             if (hasExpired(Number(tokenExp))) {
-                console.log("ERASE TOKEN")
+                signout()
+                deleteItem("TOKEN")
+                deleteItem("TOKEN_EXPIRES_AT")
             }
         }
 

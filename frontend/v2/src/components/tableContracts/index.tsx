@@ -1,22 +1,81 @@
 "use client"
-import { useState } from 'react'
+import { useEffect, useState } from "react"
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline"
-import SideModal from "../sideModal";
+import SideModal from "../sideModal"
+import { Contract } from "@/pages/api/graphql/write/addContract"
+import { shortAddress } from "@/utils/mask"
+import classNames from "classnames"
 
-function TableContracts() {
-    const [sideModalOpen, setSideModalOpen] = useState(false);
+import { getBlock, getBlockNumber } from "@thirdweb-dev/sdk"
 
+import useNetwork from "@/hooks/useNetwork"
+
+interface IContractData extends Contract {
+    status: number
+}
+
+interface IProps {
+    contractList: IContractData[]
+}
+
+function TableContracts({ contractList }: IProps) {
+    const { getCurrentBlock } = useNetwork()
+    const [sideModalOpen, setSideModalOpen] = useState(false)
+    const [currentBlock, setCurrentBlock] = useState(0)
     const count = new Array(6).fill("")
 
-    const Pill = () => {
+    useEffect(() => {
+        async function getBlock() {
+            const res = await getCurrentBlock()
+            setCurrentBlock(res)
+        }
+
+        getBlock()
+    }, [])
+
+    const Pill = ({ status }: { status: number }) => {
+        const stats: any = {
+            PENDING: {
+                value: "Pending",
+                bgColor: "bg-brand/primary/100",
+                color: "text-brand/primary/500"
+            },
+            MINED: {
+                value: "Active",
+                bgColor: "bg-green/100",
+                color: "text-green/800"
+            },
+            BRUNED: {
+                value: "Burned",
+                bgColor: "bg-green/100",
+                color: "text-green/800"
+            }
+        }
+
         return (
-            <span className="px-2 text-Default/green/800 bg-Default/green/100 rounded-xl font-medium text-sm">
-                Active
+            <span
+                className={`px-2 rounded-xl font-medium text-sm ${stats[status]?.bgColor} ${stats[status]?.color}`}
+            >
+                {stats[status]?.value}
             </span>
         )
     }
 
-    const Row = () => {
+    const Row = ({ item }: { item: IContractData }) => {
+        const blockTarget = item.block + item.locktime
+        const percentage = (currentBlock / blockTarget) * 100
+        const blocksLeft = blockTarget - currentBlock
+
+        const [copied, setCopied] = useState(false)
+
+        useEffect(() => {
+            if (copied) {
+                setTimeout(() => {
+                    setCopied(false)
+                }, 2 * 1000)
+            }
+        }, [copied])
+
         return (
             <tr className="bg-white dark:bg-gray/900 border-b border-Default/gray/200 dark:border-deep-gray/200">
                 <th
@@ -28,31 +87,64 @@ function TableContracts() {
                     </p>
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-gray/500">
-                            {"0x0b3237...d0c926"}
+                            {shortAddress(item?.address)}
                         </span>
-                        <button>
-                            <DocumentDuplicateIcon className="w-4 h-4 text-gray/400" />
+                        <button
+                            onClick={() => {
+                                navigator.clipboard
+                                    .writeText(item?.address)
+                                    .then(() => setCopied(true))
+                            }}
+                        >
+                            <DocumentDuplicateIcon
+                                className={classNames({
+                                    "w-4 h-4": true,
+                                    "text-gray/400": !copied,
+                                    "text-green/500": copied
+                                })}
+                            />
                         </button>
                     </div>
                 </th>
                 <td className="px-6 py-4 text-gray/500">Extract@</td>
                 <td className="px-6 py-4 text-gray/500">
-                    <p className="text-sm text-gray/900 font-medium text-center dark:text-gray/300">
-                        05-31-2024
-                    </p>
+                    <div
+                        className={classNames({
+                            "w-full": true,
+                            "h-2": true,
+                            "bg-gray/400": true,
+                            "rounded-md": true,
+                            "mb-2": true
+                        })}
+                    >
+                        <div
+                            className={classNames({
+                                "h-full": true,
+                                "rounded-md": true,
+                                "bg-brand/primary/500": true
+                            })}
+                            style={{
+                                width: `${percentage < 100 ? percentage : 100}%`
+                            }}
+                        ></div>
+                    </div>
+
                     <p className="text-sm text-gray/500 text-center">
-                        approximately 24 blocks
+                        {blocksLeft > 0 ? blocksLeft : 0} blocks left
                     </p>
                 </td>
-                <td className="px-6 py-4 text-gray/500">2.8 Kg</td>
+                <td className="px-6 py-4 text-gray/500">
+                    {item.commodityAmount / 10 ** 20} Kg
+                </td>
                 <td className="px-6 py-4 text-gray/500">0.58 (0.0 USD)</td>
                 <td className="px-6 py-4 text-gray/500">
-                    <Pill />
+                    <Pill status={item.status} />
                 </td>
                 <td className="px-6 py-4 text-gray/500">
-                    <button 
-                    onClick={() => setSideModalOpen(true)}
-                    className="text-brand/secondary/500 font-medium text-sm dark:text-brand/primary/500">
+                    <button
+                        onClick={() => setSideModalOpen(true)}
+                        className="text-brand/secondary/500 font-medium text-sm dark:text-brand/primary/500"
+                    >
                         View
                     </button>
                 </td>
@@ -72,7 +164,7 @@ function TableContracts() {
                             type
                         </th>
                         <th scope="col" className="px-6 py-3 text-center">
-                            Expiration date
+                            Expiration
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Weight
@@ -87,21 +179,23 @@ function TableContracts() {
                     </tr>
                 </thead>
                 <tbody>
-                    {count.map((e, i) => {
-                        return <Row key={i} />
+                    {contractList.map((e, i) => {
+                        return <Row key={i} item={e} />
                     })}
                 </tbody>
             </table>
             <SideModal
-            contractType='Extract@'
-            contract='ExtractoDAO is a privately owned Decentralized Autonomous Organization, sometimes called Decentralized Autonomous Corporation, owner of shared purpose blockchain and manager of a collective smart contract by DAO on Drawer technology that stores several individual smart contracts under the responsibility of each participant that is the contract auditor and issuer of the stablecon COW; And for the purposes of this document represented by the owner Joel Almeida creator, holder, issuer and holder In compliance with all laws of this country. ExtractoDAO It is virtually located in the Domain www.extractodao.com. ExtractoDAO is the rightful issuer of the ExtractoDAO Bull XBLL governance token contract 0x8110706a399D457D67b7A2B7636482b4bfCeBB21, issuer and keeper of the BULL tokens (XBLL)
+                contractType="Extract@"
+                contract="ExtractoDAO is a privately owned Decentralized Autonomous Organization, sometimes called Decentralized Autonomous Corporation, owner of shared purpose blockchain and manager of a collective smart contract by DAO on Drawer technology that stores several individual smart contracts under the responsibility of each participant that is the contract auditor and issuer of the stablecon COW; And for the purposes of this document represented by the owner Joel Almeida creator, holder, issuer and holder In compliance with all laws of this country. ExtractoDAO It is virtually located in the Domain www.extractodao.com. ExtractoDAO is the rightful issuer of the ExtractoDAO Bull XBLL governance token contract 0x8110706a399D457D67b7A2B7636482b4bfCeBB21, issuer and keeper of the BULL tokens (XBLL)
 
             On the other hand, the holder of this smart contract is the legal administrator of the private keys and is fully responsible for managing the funds and generating the COW that will be private and sent back to the original wallet.
-            Smart contract address: 0x0b32337D35f8CAB81180b031D9A244E088d0c926' 
-            contractTitle='contractTitle' 
-            title='My Contract 01' 
-            contractAddress='0x0b32337D35f8CAB81180b031D9A244E088d0c926'  
-            onClose={() => setSideModalOpen(false)} open={sideModalOpen} />
+            Smart contract address: 0x0b32337D35f8CAB81180b031D9A244E088d0c926"
+                contractTitle="contractTitle"
+                title="My Contract 01"
+                contractAddress="0x0b32337D35f8CAB81180b031D9A244E088d0c926"
+                onClose={() => setSideModalOpen(false)}
+                open={sideModalOpen}
+            />
         </div>
     )
 }

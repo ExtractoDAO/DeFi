@@ -7,6 +7,7 @@ interface Contract {
     locktime: number
     owner: string
     price: number
+    block: number
 }
 
 export class GraphQL {

@@ -22,6 +22,7 @@ class Contract:
         price: Int!
         status: Int!
         commodityAmmount: Decimal!
+        block: Int!
     }
     """
 
@@ -32,6 +33,7 @@ class Contract:
     owner: str
     price: int
     tx_id: str
+    block: int
 
     @staticmethod
     def from_dict(contract: dict) -> Optional["Contract"]:
@@ -44,6 +46,7 @@ class Contract:
                 tx_id=contract["address"],
                 price=contract["price"],
                 owner=contract["owner"],
+                block=contract["block"]
             )
 
         message = f"Expected dict with: locktime, address, owner, price, burn and kg, but got {list(contract.keys())}"
@@ -60,6 +63,7 @@ class Contract:
             "owner": self.owner,
             "price": self.price,
             "txId": self.tx_id,
+            "block": self.block
         }
 
 
