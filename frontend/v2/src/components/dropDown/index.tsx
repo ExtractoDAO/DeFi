@@ -17,7 +17,23 @@ export default function Dropdown({ options }: DropdownProps) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md border bg-white px-3 py-2 text-sm font-semibold text-gray/900 shadow-sm border-gray/800">
+        <Menu.Button className="inline-flex 
+                         w-full 
+                         justify-center 
+                         gap-x-1.5 
+                         rounded-md 
+                         border 
+                         bg-white 
+                         px-3 
+                         py-2 
+                         text-sm 
+                         font-semibold 
+                         text-gray/900 
+                         shadow-sm 
+                         border-gray/800
+                         
+                         dark:bg-deep-gray/100
+                         dark:border-gray/350">
           <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -31,14 +47,35 @@ export default function Dropdown({ options }: DropdownProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg border border-gray/200">
+        <Menu.Items className="absolute 
+                        right-0 
+                        z-10 
+                        mt-2 
+                        w-56 
+                        origin-top-right 
+                        rounded-md 
+                        bg-white 
+                        shadow-lg 
+                        border 
+                        border-gray/200
+                        
+                        dark:border-deep-gray/200
+                        dark:bg-deep-gray/100">
         <div className="py-1">
             {options.map((option, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
                   <Link
                     href={option.link}
-                    className={`block px-4 py-2 text-sm ${active ? 'bg-gray/100 text-gray/400' : 'text-gray/400'}`}
+                    className={`block 
+                        p-[6px]
+                        gap-2
+                        text-sm 
+                        not-italic 
+                        font-medium 
+                        rounded-md 
+                        mx-2 
+                        ${active ? 'bg-slate/200 dark:bg-brand/primary/500 text-deep-gray/100 ' : 'text-gray/700 dark:text-white'}`}
                   >
                     {option.name}
                   </Link>
