@@ -3,15 +3,20 @@
 import Link from "next/link"
 import React from "react"
 import ContractData from "./contractData"
-import Dropdown from "../dropDown"
+import Dropdown from "@/components/dropDown"
 
+interface ClausesProps {
+    params: {
+        address: string;
+    }
+}
 
-const ContractClauses = () => {
+export default function ContractClauses({ params }: ClausesProps) {
     const DropdownOptions = [
         { name: 'Alias for contract', link: '#' },
         { name: 'Withdraw', link: '#' },
         { name: 'Download in PDF', link: '#' },
-      ];
+    ];
 
     return (
         <div className="flex flex-row
@@ -98,8 +103,8 @@ const ContractClauses = () => {
 
                 </div>
             </div>
-            <div id="contract" 
-                 className="
+            <div id="contract"
+                className="
                      flex
                      flex-col
                      max-lg:w-[98%]
@@ -146,7 +151,7 @@ const ContractClauses = () => {
                             0x0b32337D35f8CAB81180b031D9A244E088d0c926
                         </Link>
                     </div>
-                    <Dropdown options={DropdownOptions}/>
+                    <Dropdown options={DropdownOptions} />
                 </div>
                 <div className="scroll-smooth
                         scroll
@@ -192,5 +197,3 @@ const ContractClauses = () => {
         </div>
     )
 }
-
-export default ContractClauses
