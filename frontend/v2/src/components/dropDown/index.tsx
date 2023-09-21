@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react';
 import Link from 'next/link';
 interface DropdownOption {
@@ -33,8 +33,8 @@ export default function Dropdown({ options }: DropdownProps) {
                          border-gray/800
                          
                          dark:bg-deep-gray/100
-                         dark:border-gray/350">
-          <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                         dark:border-deep-gray/200">
+          <EllipsisVerticalIcon className="h-5 w-5 text-gray/900 dark:text-gray/300" aria-hidden="true" />
         </Menu.Button>
       </div>
 
