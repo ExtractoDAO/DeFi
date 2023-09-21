@@ -7,7 +7,7 @@ forge script scripts/v2/local/deploy.s.sol:Local \
 
 python deploy.py
 
-forge script scripts/v2/local/buy.s.sol:Buy \
+forge script scripts/v2/local/validation/buy.s.sol:Buy \
     --rpc-url http://127.0.0.1:8545 \
     --broadcast \
     --verbosity
