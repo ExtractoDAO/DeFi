@@ -103,9 +103,8 @@ const ContractClauses = () => {
                      flex
                      flex-col
                      max-lg:w-[98%]
-                     max-[1405px]:h-[589px]
+                     h-[589px]
                      max-md:max-h-[550px]
-
                      w-[74%]
                      gap-10
                      shrink-0
