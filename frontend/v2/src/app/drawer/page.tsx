@@ -8,8 +8,6 @@ import useDrawer from "@/hooks/useDrawer"
 export default function Page() {
     const { drawer } = useDrawer()
 
-    console.log(drawer)
-
     return (
         <div>
             <div className="row-auto">

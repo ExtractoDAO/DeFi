@@ -9,6 +9,7 @@ import classNames from "classnames"
 import { getBlock, getBlockNumber } from "@thirdweb-dev/sdk"
 
 import useNetwork from "@/hooks/useNetwork"
+import useContract from "@/hooks/useContract"
 
 interface IContractData extends Contract {
     status: number
@@ -23,6 +24,8 @@ function TableContracts({ contractList }: IProps) {
     const [sideModalOpen, setSideModalOpen] = useState(false)
     const [currentBlock, setCurrentBlock] = useState(0)
     const count = new Array(6).fill("")
+
+    const { read, contractAddress } = useContract("Future")
 
     useEffect(() => {
         async function getBlock() {
@@ -67,6 +70,16 @@ function TableContracts({ contractList }: IProps) {
         const blocksLeft = blockTarget - currentBlock
 
         const [copied, setCopied] = useState(false)
+
+        async function getTeste() {
+            const res = await read("getKg")
+
+            console.log(contractAddress)
+        }
+
+        useEffect(() => {
+            getTeste()
+        }, [])
 
         useEffect(() => {
             if (copied) {
