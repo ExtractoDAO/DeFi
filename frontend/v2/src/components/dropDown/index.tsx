@@ -10,9 +10,10 @@ interface DropdownOption {
 
 interface DropdownProps {
   options: DropdownOption[];
+  titleMenu: string;
 }
 
-export default function Dropdown({ options }: DropdownProps) {
+export default function Dropdown({ options, titleMenu }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -23,14 +24,14 @@ export default function Dropdown({ options }: DropdownProps) {
                          gap-x-1.5 
                          rounded-md 
                          border 
-                         bg-white 
+                         bg-white
                          px-3 
                          py-2 
                          text-sm 
                          font-semibold 
                          text-gray/900 
                          shadow-sm 
-                         border-gray/800
+                         border-gray/200
                          
                          dark:bg-deep-gray/100
                          dark:border-deep-gray/200">
@@ -61,7 +62,23 @@ export default function Dropdown({ options }: DropdownProps) {
                         
                         dark:border-deep-gray/200
                         dark:bg-deep-gray/100">
-        <div className="py-1">
+          <div className="py-1">
+            <div className='flex
+                     items-center
+                     gap-2
+                     self-stretch
+                     p-[6px]
+                     mx-2'>
+              <p className='text-gray/400
+                     text-sm
+                     not-italic
+                     font-medium
+               '>{titleMenu}</p>
+            </div>
+            <div className='border 
+                  border-gray/200
+                  mb-1
+                  dark:border-gray/900 mx-2'></div>
             {options.map((option, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
@@ -75,7 +92,7 @@ export default function Dropdown({ options }: DropdownProps) {
                         font-medium 
                         rounded-md 
                         mx-2 
-                        ${active ? 'bg-slate/200 dark:bg-brand/primary/500 text-deep-gray/100 ' : 'text-gray/700 dark:text-white'}`}
+                        ${active ? 'bg-slate/200 dark:bg-brand/primary/500 text-gray/700 ' : 'text-gray/700 dark:text-white'}`}
                   >
                     {option.name}
                   </Link>
