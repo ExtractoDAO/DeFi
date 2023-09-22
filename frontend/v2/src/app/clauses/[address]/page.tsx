@@ -108,7 +108,8 @@ export default function ContractClauses({ params }: ClausesProps) {
                      flex
                      flex-col
                      max-lg:w-[98%]
-                     h-[589px]
+                     h-[675px]
+                     max-2xl:h-[589px]
                      max-md:max-h-[550px]
                      w-[74%]
                      gap-10
