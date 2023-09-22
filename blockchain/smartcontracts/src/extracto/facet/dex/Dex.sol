@@ -11,6 +11,7 @@ import {Crud} from "./Dex.Crud.sol";
 contract Dex is Crud {
     constructor() Crud() {}
 
+        // TODO: Add Event
     function sellOrder(address investor, uint256 amount) external returns (bytes32 id) {
         zeroAddr(investor);
         zeroAddr(msg.sender);
@@ -39,7 +40,7 @@ contract Dex is Crud {
             id = sell.id;
         }
     }
-
+    // TODO: Add Event
     function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce)
         external
         returns (bytes32 id)
@@ -64,6 +65,7 @@ contract Dex is Crud {
         }
     }
 
+    // TODO: Add Event
     function cancelOrder(bytes32 orderId) external {
         zeroAddr(msg.sender);
         onlyOwnerOfOrder(msg.sender, orderId);
@@ -76,6 +78,7 @@ contract Dex is Crud {
         }
     }
 
+    // TODO: Add Event
     function removeOrder(address investor, bytes32 orderId) internal {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
@@ -99,6 +102,7 @@ contract Dex is Crud {
         }
     }
 
+    // TODO: Add Event
     function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
 
