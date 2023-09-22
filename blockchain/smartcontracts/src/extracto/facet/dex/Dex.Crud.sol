@@ -14,4 +14,9 @@ abstract contract Crud is Utils {
     function buyOrders() external view returns (DexStorageLib.Order[] memory) {
         return filterOrdersByType(DexStorageLib.OrderType.Buy);
     }
+
+    function orderBook() external view returns (DexStorageLib.Order[] memory) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
+        return lib.orderBook;
+    }
 }

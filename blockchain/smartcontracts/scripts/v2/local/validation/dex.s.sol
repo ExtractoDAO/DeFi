@@ -3,6 +3,8 @@ pragma solidity ^0.8.18;
 
 import "../../../../lib/forge-std/src/Script.sol";
 import {Commodity} from "../../../../src/extracto/facet/commodity/Commodity.sol";
+import {Future} from "../../../../src/extracto/facet/future/Future.sol";
+import {Dex, DexStorageLib} from "../../../../src/extracto/facet/dex/Dex.sol";
 import {Diamond} from "../../../../src/extracto/diamond/Diamond.sol";
 import {MockToken} from "../../../../test/MockToken.t.sol";
 
@@ -14,6 +16,7 @@ abstract contract Data is Script {
     address diamond = 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9;
 
     Commodity commodity = Commodity(diamond);
+    Dex dex = Dex(diamond);
     MockToken usdc = MockToken(0x5FbDB2315678afecb367f032d93F642f64180aa3);
 
     function bytes2uint(bytes32 b) public pure returns (uint256 result) {
@@ -48,14 +51,60 @@ abstract contract Helper is Data {
         }
     }
 
-    function sellOrder(address future, uint256 price) public {}
+    function sellOrder(address _future, uint256 price) public returns (bytes32) {
+        Future future = Future(_future);
+        return future.sell(price);
+    }
 
-    function buyOrder(uint256 price, uint256 commodity) public {}
+    function transfer(address to, uint256 amount) public {
+        usdc.transfer(to, amount);
+    }
 
-    function getOrderBook() public {}
+    function buyOrder(uint256 price, uint256 commodityAmount) public {
+        dex.buyOrder(address(usdc), commodityAmount, price, uint256(12));
+    }
+
+    function getOrderBook() public returns (bool) {
+        bool result;
+        bool ok;
+        bytes memory data;
+
+        fn = bytes4(keccak256(bytes("sellOrders()")));
+        payload = abi.encodeWithSelector(fn);
+
+        (ok, data) = address(diamond).call(payload);
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            DexStorageLib.Order[] memory orderbook = abi.decode(
+                data,
+                (DexStorageLib.Order[])
+            );
+            result = orderbook.length == 0;
+        }
+        fn = bytes4(keccak256(bytes("buyOrders()")));
+        payload = abi.encodeWithSelector(fn);
+
+        (ok, data) = address(diamond).call(payload);
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            DexStorageLib.Order[] memory orderbook = abi.decode(
+                data,
+                (DexStorageLib.Order[])
+            );
+            result = orderbook.length == 0;
+        }
+
+        return result;
+    }
 }
 
-contract Dex is Helper {
+contract OrderBook is Helper {
     constructor() Helper() {}
 
     function run() external {
@@ -65,15 +114,16 @@ contract Dex is Helper {
         sellOrder(0xd8058efe0198ae9dD7D563e1b4938Dcbc86A1F81, 1500 * 10e18);
 
         // transferir saldo de A->B
-        transfer(1500 * 10e18, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8);
+        transfer(0x70997970C51812dc3A010C7d01b50e0d17dc79C8, 1500 * 10e18);
         vm.stopBroadcast();
 
         // colocar ordem de compra
         vm.startBroadcast(bytes2uint(guessPrivatekey));
+        diamondApprove(1500 * 10e18);
         buyOrder(1500 * 10e18, 1);
 
         // ver se o orderbook esta empty
-        getOrderBook();
+        console.log(getOrderBook());
 
         vm.stopBroadcast();
     }

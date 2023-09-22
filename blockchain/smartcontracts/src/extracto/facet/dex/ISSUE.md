@@ -1,0 +1,3 @@
+- Se o Contrato está a venda, eu posso sacar?
+- Eu posso colocar 2 ordens de vensa?
+- Adicionar eventos na DEX
