@@ -45,7 +45,7 @@ abstract contract FAuth is FStorage {
 
     function timeUnlocked() internal view {
         if (block.number < getLockTime) {
-            revert Locktime(getLockTime - block.number);
+            revert Locktime(getLockTime);
         }
     }
 
