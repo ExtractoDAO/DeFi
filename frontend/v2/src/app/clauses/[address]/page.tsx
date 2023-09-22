@@ -151,7 +151,7 @@ export default function ContractClauses({ params }: ClausesProps) {
                             0x0b32337D35f8CAB81180b031D9A244E088d0c926
                         </Link>
                     </div>
-                    <Dropdown options={DropdownOptions} />
+                    <Dropdown titleMenu="More options" options={DropdownOptions} />
                 </div>
                 <div className="scroll-smooth
                         scroll
