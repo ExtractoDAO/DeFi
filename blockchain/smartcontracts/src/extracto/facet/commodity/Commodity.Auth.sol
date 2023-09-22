@@ -5,25 +5,43 @@ import {CommodityStorageLib} from "../../diamond/libraries/Lib.Commodity.sol";
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {ERC20} from "../../../token/ERC20.sol";
 
+// 0xf73354fb
 error TokensDecimalsLengthError(uint256 tokensLength, uint256 decimalsLength);
+// 0x0eb825b4
 error UnavailableKilos(uint256 kilos, uint256 yourAmount, uint256 diff);
+// 0x04f3d455
 error InsufficientAllowance(uint256 need, uint256 have, uint256 diff);
+// 0x6d400e38
 error InsufficientAmount(uint256 yourAmount, uint256 minimumAmount);
+// 0xcceda04b
 error PaymentFailed(address from, address to, uint256 amount);
+// 0xe90593d7
 error InvalidFutureOwnership(address future, address investor);
+// 0xcd54abc4
 error InvalidOrderOwnership(address investor, bytes32 orderId);
+// 0x778b4c4b
 error InvalidYield(uint8 minimum, uint8 maximum);
 
+// 0x5651df57
 error FutureNotExists(address future);
+// 0xc80b8834
 error ZeroAddress(address investor);
+// 0x49451944
 error BurnContract(address future);
+// 0x961c9a4f
 error InvalidToken(address token);
+// 0x59485ed9
 error OrderNotFound(bytes32 id);
 
+// 0x8baa579f
 error InvalidSignature();
+// 0xfe835e35
 error InternalError();
+// 0x82b42900
 error Unauthorized();
+// 0x583fe886
 error NoReentrancy();
+// 0x1142a68c
 error Deactivated();
 
 abstract contract Auth {
