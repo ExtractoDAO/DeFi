@@ -106,10 +106,15 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
         const errorName = err.name;
         let errorArgs = "";
         err.errorFragment.inputs.map((i, index) => {
-          errorArgs += `${i.type} ${i.name}: ${err.args[index]}, `;
+          if (i.type.startsWith("uint")) {
+            errorArgs += `${i.type} ${i.name}: ${parseInt(err.args[index])}, `;
+          } else {
+            errorArgs += `${i.type} ${i.name}: ${err.args[index]}, `;
+          }
         });
-
-        const message = `${errorName}(${errorArgs.slice(0, -3)})`;
+        console.error(errorArgs);
+        const message = `${errorName}(${errorArgs.slice(0, -2)})`;
+        console.error(message);
         return message;
       };
 
@@ -120,7 +125,7 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
           try {
             const iface = new ethers.utils.Interface(abi);
             const message = errorMsg(iface, errorData);
-            console.info(message);
+            console.error(message);
             notification.error(message);
             break;
           } catch (e) {
