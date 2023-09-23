@@ -7,6 +7,7 @@ import SelectContract from "./SelectContract"
 import TableOrderBook from "./TableOrderBook"
 import Button from "@/components/button"
 import TableLayoutSelector from "./TableLayoutSelector"
+import TableUserOrders from "./TableUserOrders"
 
 export default function page() {
     const box = classNames({
@@ -70,7 +71,7 @@ export default function page() {
 
                     <div className="row">
                         <div className="col-12 mt-4">
-                            <div className={box}>User orders</div>
+                            <TableUserOrders />
                         </div>
                     </div>
                 </div>

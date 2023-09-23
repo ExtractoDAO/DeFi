@@ -21,7 +21,7 @@ interface ISelect {
 function Select({ options, onChange, value, placeholder, label }: ISelect) {
     return (
         <Menu>
-            <div className="flex flex-col gap-[0.375rem] ">
+            <div className="flex flex-col gap-[0.375rem]">
                 {!!label && (
                     <label className="text-deep-gray/600 dark:text-gray/250 text-sm">
                         {label}
@@ -30,7 +30,7 @@ function Select({ options, onChange, value, placeholder, label }: ISelect) {
                 <div className="relative">
                     <Menu.Button
                         className="
-                        w-full py-2 px-3
+                        w-full py-2 pl-3 pr-8
                         border border-default/gray/300
                         dark:border-slate/800
                         rounded

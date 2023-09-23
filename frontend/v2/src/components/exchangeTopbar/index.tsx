@@ -33,7 +33,7 @@ export default function ExchangeTopBar() {
     }
 
     return (
-        <div className="container-fluid border-b border-gray/200">
+        <div className="container-fluid border-b border-gray/200 dark:border-gray/600">
             <div className="row">
                 <div className="col">
                     <div className="px-6 py-2 flex items-center gap-6">

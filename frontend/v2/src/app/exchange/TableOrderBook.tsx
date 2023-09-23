@@ -56,9 +56,9 @@ const TableOrderBook = ({ side }: TableOrderBookProps) => {
                 </tr>
             </thead>
             <tbody>
-                {new Array(10).fill("").map((e) => {
+                {new Array(10).fill("").map((e, i) => {
                     return (
-                        <tr key={e}>
+                        <tr key={i}>
                             <td
                                 className={classNames({
                                     "text-gray/500 text-left border-l border-t border-b border-gray/200 dark:border-slate/800 py-[0.38rem] px-6 text-xs bg-white dark:bg-deep-gray/100":
