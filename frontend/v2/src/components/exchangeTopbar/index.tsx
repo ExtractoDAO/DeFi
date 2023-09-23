@@ -22,7 +22,7 @@ export default function ExchangeTopBar() {
         return (
             <button
                 {...props}
-                className="uppercase text-xs flex items-center gap-3 font-medium"
+                className="uppercase text-xs flex items-center gap-3 font-medium text-gray/500 dark:text-gray/400"
             >
                 {label === "trending" && (
                     <ArrowTrendingUpIcon className="w-4 h-4" />
@@ -33,7 +33,7 @@ export default function ExchangeTopBar() {
     }
 
     return (
-        <div className="container-fluid border-b border-gray/200">
+        <div className="container-fluid border-b border-gray/200 dark:border-gray/600">
             <div className="row">
                 <div className="col">
                     <div className="px-6 py-2 flex items-center gap-6">

@@ -49,7 +49,7 @@ export default function Navbar() {
                 "leading-6",
                 "dark:bg-deep-gray/200"
             )}
-            switchToActiveChain
+            // switchToActiveChain
             detailsBtn={() => {
                 return (
                     <button
@@ -149,7 +149,7 @@ export default function Navbar() {
                         className={classNames(
                             "text-gray/600",
                             "font-medium",
-                            "dark:text-gray/600",
+                            "dark:text-gray/400",
                             "w-[110px]",
                             "text-xl/medium",
                             "not-italic",
