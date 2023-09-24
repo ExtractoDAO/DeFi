@@ -1,6 +1,6 @@
 "use client"
 
-import { theme } from "@/utils/theme"
+// import { theme } from "@/utils/theme"
 import Chart from "@qognicafinance/react-lightweight-charts"
 
 interface StockData {
@@ -12,7 +12,9 @@ interface StockData {
 }
 
 function ChartComponent() {
-    const background = theme === "dark" ? "#0d0d0d" : "#ffffff"
+    // const background = theme === "dark" ? "#0d0d0d" : "#ffffff"
+
+    const background = "#0d0d0d"
 
     function generateStockDataArray(
         startDate: Date,
@@ -86,7 +88,8 @@ function ChartComponent() {
                 autoWidth
                 height={480}
                 legend="Contract@ / USD"
-                darkTheme={!!(theme === "dark")}
+                // darkTheme={!!(theme === "dark")}
+                darkTheme={true}
                 from={new Date("2023-06-19").getTime() / 1000}
                 to={new Date().getTime() / 1000}
             />
