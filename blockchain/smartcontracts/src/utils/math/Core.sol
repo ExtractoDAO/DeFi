@@ -1,3 +1,4 @@
+// CREDITS: https://github.com/PaulRBerg/prb-math
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
@@ -19,6 +20,9 @@ error PRBMath__MulDivOverflow(uint256 x, uint256 y, uint256 denominator);
 /// @notice Emitted when ceiling a number overflows UD60x18.
 error PRBMath_UD60x18_Ceil_Overflow(UD60x18 x);
 
+/// @notice Thrown when taking the logarithm of a number less than 1.
+error PRBMath_UD60x18_Log_InputTooSmall(UD60x18 x);
+
 /*//////////////////////////////////////////////////////////////////////////
                                     CONSTANTS
 //////////////////////////////////////////////////////////////////////////*/
@@ -37,6 +41,10 @@ uint256 constant UNIT_INVERSE = 781566461551748419797279945988162623061752125920
 /// @dev The maximum whole value an UD60x18 number can have.
 uint256 constant uMAX_WHOLE_UD60x18 = 115792089237316195423570985008687907853269984665640564039457_000000000000000000;
 UD60x18 constant MAX_WHOLE_UD60x18 = UD60x18.wrap(uMAX_WHOLE_UD60x18);
+
+/// @dev Half the UNIT number.
+uint256 constant uHALF_UNIT = 0.5e18;
+UD60x18 constant HALF_UNIT = UD60x18.wrap(uHALF_UNIT);
 
 /*//////////////////////////////////////////////////////////////////////////
                                     FUNCTIONS
@@ -188,5 +196,82 @@ function mulDiv18(uint256 x, uint256 y) pure returns (uint256 result) {
                 ),
                 UNIT_INVERSE
             )
+    }
+}
+
+/// @notice Finds the zero-based index of the first 1 in the binary representation of x.
+///
+/// @dev See the note on "msb" in this Wikipedia article: https://en.wikipedia.org/wiki/Find_first_set
+///
+/// Each step in this implementation is equivalent to this high-level code:
+///
+/// ```solidity
+/// if (x >= 2 ** 128) {
+///     x >>= 128;
+///     result += 128;
+/// }
+/// ```
+///
+/// Where 128 is replaced with each respective power of two factor. See the full high-level implementation here:
+/// https://gist.github.com/PaulRBerg/f932f8693f2733e30c4d479e8e980948
+///
+/// The Yul instructions used below are:
+///
+/// - "gt" is "greater than"
+/// - "or" is the OR bitwise operator
+/// - "shl" is "shift left"
+/// - "shr" is "shift right"
+///
+/// @param x The uint256 number for which to find the index of the most significant bit.
+/// @return result The index of the most significant bit as a uint256.
+/// @custom:smtchecker abstract-function-nondet
+function msb(uint256 x) pure returns (uint256 result) {
+    // 2^128
+    assembly ("memory-safe") {
+        let factor := shl(7, gt(x, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^64
+    assembly ("memory-safe") {
+        let factor := shl(6, gt(x, 0xFFFFFFFFFFFFFFFF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^32
+    assembly ("memory-safe") {
+        let factor := shl(5, gt(x, 0xFFFFFFFF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^16
+    assembly ("memory-safe") {
+        let factor := shl(4, gt(x, 0xFFFF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^8
+    assembly ("memory-safe") {
+        let factor := shl(3, gt(x, 0xFF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^4
+    assembly ("memory-safe") {
+        let factor := shl(2, gt(x, 0xF))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^2
+    assembly ("memory-safe") {
+        let factor := shl(1, gt(x, 0x3))
+        x := shr(factor, x)
+        result := or(result, factor)
+    }
+    // 2^1
+    // No need to shift x any more.
+    assembly ("memory-safe") {
+        let factor := gt(x, 0x1)
+        result := or(result, factor)
     }
 }
