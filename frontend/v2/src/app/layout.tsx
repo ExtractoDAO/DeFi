@@ -26,7 +26,7 @@ export default function RootLayout({
     // thirdwebsecret = "Qs-BcgYakeFuRu35xTzHZ9TlB0vVRk4Vc7SL-KnaXTMVRktUqnhdvnULNlsI-P6uEZmmxw5lIYw9ybHfKDlLqw"
 
     return (
-        <html lang="en" className={theme}>
+        <html lang="en" className="dark">
             <body className={`${inter.className} bg-slate/50 dark:bg-gray/900`}>
                 <ThirdwebProvider
                     activeChain="localhost"
