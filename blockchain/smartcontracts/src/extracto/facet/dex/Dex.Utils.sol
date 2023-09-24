@@ -10,6 +10,8 @@ abstract contract Utils is Auth {
     function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
+        // match price by bucket
+
         for (index = 0; index < lib.orderBook.length; index++) {
             DexStorageLib.Order memory orderProposal = lib.orderBook[index];
 
@@ -62,7 +64,9 @@ abstract contract Utils is Auth {
         address investor,
         DexStorageLib.OrderType typed,
         uint256 randNonce
-    ) internal pure returns (DexStorageLib.Order memory buy) {
+
+        // TODO: validate data;
+
         bytes32 id =
             keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
 
