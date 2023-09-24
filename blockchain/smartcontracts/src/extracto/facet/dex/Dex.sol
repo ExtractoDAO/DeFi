@@ -29,13 +29,15 @@ contract Dex is Crud {
             commodityAmount, amount, address(0x0), msg.sender, investor, DexStorageLib.OrderType.Sell, randNonce
         );
 
-        (bool _match, uint256 index) = matchOrder(sell);
+        uint256 bucket = calculateBucket(sell.amount);
+        (bool _match, uint256 index) = matchOrder(sell, bucket);
 
         if (_match) {
             swap(lib.orderBook[index], sell);
         } else {
             lib.orderByInvestorById[sell.investor][sell.id] = sell;
             lib.ordersByInvestor[sell.investor].push(sell);
+            lib.orderBookBuckets[bucket].push(sell);
             lib.orderBook.push(sell);
             id = sell.id;
         }
@@ -54,13 +56,15 @@ contract Dex is Crud {
         );
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        (bool _match, uint256 index) = matchOrder(buy);
+        uint256 bucket = calculateBucket(buy.amount);
+        (bool _match, uint256 index) = matchOrder(buy, bucket);
 
         if (_match) {
             swap(buy, lib.orderBook[index]);
         } else {
             lib.orderByInvestorById[buy.investor][buy.id] = buy;
             lib.ordersByInvestor[buy.investor].push(buy);
+            lib.orderBookBuckets[bucket].push(buy);
             lib.orderBook.push(buy);
             id = buy.id;
         }

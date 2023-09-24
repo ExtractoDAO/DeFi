@@ -3,11 +3,12 @@ pragma solidity ^0.8.18;
 
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {Auth} from "../commodity/Commodity.Auth.sol";
+import "../../../utils/math/UD60x18.sol";
 
 abstract contract Utils is Auth {
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
+    function matchOrder(DexStorageLib.Order memory order, uint256 bucket) internal view returns (bool result, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
         // match price by bucket
@@ -64,12 +65,18 @@ abstract contract Utils is Auth {
         address investor,
         DexStorageLib.OrderType typed,
         uint256 randNonce
+    ) internal pure returns (DexStorageLib.Order memory order) {
 
         // TODO: validate data;
 
         bytes32 id =
             keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
 
-        buy = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
+        order = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
+    }
+
+    function calculateBucket(uint256 price) internal pure returns (uint256 bucket) {
+        bucket = unwrap(floor(log2(ud60x18(price))));
+        // TODO: update max bucket
     }
 }
