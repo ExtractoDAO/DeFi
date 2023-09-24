@@ -158,6 +158,8 @@ abstract contract Auth {
         if (lib.contracts[future].investor == address(0x0)) {
             revert FutureNotExists(future);
         }
+
+        // TODO: check if order already exists
     }
 
     function onlyOwnerOfFutures(address investor, address future) internal view {
