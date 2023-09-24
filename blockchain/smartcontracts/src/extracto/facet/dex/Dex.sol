@@ -11,7 +11,7 @@ import {Crud} from "./Dex.Crud.sol";
 contract Dex is Crud {
     constructor() Crud() {}
 
-        // TODO: Add Event
+    // TODO: Add Event
     function sellOrder(address investor, uint256 amount) external returns (bytes32 id) {
         zeroAddr(investor);
         zeroAddr(msg.sender);
@@ -40,6 +40,7 @@ contract Dex is Crud {
             id = sell.id;
         }
     }
+
     // TODO: Add Event
     function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce)
         external
@@ -105,6 +106,9 @@ contract Dex is Crud {
     // TODO: Add Event
     function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
+
+        // TODO: investor of the buy and sell order cannot be the same
+        // TODO: contract should be not burned
 
         removeOrder(buy.investor, buy.id);
         removeOrder(sell.investor, sell.id);
