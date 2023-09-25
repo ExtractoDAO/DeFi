@@ -33,6 +33,7 @@ library DexStorageLib {
         mapping(bytes32 => bool) orderById;
         mapping(address => Order[]) ordersByInvestor;
         mapping(address => mapping(bytes32 => Order)) orderByInvestorById;
+        mapping(address => Order) sellOrdersByAddress;
         mapping(uint256 => Order[]) orderBookBuckets;
         uint256 maxBucket;
     }

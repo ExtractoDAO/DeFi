@@ -33,6 +33,8 @@ error InvalidToken(address token);
 // 0x59485ed9
 error OrderNotFound(bytes32 id);
 
+// 0x846c2fea
+error FutureAlreadyListed();
 // 0x8baa579f
 error InvalidSignature();
 // 0xfe835e35
@@ -158,8 +160,6 @@ abstract contract Auth {
         if (lib.contracts[future].investor == address(0x0)) {
             revert FutureNotExists(future);
         }
-
-        // TODO: check if order already exists
     }
 
     function onlyOwnerOfFutures(address investor, address future) internal view {
@@ -206,6 +206,13 @@ abstract contract Auth {
             uint256 have = allowance;
             uint256 diff = need - have;
             revert InsufficientAllowance(need, have, diff);
+        }
+    }
+
+    function onlyNonListed(address future) internal view {
+        DexStorageLib.Storage storage dex = DexStorageLib.getDexStorage();
+        if (dex.sellOrdersByAddress[future].investor == address(0)) {
+            revert FutureAlreadyListed();
         }
     }
 }

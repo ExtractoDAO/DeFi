@@ -16,6 +16,7 @@ contract Dex is Crud {
         zeroAddr(investor);
         zeroAddr(msg.sender);
         onlyFutures(msg.sender);
+        onlyNonListed(msg.sender);
         onlyNotBurnedFutures(msg.sender);
         onlyOwnerOfFutures(investor, msg.sender);
 
