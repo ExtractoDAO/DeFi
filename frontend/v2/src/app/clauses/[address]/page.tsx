@@ -70,7 +70,7 @@ export default function ContractClauses({ params }: ClausesProps) {
                     <ol className="list-decimal
                         
                         ">
-                        {ContractData.map((section) => (
+                        {ContractData.map((section, index) => (
                             <li
                                 key={section.id}
                                 className="flex
@@ -78,6 +78,7 @@ export default function ContractClauses({ params }: ClausesProps) {
                                         pb-1
                                         pr-1
                                             ">
+                                               
                                 <Link
                                     className="
                                             hover:bg-slate/200
@@ -93,9 +94,11 @@ export default function ContractClauses({ params }: ClausesProps) {
                                             dark:hover:bg-clauses/section/hover
                                             dark:focus:bg-clauses/section/active
                                             dark:focus:text-gray/300"
-                                    href={`#${section.id}`}
+                                    href={`#${section.id}`} onClick={() => {
+                                        console.log(`Clicked on section with ID: ${section.id}`);
+                                      }}
                                 >
-                                    {section.title}
+                                    {`${index + 1}. ${section.title}`}
                                 </Link>
                             </li>
                         ))}
