@@ -6,9 +6,20 @@ import {Auth} from "../commodity/Commodity.Auth.sol";
 import "../../../utils/math/UD60x18.sol";
 
 abstract contract Utils is Auth {
+    event MatchOrder(
+        address oldInvestor, address newInvestor, address future, uint256 indexed amount, uint256 commodityAmount
+    );
+    event CancelOrder(uint256 indexed amount, uint256 commodityAmount, DexStorageLib.OrderType side);
+    event SellOrder(address indexed future, uint256 amount, uint256 commodityAmount);
+    event BuyOrder(uint256 indexed amount, uint256 commodityAmount);
+
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order, uint256 bucket) internal view returns (bool result, uint256 index) {
+    function matchOrder(DexStorageLib.Order memory order, uint256 bucket)
+        internal
+        view
+        returns (bool result, uint256 index)
+    {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
         // match price by bucket
@@ -66,7 +77,6 @@ abstract contract Utils is Auth {
         DexStorageLib.OrderType typed,
         uint256 randNonce
     ) internal pure returns (DexStorageLib.Order memory order) {
-
         // TODO: validate data;
 
         bytes32 id =
