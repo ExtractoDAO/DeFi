@@ -37,6 +37,8 @@ error OrderNotFound(bytes32 id);
 error FutureAlreadyListed();
 // 0x8baa579f
 error InvalidSignature();
+// 0x6e10997a
+error SelfTradingError();
 // 0xfe835e35
 error InternalError();
 // 0x82b42900
@@ -213,6 +215,12 @@ abstract contract Auth {
         DexStorageLib.Storage storage dex = DexStorageLib.getDexStorage();
         if (dex.sellOrdersByAddress[future].investor == address(0)) {
             revert FutureAlreadyListed();
+        }
+    }
+
+    function onlyOtherInvestor(address buyInvestor, address sellInvestor) internal pure {
+        if (buyInvestor == sellInvestor) {
+            revert SelfTradingError();
         }
     }
 }

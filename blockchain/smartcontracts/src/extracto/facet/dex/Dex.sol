@@ -114,7 +114,7 @@ contract Dex is Crud {
     function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
 
-        // TODO: investor of the buy and sell order cannot be the same
+        onlyOtherInvestor(buy.investor, sell.investor);
         // TODO: contract should be not burned
 
         removeOrder(buy.investor, buy.id);
