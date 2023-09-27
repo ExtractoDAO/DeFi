@@ -83,15 +83,13 @@ abstract contract Auth {
         zeroAddr(token);
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
 
-        bool condition = true;
         for (uint256 i = 0; i < lib.allowedTokensList.length; i++) {
             if (lib.allowedTokensList[i] == token) {
-                condition = false;
+                return;
             }
         }
-        if (condition) {
-            revert InvalidToken(token);
-        }
+
+        revert InvalidToken(token);
     }
 
     function onlyKgSupply(uint256 amount) internal view {
@@ -166,8 +164,6 @@ abstract contract Auth {
         if (lib.contracts[future].investor == address(0x0)) {
             revert FutureNotExists(future);
         }
-
-        // TODO: check if order already exists
     }
 
     function onlyOwnerOfFutures(address investor, address future) internal view {
@@ -181,7 +177,7 @@ abstract contract Auth {
     function onlyOwnerOfOrder(address investor, bytes32 id) internal view {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        if (lib.orderByInvestorById[investor][id].investor != investor) {
+        if (lib.orderById[id].investor != investor) {
             revert InvalidOrderOwnership(investor, id);
         }
     }
@@ -219,7 +215,7 @@ abstract contract Auth {
 
     function onlyNonListed(address future) internal view {
         DexStorageLib.Storage storage dex = DexStorageLib.getDexStorage();
-        if (dex.sellOrdersByAddress[future].investor == address(0)) {
+        if (dex.sellOrdersByAddress[future].investor != address(0x0)) {
             revert FutureAlreadyListed();
         }
     }
@@ -239,12 +235,12 @@ abstract contract Auth {
         }
     }
 
-    function onlyTrueOrder(bytes32 orderId) internal {
+    function onlyTrueOrder(bytes32 orderId) internal view {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
         DexStorageLib.Order memory order = lib.orderById[orderId];
 
         if (order.investor == address(0x0)) {
-            revert OrderNotFound();
+            revert OrderNotFound(orderId);
         }
     }
 }

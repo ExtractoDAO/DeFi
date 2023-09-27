@@ -12,28 +12,30 @@ contract Dex is Crud {
     constructor() Crud() {}
 
     function sellOrder(address investor, uint256 amount) external returns (bytes32 id) {
+        address future = msg.sender;
         zeroAddr(investor);
-        zeroAddr(msg.sender);
-        onlyFutures(msg.sender);
-        onlyNonListed(msg.sender);
-        onlyNotBurnedFutures(msg.sender);
-        onlyOwnerOfFutures(investor, msg.sender);
+        zeroAddr(future);
+        onlyFutures(future);
+        onlyNonListed(future);
+        onlyNotBurnedFutures(future);
+        onlyOwnerOfFutures(investor, future);
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
 
-        uint256 rawCommodityAmount = libCommodity.contracts[msg.sender].commodityAmount;
+        uint256 rawCommodityAmount = libCommodity.contracts[future].commodityAmount;
         uint256 commodityAmount = unwrap(floor(ud60x18(rawCommodityAmount)));
         uint256 randNonce = rawCommodityAmount - commodityAmount;
 
         DexStorageLib.Order memory sell = mountOrder(
-            commodityAmount, amount, address(0x0), msg.sender, investor, DexStorageLib.OrderType.Sell, randNonce
+            commodityAmount, amount, address(0x0), future, investor, DexStorageLib.OrderType.Sell, randNonce
         );
-        DexStorageLib.Order[] memory order = lib.orderBookMatch[sell.amount][sell.commodityAmount];
+        DexStorageLib.Order memory order = lib.orderBookMatch[sell.amount][sell.commodityAmount];
 
         if (order.typed == DexStorageLib.OrderType.Buy && order.investor != address(0x0)) {
             swap(order, sell);
         } else {
+            // TODO: make possible put several contracts with same amount & commodityAmount
             lib.orderBookMatch[sell.amount][sell.commodityAmount] = sell;
             lib.ordersByInvestor[sell.investor].push(sell);
             lib.orderById[sell.id] = sell;
@@ -48,19 +50,22 @@ contract Dex is Crud {
         external
         returns (bytes32 id)
     {
+        address investor = msg.sender;
         onlyStableCoins(tokenAddress);
-        validateAllowance(tokenAddress, msg.sender, address(this), amount);
-
-        DexStorageLib.Order memory buy = mountOrder(
-            commodityAmount, amount, tokenAddress, address(0x0), msg.sender, DexStorageLib.OrderType.Buy, randNonce
-        );
+        validateAllowance(tokenAddress, investor, address(this), amount);
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        DexStorageLib.Order[] memory order = lib.orderBookMatch[buy.amount][buy.commodityAmount];
+
+        DexStorageLib.Order memory buy = mountOrder(
+            commodityAmount, amount, tokenAddress, address(0x0), investor, DexStorageLib.OrderType.Buy, randNonce
+        );
+
+        DexStorageLib.Order memory order = lib.orderBookMatch[buy.amount][buy.commodityAmount];
 
         if (order.typed == DexStorageLib.OrderType.Sell && order.investor != address(0x0)) {
             swap(buy, order);
         } else {
+            // TODO: make possible put several contracts with same amount & commodityAmount
             lib.orderBookMatch[buy.amount][buy.commodityAmount] = buy;
             lib.ordersByInvestor[buy.investor].push(buy);
             lib.orderById[buy.id] = buy;
@@ -72,21 +77,22 @@ contract Dex is Crud {
     }
 
     function cancelOrder(bytes32 orderId) external {
-        zeroAddr(msg.sender);
+        address investor = msg.sender;
+        zeroAddr(investor);
         onlyTrueOrder(orderId);
-        onlyOwnerOfOrder(msg.sender, orderId);
+        onlyOwnerOfOrder(investor, orderId);
+
+        removeOrder(investor, orderId);
 
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        DexStorageLib.Order memory order = lib.orderById[orderId];
+        DexStorageLib.Order storage order = lib.orderById[orderId];
 
-        removeOrder(msg.sender, orderId);
-
-        emit CancelOrder(order.id, order.amount, order.commodityAmount, order.typed);
+        emit CancelOrder(orderId, order.amount, order.commodityAmount, order.typed);
     }
 
     function removeOrder(address investor, bytes32 orderId) internal {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        DexStorageLib.Order[] storage order = lib.orderById[orderId];
+        DexStorageLib.Order storage order = lib.orderById[orderId];
 
         delete lib.orderBookMatch[order.amount][order.commodityAmount];
         delete lib.orderById[orderId];
@@ -118,11 +124,13 @@ contract Dex is Crud {
         removeOrder(buy.investor, buy.id);
         removeOrder(sell.investor, sell.id);
 
-        libCommodity.contracts[sell.investor].investor = buy.investor;
+
+        libCommodity.contracts[sell.future].investor = buy.investor;
         CommodityStorageLib.Contract[] storage contracts = libCommodity.contractsByInvestor[sell.investor];
         for (uint256 i = 0; i < contracts.length; i++) {
             if (contracts[i].future == sell.future) {
                 libCommodity.contractsByInvestor[buy.investor].push(contracts[i]);
+
                 contracts[i] = contracts[contracts.length - 1];
                 contracts.pop();
                 break;

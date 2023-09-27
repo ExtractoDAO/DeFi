@@ -9,18 +9,18 @@ abstract contract Utils is Auth {
     event MatchOrder(
         address oldInvestor, address newInvestor, address future, uint256 indexed amount, uint256 commodityAmount
     );
-    event CancelOrder(uint256 indexed amount, uint256 commodityAmount, DexStorageLib.OrderType side);
-    event SellOrder(address indexed future, uint256 amount, uint256 commodityAmount);
-    event BuyOrder(uint256 indexed amount, uint256 commodityAmount);
+    event CancelOrder(bytes32 id, uint256 indexed amount, uint256 commodityAmount, DexStorageLib.OrderType side);
+    event SellOrder(bytes32 id, address indexed future, uint256 amount, uint256 commodityAmount);
+    event BuyOrder(bytes32 id, uint256 indexed amount, uint256 commodityAmount);
 
     constructor() Auth() {}
 
     function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        DexStorageLib.Order[] memory x = lib.orderBookMatch[order.amount][order.commodityAmount];
+        DexStorageLib.Order memory matched = lib.orderBookMatch[order.amount][order.commodityAmount];
 
-        if (x.investor == address(0)) {
+        if (matched.investor == address(0) && matched.investor == address(0)) {
             return (false, 0);
         }
     }
@@ -65,14 +65,5 @@ abstract contract Utils is Auth {
             keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
 
         order = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
-    }
-
-    function calculateBucket(uint256 price) internal returns (uint256 bucket) {
-        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
-        bucket = unwrap(floor(log2(ud60x18(price))));
-
-        if (bucket > lib.maxBucket) {
-            lib.maxBucket = bucket;
-        }
     }
 }

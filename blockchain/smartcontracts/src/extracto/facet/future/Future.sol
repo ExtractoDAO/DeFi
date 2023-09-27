@@ -24,6 +24,7 @@ contract Future is FBase {
 
         emit Withdraw(getKg, investor);
 
+        // TODO: cancell order
         extracto.mintToken(getKg, investor);
     }
 
