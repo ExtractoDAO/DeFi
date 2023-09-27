@@ -15,7 +15,7 @@ abstract contract Data is Script {
     address dao = vm.addr(bytes2uint(daoPrivateKey));
     uint256 commodityBuyPrice = 2_00 * 1e16;
     uint256 commoditySellPrice = 2_00 * 1e16;
-    uint256 commoditySupply = 1_000_000 * 1e16;
+    uint256 commoditySupply = 1_000_000 * 1e18;
     uint256 locktime = 5;
     uint8 yieldFarming = 50;
     bool activateSells = true;
