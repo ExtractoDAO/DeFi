@@ -11,7 +11,6 @@ import {Crud} from "./Dex.Crud.sol";
 contract Dex is Crud {
     constructor() Crud() {}
 
-    // TODO: Add Event
     function sellOrder(address investor, uint256 amount) external returns (bytes32 id) {
         zeroAddr(investor);
         zeroAddr(msg.sender);
@@ -41,10 +40,11 @@ contract Dex is Crud {
             lib.orderBookBuckets[bucket].push(sell);
             lib.orderBook.push(sell);
             id = sell.id;
+
+            emit SellOrder(sell.future, sell.amount, sell.commodityAmount);
         }
     }
 
-    // TODO: Add Event
     function buyOrder(address tokenAddress, uint256 commodityAmount, uint256 amount, uint256 randNonce)
         external
         returns (bytes32 id)
@@ -68,23 +68,26 @@ contract Dex is Crud {
             lib.orderBookBuckets[bucket].push(buy);
             lib.orderBook.push(buy);
             id = buy.id;
+
+            emit BuyOrder(buy.amount, buy.commodityAmount);
         }
     }
 
-    // TODO: Add Event
     function cancelOrder(bytes32 orderId) external {
         zeroAddr(msg.sender);
         onlyOwnerOfOrder(msg.sender, orderId);
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
+        DexStorageLib.Order memory order = lib.orderByInvestorById[msg.sender][orderId];
 
-        if (lib.orderByInvestorById[msg.sender][orderId].investor == address(0x0)) {
+        if (order.investor == address(0x0)) {
             revertOrderNotFound(orderId);
         } else {
             removeOrder(msg.sender, orderId);
+
+            emit CancelOrder(order.amount, order.commodityAmount, order.typed);
         }
     }
 
-    // TODO: Add Event
     function removeOrder(address investor, bytes32 orderId) internal {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
@@ -108,7 +111,6 @@ contract Dex is Crud {
         }
     }
 
-    // TODO: Add Event
     function swap(DexStorageLib.Order memory buy, DexStorageLib.Order memory sell) internal {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
 
@@ -133,5 +135,7 @@ contract Dex is Crud {
 
         Future future = Future(sell.future);
         future.swap(buy.investor);
+
+        emit MatchOrder(sell.investor, buy.investor, sell.future, sell.amount, sell.commodityAmount);
     }
 }
