@@ -64,7 +64,7 @@ abstract contract Utils is Auth {
         address investor,
         DexStorageLib.OrderType typed,
         uint256 randNonce
-
+    ) internal pure returns (DexStorageLib.Order memory buy) {
         // TODO: validate data;
 
         bytes32 id =
