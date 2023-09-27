@@ -115,7 +115,7 @@ contract Dex is Crud {
         CommodityStorageLib.Storage storage libCommodity = CommodityStorageLib.getCommodityStorage();
 
         onlyOtherInvestor(buy.investor, sell.investor);
-        // TODO: contract should be not burned
+        onlyNotBurnedFutures(sell.investor);
 
         removeOrder(buy.investor, buy.id);
         removeOrder(sell.investor, sell.id);
