@@ -30,12 +30,11 @@ library DexStorageLib {
     struct Storage {
         address controller;
         Order[] orderBook;
-        mapping(bytes32 => bool) orderById;
+        mapping(bytes32 => Order) orderById;
         mapping(address => Order[]) ordersByInvestor;
-        mapping(address => mapping(bytes32 => Order)) orderByInvestorById;
-        mapping(address => Order) sellOrdersByAddress;
-        mapping(uint256 => Order[]) orderBookBuckets;
-        uint256 maxBucket;
+        // v2
+        mapping(uint256 amount => mapping(uint256 commodityAmount => Order)) orderBookMatch;
+        mapping(address future => bool exist) sellOrderByAddress;
     }
 
     /*////////////////////////////////////////////////////////////
