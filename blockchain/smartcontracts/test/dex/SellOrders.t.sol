@@ -51,7 +51,7 @@ contract SellOrders is DexBaseSetup {
         - Then: should get a error `FutureAlreadyListed`
     */
 
-   /* JOEL
+    /* JOEL
     # Scenary: Self Trading Order
         - Give: that the a investor sell contract
         - When: see the order book

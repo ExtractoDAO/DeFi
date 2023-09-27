@@ -15,32 +15,14 @@ abstract contract Utils is Auth {
 
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order, uint256 bucket)
-        internal
-        view
-        returns (bool result, uint256 index)
-    {
+    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        // match price by bucket
+        DexStorageLib.Order[] memory x = lib.orderBookMatch[order.amount][order.commodityAmount];
 
-        for (index = 0; index < lib.orderBook.length; index++) {
-            DexStorageLib.Order memory orderProposal = lib.orderBook[index];
-
-            if (orderProposal.typed == order.typed) {
-                continue;
-            } else {
-                result = true;
-                result = result && order.amount == orderProposal.amount;
-                result = result && order.commodityAmount == orderProposal.commodityAmount;
-                if (result) {
-                    return (result, index);
-                } else {
-                    continue;
-                }
-            }
+        if (x.investor == address(0)) {
+            return (false, 0);
         }
-        index = 0;
     }
 
     function filterOrdersByType(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {
@@ -77,7 +59,7 @@ abstract contract Utils is Auth {
         DexStorageLib.OrderType typed,
         uint256 randNonce
     ) internal pure returns (DexStorageLib.Order memory order) {
-        // TODO: validate data;
+        validateAmounts(commodityAmount, amount);
 
         bytes32 id =
             keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
@@ -85,8 +67,12 @@ abstract contract Utils is Auth {
         order = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
     }
 
-    function calculateBucket(uint256 price) internal pure returns (uint256 bucket) {
+    function calculateBucket(uint256 price) internal returns (uint256 bucket) {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
         bucket = unwrap(floor(log2(ud60x18(price))));
-        // TODO: update max bucket
+
+        if (bucket > lib.maxBucket) {
+            lib.maxBucket = bucket;
+        }
     }
 }

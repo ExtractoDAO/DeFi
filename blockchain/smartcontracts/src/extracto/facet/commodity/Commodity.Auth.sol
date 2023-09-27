@@ -33,12 +33,16 @@ error InvalidToken(address token);
 // 0x59485ed9
 error OrderNotFound(bytes32 id);
 
+// 0x5eea6086
+error InvalidCommodityAmount();
 // 0x846c2fea
 error FutureAlreadyListed();
 // 0x8baa579f
 error InvalidSignature();
 // 0x6e10997a
 error SelfTradingError();
+// 0x2c5211c6
+error InvalidAmount();
 // 0xfe835e35
 error InternalError();
 // 0x82b42900
@@ -223,6 +227,24 @@ abstract contract Auth {
     function onlyOtherInvestor(address buyInvestor, address sellInvestor) internal pure {
         if (buyInvestor == sellInvestor) {
             revert SelfTradingError();
+        }
+    }
+
+    function validateAmounts(uint256 commodityAmount, uint256 amount) internal pure {
+        if (amount <= 0) {
+            revert InvalidAmount();
+        }
+        if (commodityAmount <= 0) {
+            revert InvalidCommodityAmount();
+        }
+    }
+
+    function onlyTrueOrder(bytes32 orderId) internal {
+        DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
+        DexStorageLib.Order memory order = lib.orderById[orderId];
+
+        if (order.investor == address(0x0)) {
+            revert OrderNotFound();
         }
     }
 }
