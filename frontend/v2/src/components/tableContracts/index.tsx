@@ -72,9 +72,8 @@ function TableContracts({ contractList }: IProps) {
         const [copied, setCopied] = useState(false)
 
         async function getTeste() {
-            const res = await read("getKg")
-
-            console.log(contractAddress)
+            // const res = await read("getKg")
+            // console.log("RESPONSE ", Number(res) / 10 ** 20)
         }
 
         useEffect(() => {

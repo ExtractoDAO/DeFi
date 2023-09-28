@@ -10,11 +10,10 @@ import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
 
-import { getBlockNumber, useConnectionStatus } from "@thirdweb-dev/react"
+import { useConnectionStatus } from "@thirdweb-dev/react"
 
 const useContract = <TContractName extends ContractName>(
-    contractName: TContractName,
-    contractAddress?: string
+    contractName: TContractName
 ) => {
     const connectStatus = useConnectionStatus()
     const { data: contractData } = useDeployedContractInfo(contractName)
@@ -28,7 +27,7 @@ const useContract = <TContractName extends ContractName>(
 
             setContract(
                 new ethers.Contract(
-                    "0x6D544390Eb535d61e196c87d6B9c80dCD8628Acd",
+                    contractData.address,
                     contractData.abi,
                     signer
                 )
