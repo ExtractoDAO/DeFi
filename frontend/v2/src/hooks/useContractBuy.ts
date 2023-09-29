@@ -130,7 +130,7 @@ const useContractBuy = () => {
                 owner: string
                 amount: BigNumber
                 locktime: BigNumber
-            } = await decodeContractDeployedData(response)
+            } = await decodeContractDeployedData("FutureCreated")
 
             const block = await getCurrentBlock()
 

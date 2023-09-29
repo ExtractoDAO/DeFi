@@ -6,8 +6,22 @@ import IconMixed from "@/assets/img/icons/exchange/orderbook-mixed.svg"
 import IconSell from "@/assets/img/icons/exchange/orderbook-sell.svg"
 import IconBuy from "@/assets/img/icons/exchange/orderbook-buy.svg"
 import Image from "next/image"
+import { useDexContext } from "@/context"
 
 const TableLayoutSelector = () => {
+    const { selectedToken, handleChangeToken } = useDexContext()
+
+    const options = [
+        {
+            name: "Extract@ / Tether",
+            value: "extracto-usdt"
+        },
+        {
+            name: "Extract@ / USD Coin",
+            value: "extracto-usdc"
+        }
+    ]
+
     return (
         <>
             <div className="flex gap-1">
@@ -38,14 +52,12 @@ const TableLayoutSelector = () => {
             </div>
             <div className="bg-white dark:bg-deep-gray/100 rounded mb-2">
                 <Select
-                    options={[
-                        {
-                            name: "Extract@ / Tether",
-                            value: "extracto-usdt"
-                        }
-                    ]}
-                    value="extracto-usdt"
-                    onChange={(value) => console.log(value)}
+                    options={options}
+                    value={
+                        options.filter((e) => e.value === selectedToken)[0]
+                            .value
+                    }
+                    onChange={(value) => handleChangeToken(value)}
                     placeholder="Teste"
                 />
             </div>

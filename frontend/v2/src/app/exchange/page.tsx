@@ -3,24 +3,16 @@ import ExchangeTopBar from "@/components/exchangeTopbar"
 
 import TextInput from "@/components/textInput"
 import classNames from "classnames"
-import SelectContract from "./SelectContract"
-import TableOrderBook from "./TableOrderBook"
+import SelectContract from "./components/SelectContract"
+
 import Button from "@/components/button"
-import TableLayoutSelector from "./TableLayoutSelector"
-import TableUserOrders from "./TableUserOrders"
+
+import TableUserOrders from "./table/TableUserOrders"
+import useExchange from "@/hooks/useExchange"
+import OrderBook from "./components/OrderBook"
+import PlaceOrder from "./components/PlaceOrder"
 
 export default function page() {
-    const box = classNames({
-        "bg-white dark:bg-deep-gray/100": true,
-        "rounded-md": true,
-        "w-full": true,
-        "p-4": true,
-        "shadow-sm": true,
-        border: true,
-        "border-solid": true,
-        "border-gray/200 dark:border-gray/600": true
-    })
-
     return (
         <>
             <ExchangeTopBar />
@@ -32,40 +24,11 @@ export default function page() {
                                 <ChartComponent />
                             </div>
                             <div className="row">
-                                <div className="col-12 lg:col-6">
-                                    <div className={box}>
-                                        <TextInput label="Commodity amount" />
-                                        <TextInput label="Price" />
-                                        <div className="mt-5">
-                                            <Button bgColor="success">
-                                                Buy contract
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-12 lg:col-6">
-                                    <div className={box}>
-                                        <div className="mb-3">
-                                            <SelectContract />
-                                        </div>
-                                        <TextInput label="Price" />
-                                        <div className="mt-5">
-                                            <Button bgColor="error">
-                                                Buy contract
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <PlaceOrder />
                             </div>
                         </div>
                         <div className="col-12 lg:col-5">
-                            <div className="flex justify-between">
-                                <TableLayoutSelector />
-                            </div>
-                            <div>
-                                <TableOrderBook side="sell" />
-                                <TableOrderBook side="buy" />
-                            </div>
+                            <OrderBook />
                         </div>
                     </div>
 
