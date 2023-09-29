@@ -27,9 +27,8 @@ contract Dex is Crud {
         uint256 commodityAmount = unwrap(floor(ud60x18(rawCommodityAmount)));
         uint256 randNonce = rawCommodityAmount - commodityAmount;
 
-        DexStorageLib.Order memory sell = mountOrder(
-            commodityAmount, amount, address(0x0), future, investor, DexStorageLib.OrderType.Sell, randNonce
-        );
+        DexStorageLib.Order memory sell =
+            mountOrder(commodityAmount, amount, address(0x0), future, investor, DexStorageLib.OrderType.Sell, randNonce);
         DexStorageLib.Order memory order = lib.orderBookMatch[sell.amount][sell.commodityAmount];
 
         if (order.typed == DexStorageLib.OrderType.Buy && order.investor != address(0x0)) {
@@ -123,7 +122,6 @@ contract Dex is Crud {
 
         removeOrder(buy.investor, buy.id);
         removeOrder(sell.investor, sell.id);
-
 
         libCommodity.contracts[sell.future].investor = buy.investor;
         CommodityStorageLib.Contract[] storage contracts = libCommodity.contractsByInvestor[sell.investor];
