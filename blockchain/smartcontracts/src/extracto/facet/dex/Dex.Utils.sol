@@ -15,14 +15,21 @@ abstract contract Utils is Auth {
 
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
+    function matchOrder(uint256 amount, uint256 commodityAmount, DexStorageLib.OrderType typed)
+        internal
+        view
+        returns (bool result, uint256 index)
+    {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        DexStorageLib.Order memory matched = lib.orderBookMatch[order.amount][order.commodityAmount];
+        DexStorageLib.Order[] memory orders = lib.orderBookMatch[amount][commodityAmount];
 
-        if (matched.investor == address(0) && matched.investor == address(0)) {
-            return (false, 0);
+        for (uint256 i = 0; i < orders.length; i++) {
+            if (orders[i].typed == typed) {
+                return (true, i);
+            }
         }
+        return (false, 0);
     }
 
     function filterOrdersByType(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {

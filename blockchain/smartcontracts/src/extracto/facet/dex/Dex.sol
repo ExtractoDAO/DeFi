@@ -29,13 +29,13 @@ contract Dex is Crud {
 
         DexStorageLib.Order memory sell =
             mountOrder(commodityAmount, amount, address(0x0), future, investor, DexStorageLib.OrderType.Sell, randNonce);
-        DexStorageLib.Order memory order = lib.orderBookMatch[sell.amount][sell.commodityAmount];
 
-        if (order.typed == DexStorageLib.OrderType.Buy && order.investor != address(0x0)) {
-            swap(order, sell);
+        (bool result, uint256 index) = matchOrder(sell.amount, sell.commodityAmount, DexStorageLib.OrderType.Buy);
+
+        if (result) {
+            swap(lib.orderBookMatch[sell.amount][sell.commodityAmount][index], sell);
         } else {
-            // TODO: make possible put several contracts with same amount & commodityAmount
-            lib.orderBookMatch[sell.amount][sell.commodityAmount] = sell;
+            lib.orderBookMatch[sell.amount][sell.commodityAmount].push(sell);
             lib.ordersByInvestor[sell.investor].push(sell);
             lib.orderById[sell.id] = sell;
             lib.orderBook.push(sell);
@@ -59,13 +59,12 @@ contract Dex is Crud {
             commodityAmount, amount, tokenAddress, address(0x0), investor, DexStorageLib.OrderType.Buy, randNonce
         );
 
-        DexStorageLib.Order memory order = lib.orderBookMatch[buy.amount][buy.commodityAmount];
+        (bool result, uint256 index) = matchOrder(buy.amount, buy.commodityAmount, DexStorageLib.OrderType.Sell);
 
-        if (order.typed == DexStorageLib.OrderType.Sell && order.investor != address(0x0)) {
-            swap(buy, order);
+        if (result) {
+            swap(buy, lib.orderBookMatch[buy.amount][buy.commodityAmount][index]);
         } else {
-            // TODO: make possible put several contracts with same amount & commodityAmount
-            lib.orderBookMatch[buy.amount][buy.commodityAmount] = buy;
+            lib.orderBookMatch[buy.amount][buy.commodityAmount].push(buy);
             lib.ordersByInvestor[buy.investor].push(buy);
             lib.orderById[buy.id] = buy;
             lib.orderBook.push(buy);

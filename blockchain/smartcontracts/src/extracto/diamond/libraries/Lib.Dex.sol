@@ -33,7 +33,7 @@ library DexStorageLib {
         mapping(bytes32 => Order) orderById;
         mapping(address => Order[]) ordersByInvestor;
         // v2
-        mapping(uint256 amount => mapping(uint256 commodityAmount => Order order)) orderBookMatch;
+        mapping(uint256 amount => mapping(uint256 commodityAmount => Order[] orders)) orderBookMatch;
         mapping(address future => Order order) sellOrdersByAddress;
     }
 
