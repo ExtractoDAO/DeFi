@@ -9,9 +9,6 @@ import useDeployedContractInfo from "./useDeployedContractInfo"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
-
-import { useConnectionStatus } from "@thirdweb-dev/react"
-
 import { ExtractAbiEventNames } from "abitype"
 
 const useContract = <TContractName extends ContractName>(

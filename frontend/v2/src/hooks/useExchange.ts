@@ -8,6 +8,7 @@ import useDeployedContractInfo from "./useDeployedContractInfo"
 import { useDexContext } from "@/context"
 import { toast } from "react-toastify"
 import { ethers } from "ethers"
+import useFuture from "./useFuture"
 
 interface IBuyOrder {
     tokenAddress: string
@@ -25,12 +26,16 @@ export interface IOrder {
 
 const useExchange = () => {
     const { selectedToken } = useDexContext()
+    const { write: futureWrite } = useFuture()
     const { read, write, hash, contractAddress, contract } = useContract("Dex")
+    const { read: readCommodity, contract: contractCommodity } =
+        useContract("Commodity")
     const [buyOrders, setBuyOrders] = useState<IOrder[]>([])
     const [sellOrders, setSellOrders] = useState<IOrder[]>([])
     const [loading, setLoading] = useState(false)
     const [tokenName, setTokenName] = useState("")
     const [modal, setModal] = useState("")
+    const [userContractList, setUserContractList] = useState([])
 
     const { data: contractData } = useDeployedContractInfo(
         tokenName as ContractName
@@ -43,6 +48,11 @@ const useExchange = () => {
     useEffect(() => {
         setTokenName(selectedToken.split("-")[1].toUpperCase())
     }, [selectedToken])
+
+    const getUserContracts = async () => {
+        const response = await readCommodity("getFullDrawer")
+        setUserContractList(response)
+    }
 
     const fetchOrders = async () => {
         setLoading(true)
@@ -107,11 +117,38 @@ const useExchange = () => {
             })
     }
 
+    const placeSellOrder = async ({
+        address,
+        amount
+    }: {
+        address: string
+        amount: string
+    }) => {
+        await futureWrite(address, "sell", amount.toString, {
+            gasLimit: 10000000
+        })
+            .then(() => {
+                setModal("")
+                fetchOrders()
+            })
+            .catch((e) => {
+                toast(e, {
+                    type: "error"
+                })
+            })
+    }
+
     useEffect(() => {
         if (contract) {
             fetchOrders()
         }
     }, [contract])
+
+    useEffect(() => {
+        if (contractCommodity) {
+            getUserContracts()
+        }
+    }, [contractCommodity])
 
     async function handleApprove(price: string) {
         setModal("approving")
@@ -128,14 +165,26 @@ const useExchange = () => {
         }
     }
 
-    const handlePlaceOrder = async (price: number, commodityAmount: number) => {
+    const handlePlaceBuyOrder = async (
+        price: number,
+        commodityAmount: number
+    ) => {
         if (!contractData) return
+
+        const decimals = await readToken("decimals")
 
         await placeBuyOrder({
             tokenAddress: contractData?.address,
-            amount: price * 10 ** 18,
+            amount: price * 10 ** decimals,
             commodityAmount: commodityAmount * 10 ** 18,
             randNonce: Math.floor(Math.random() * 4096) + 1
+        })
+    }
+
+    const handlePlaceSellOrder = async (address: string, price: number) => {
+        await placeSellOrder({
+            address,
+            amount: (price * 10 ** 18).toString()
         })
     }
 
@@ -148,8 +197,10 @@ const useExchange = () => {
         setModal,
         tokenName,
         handleApprove,
-        handlePlaceOrder,
-        hash
+        handlePlaceBuyOrder,
+        handlePlaceSellOrder,
+        hash,
+        userContractList
     }
 }
 

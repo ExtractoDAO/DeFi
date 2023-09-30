@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Button from "@/components/button"
 import TextInput from "@/components/textInput"
 import classNames from "classnames"
 import SelectContract from "./SelectContract"
 import useExchange from "@/hooks/useExchange"
-import { useDexContext } from "@/context"
-import useDeployedContractInfo from "@/hooks/useDeployedContractInfo"
-import { ContractName } from "@/utils/contract"
+
 import ModalLoading from "@/components/buy/modalLoading"
 import ModalSuccess from "@/components/buy/modalSuccess"
 import Modal from "@/components/modal"
@@ -17,15 +15,24 @@ import { ShoppingCartIcon } from "@heroicons/react/20/solid"
 export default function PlaceOrder() {
     const {
         handleApprove,
-        handlePlaceOrder,
+        handlePlaceBuyOrder,
+        handlePlaceSellOrder,
         modal,
         setModal,
         tokenName,
-        hash
+        hash,
+        userContractList
     } = useExchange()
+
+    // TODO: Falta deploy do contrato "Future"
 
     const [buyState, setBuyState] = useState({
         commodityAmount: 0,
+        price: 0
+    })
+
+    const [sellState, setSellState] = useState({
+        selectedContract: "",
         price: 0
     })
 
@@ -76,7 +83,7 @@ export default function PlaceOrder() {
                     {
                         label: "Confirm",
                         onClick: () =>
-                            handlePlaceOrder(
+                            handlePlaceBuyOrder(
                                 buyState.price,
                                 buyState.commodityAmount
                             )
@@ -132,11 +139,39 @@ export default function PlaceOrder() {
             <div className="col-12 lg:col-6">
                 <div className={box}>
                     <div className="mb-3">
-                        <SelectContract />
+                        <SelectContract
+                            list={userContractList}
+                            selected={sellState.selectedContract}
+                            onChage={(value) => {
+                                setSellState({
+                                    ...sellState,
+                                    selectedContract: value
+                                })
+                            }}
+                        />
                     </div>
-                    <TextInput label="Price" />
+                    <TextInput
+                        label="Price"
+                        value={sellState.price}
+                        onChange={({ target }) =>
+                            setSellState({
+                                ...sellState,
+                                price: Number(target.value)
+                            })
+                        }
+                    />
                     <div className="mt-5">
-                        <Button bgColor="error">Sell contract</Button>
+                        <Button
+                            bgColor="error"
+                            onClick={() =>
+                                handlePlaceSellOrder(
+                                    sellState.selectedContract,
+                                    sellState.price
+                                )
+                            }
+                        >
+                            Sell contract
+                        </Button>
                     </div>
                 </div>
             </div>

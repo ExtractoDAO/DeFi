@@ -44,6 +44,7 @@ const useFuture = () => {
     ): Promise<ethers.ContractTransaction | undefined> => {
         try {
             const contract = getContract(address)
+            console.log(contract)
             if (!contract) return
 
             const txn: ethers.ContractTransaction = await contract[

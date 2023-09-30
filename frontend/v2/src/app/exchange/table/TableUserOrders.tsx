@@ -1,4 +1,12 @@
+"use client"
+
+import useExchange from "@/hooks/useExchange"
+
 export default function TableUserOrders() {
+    const { buyOrders, sellOrders, loading } = useExchange()
+
+    console.log(buyOrders, sellOrders)
+
     const Pill = ({ status }: { status: number }) => {
         const stats: any = {
             0: {
