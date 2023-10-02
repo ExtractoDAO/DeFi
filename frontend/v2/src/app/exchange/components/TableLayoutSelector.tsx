@@ -8,7 +8,11 @@ import IconBuy from "@/assets/img/icons/exchange/orderbook-buy.svg"
 import Image from "next/image"
 import { useDexContext } from "@/context"
 
-const TableLayoutSelector = () => {
+interface Props {
+    setLayout: (layout: "buy" | "sell" | "both") => void
+}
+
+const TableLayoutSelector = ({ setLayout }: Props) => {
     const { selectedToken, handleChangeToken } = useDexContext()
 
     const options = [
@@ -25,7 +29,7 @@ const TableLayoutSelector = () => {
     return (
         <>
             <div className="flex gap-1">
-                <button>
+                <button onClick={() => setLayout("both")}>
                     <Image
                         src={IconMixed.src}
                         alt="Logo"
@@ -33,7 +37,7 @@ const TableLayoutSelector = () => {
                         height={24}
                     />
                 </button>
-                <button>
+                <button onClick={() => setLayout("buy")}>
                     <Image
                         src={IconBuy.src}
                         alt="Logo"
@@ -41,7 +45,7 @@ const TableLayoutSelector = () => {
                         height={24}
                     />
                 </button>
-                <button>
+                <button onClick={() => setLayout("sell")}>
                     <Image
                         src={IconSell.src}
                         alt="Logo"
