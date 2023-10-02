@@ -24,8 +24,6 @@ export default function PlaceOrder() {
         userContractList
     } = useExchange()
 
-    // TODO: Falta deploy do contrato "Future"
-
     const [buyState, setBuyState] = useState({
         commodityAmount: 0,
         price: 0

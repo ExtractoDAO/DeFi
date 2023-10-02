@@ -1748,6 +1748,165 @@ const deployedContracts = {
                             ],
                             stateMutability: "view",
                             type: "function"
+                        },
+                        {
+                            inputs: [
+                                {
+                                    internalType: "bytes32",
+                                    name: "id",
+                                    type: "bytes32",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "amount",
+                                    type: "uint256",
+                                    indexed: true
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "commodityAmount",
+                                    type: "uint256",
+                                    indexed: false
+                                }
+                            ],
+                            type: "event",
+                            name: "BuyOrder",
+                            anonymous: false
+                        },
+                        {
+                            inputs: [
+                                {
+                                    internalType: "bytes32",
+                                    name: "id",
+                                    type: "bytes32",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "amount",
+                                    type: "uint256",
+                                    indexed: true
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "commodityAmount",
+                                    type: "uint256",
+                                    indexed: false
+                                },
+                                {
+                                    internalType:
+                                        "enum DexStorageLib.OrderType",
+                                    name: "side",
+                                    type: "uint8",
+                                    indexed: false
+                                }
+                            ],
+                            type: "event",
+                            name: "CancelOrder",
+                            anonymous: false
+                        },
+                        {
+                            inputs: [
+                                {
+                                    internalType: "address",
+                                    name: "oldInvestor",
+                                    type: "address",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "address",
+                                    name: "newInvestor",
+                                    type: "address",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "address",
+                                    name: "future",
+                                    type: "address",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "amount",
+                                    type: "uint256",
+                                    indexed: true
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "commodityAmount",
+                                    type: "uint256",
+                                    indexed: false
+                                }
+                            ],
+                            type: "event",
+                            name: "MatchOrder",
+                            anonymous: false
+                        },
+                        {
+                            inputs: [
+                                {
+                                    internalType: "bytes32",
+                                    name: "id",
+                                    type: "bytes32",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "address",
+                                    name: "future",
+                                    type: "address",
+                                    indexed: true
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "amount",
+                                    type: "uint256",
+                                    indexed: false
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "commodityAmount",
+                                    type: "uint256",
+                                    indexed: false
+                                }
+                            ],
+                            type: "event",
+                            name: "SellOrder",
+                            anonymous: false
+                        },
+                        {
+                            inputs: [
+                                {
+                                    internalType: "address",
+                                    name: "tokenAddress",
+                                    type: "address"
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "commodityAmount",
+                                    type: "uint256"
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "amount",
+                                    type: "uint256"
+                                },
+                                {
+                                    internalType: "uint256",
+                                    name: "randNonce",
+                                    type: "uint256"
+                                }
+                            ],
+                            stateMutability: "nonpayable",
+                            type: "function",
+                            name: "buyOrder",
+                            outputs: [
+                                {
+                                    internalType: "bytes32",
+                                    name: "id",
+                                    type: "bytes32"
+                                }
+                            ]
                         }
                     ]
                 },

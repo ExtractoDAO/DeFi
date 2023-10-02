@@ -75,7 +75,7 @@ const useContract = <TContractName extends ContractName>(
             if (!contractData) return
 
             const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const fragment = contract?.interface.getEvent("FutureCreated")
+            const fragment = contract?.interface.getEvent(event)
             const emptyIface = new ethers.utils.Interface([])
 
             if (!fragment) return

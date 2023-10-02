@@ -27,7 +27,14 @@ export interface IOrder {
 const useExchange = () => {
     const { selectedToken } = useDexContext()
     const { write: futureWrite } = useFuture()
-    const { read, write, hash, contractAddress, contract } = useContract("Dex")
+    const {
+        read,
+        write,
+        hash,
+        contractAddress,
+        contract,
+        decodeContractDeployedData
+    } = useContract("Dex")
     const { read: readCommodity, contract: contractCommodity } =
         useContract("Commodity")
     const [buyOrders, setBuyOrders] = useState<IOrder[]>([])
@@ -106,7 +113,10 @@ const useExchange = () => {
                 gasLimit: 10000000
             }
         )
-            .then(() => {
+            .then(async () => {
+                const response = await decodeContractDeployedData("BuyOrder")
+                console.log("DECODED: ", response)
+
                 setModal("")
                 fetchOrders()
             })
@@ -127,7 +137,10 @@ const useExchange = () => {
         await futureWrite(address, "sell", amount.toString, {
             gasLimit: 10000000
         })
-            .then(() => {
+            .then(async () => {
+                const response = await decodeContractDeployedData("BuyOrder")
+                console.log("DECODED: ", response)
+
                 setModal("")
                 fetchOrders()
             })
