@@ -24,6 +24,13 @@ export interface IOrder {
     tokenAddress?: string
 }
 
+interface IOrderPayload {
+    id: string
+    amount: number
+    commodityAmount: number
+    future: string
+}
+
 const useExchange = () => {
     const { selectedToken } = useDexContext()
     const { write: futureWrite } = useFuture()
@@ -134,12 +141,12 @@ const useExchange = () => {
         address: string
         amount: string
     }) => {
-        await futureWrite(address, "sell", amount.toString, {
+        await futureWrite(address, "sell", amount.toString(), {
             gasLimit: 10000000
         })
             .then(async () => {
                 const response = await decodeContractDeployedData("BuyOrder")
-                console.log("DECODED: ", response)
+                console.log("DECODED 0: ", response)
 
                 setModal("")
                 fetchOrders()

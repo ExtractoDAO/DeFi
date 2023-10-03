@@ -15,6 +15,7 @@ const useFuture = () => {
     const { data: contractData } = useDeployedContractInfo("Future")
 
     const getContract = (address: string) => {
+        // TODO: Contrato "Future" não foi deployado
         if (contractData) {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const signer = provider.getSigner()
@@ -43,8 +44,9 @@ const useFuture = () => {
         ...args: any[]
     ): Promise<ethers.ContractTransaction | undefined> => {
         try {
+            console.log("CONTRACT ", address)
             const contract = getContract(address)
-            console.log(contract)
+
             if (!contract) return
 
             const txn: ethers.ContractTransaction = await contract[
