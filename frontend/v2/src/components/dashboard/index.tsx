@@ -4,18 +4,121 @@ export default function Dashboard() {
             <title>
 
             </title>
-            <div>
-                <div>
-
+            <div className="flex
+                       w-full">
+                <div className="flex
+                        w-full
+                        p-6
+                        flex-col
+                        gap-4
+                        flex-[1 0 0]
+                        rounded-l-lg
+                        border
+                        border-solid
+                        bg-brand/secondary/500
+                        border-brand/secondary/600">
+                    <p className="text-gray/300
+                            text-sm
+                            not-italic
+                            font-medium
+                            ">Total Balance</p>
+                    <div className="flex
+                            items-end
+                            gap-3">
+                        <p className="text-3xl
+                                font-bold
+                                not-italic
+                                text-white">400</p>
+                        <p className="text-gray/300
+                                text-sm
+                                not-italic
+                                font-normal">USDT</p>
+                    </div>
                 </div>
-                <div>
-
+                <div className="flex
+                          w-full
+                          p-6
+                          flex-col
+                          gap-4
+                          flex-[1 0 0]
+                          border
+                          border-solid
+                          bg-brand/secondary/500
+                          border-brand/secondary/600">
+                            <p className="text-gray/300
+                            text-sm
+                            not-italic
+                            font-medium
+                            ">Number of contracts</p>
+                    <div className="flex
+                            items-end
+                            gap-3">
+                        <p className="text-3xl
+                                font-bold
+                                not-italic
+                                text-white">30</p>
+                        <p className="text-gray/300
+                                text-sm
+                                not-italic
+                                font-normal">contracts pruchased</p>
+                    </div>
                 </div>
-                <div>
-
+                <div className="flex
+                          w-full
+                          p-6
+                          flex-col
+                          gap-4
+                          flex-[1 0 0]
+                          border
+                          border-solid
+                          bg-brand/secondary/500
+                          border-brand/secondary/600">
+                            <p className="text-gray/300
+                            text-sm
+                            not-italic
+                            font-medium
+                            ">Avaliable for withdrawal</p>
+                    <div className="flex
+                            items-end
+                            gap-3">
+                        <p className="text-3xl
+                                font-bold
+                                not-italic
+                                text-white">05</p>
+                        <p className="text-gray/300
+                                text-sm
+                                not-italic
+                                font-normal">contracts avaliable</p>
+                    </div>
                 </div>
-                <div>
-
+                <div className="flex
+                          w-full
+                          p-6
+                          flex-col
+                          gap-4
+                          flex-[1 0 0]
+                          rounded-r-lg
+                          border
+                          border-solid
+                          bg-brand/secondary/500
+                          border-brand/secondary/600">
+                            <p className="text-gray/300
+                            text-sm
+                            not-italic
+                            font-medium
+                            ">Value fat ox</p>
+                    <div className="flex
+                            items-end
+                            gap-3">
+                        <p className="text-3xl
+                                font-bold
+                                not-italic
+                                text-white">50,51</p>
+                        <p className="text-gray/300
+                                text-sm
+                                not-italic
+                                font-normal">Dollar</p>
+                    </div>
                 </div>
             </div>
 
