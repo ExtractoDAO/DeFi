@@ -1,9 +1,13 @@
 export default function Dashboard() {
     return (
         <div>
-            <title>
-
-            </title>
+            <h1 className="text-gray/500
+                        text-base
+                        not-italic
+                        font-medium
+                        mb-4">
+                Overview your account
+            </h1>
             <div className="flex
                        w-full">
                 <div className="flex
@@ -122,21 +126,40 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div className="relative overflow-x-auto ">
+            <h1 className="text-gray/500
+                        text-base
+                        not-italic
+                        font-medium
+                        mb-4
+                        mt-8">
+                    Fat ox price historic</h1>
+                <table className="w-full 
+                            text-sm 
+                            text-left 
+                            text-gray-500
+                            border
+                            border-gray/200
+                            rounded
+                            ">
+                    <thead className="h-[38px]
+                                justify-center
+                                items-start
+                                self-stretch
+                                text-gray/500
+                                font-medium
+                                not-italic
+                                uppercase
+                                text-xs">
                         <tr>
                             <th scope="col" className="px-6 py-3">
-
+VALUE
                             </th>
                             <th scope="col" className="px-6 py-3">
-
+                            VAl./DAY
                             </th>
                             <th scope="col" className="px-6 py-3">
-
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-
+                            VALUE US$
                             </th>
                             <th scope="col" className="px-6 py-3">
 
@@ -144,89 +167,124 @@ export default function Dashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                        <tr className="h-[72px]
+                                px-6
+                                py-4
+                                justify-center
+                                items-start
+                                gap-[10px]
+                                self-stretch
+                                text-gray/500
+                                not-italic
+                                font-normal
+                                text-sm">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
+1
                             </th>
                             <td className="px-6 py-4">
-
+2
                             </td>
                             <td className="px-6 py-4">
-
+3
                             </td>
                             <td className="px-6 py-4">
-
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+4
                             </td>
                         </tr>
-                        <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                        <tr className="h-[72px]
+                                px-6
+                                py-4
+                                justify-center
+                                items-start
+                                gap-[10px]
+                                self-stretch
+                                text-gray/500
+                                not-italic
+                                font-normal
+                                text-sm">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
+53
                             </th>
                             <td className="px-6 py-4">
-
+34
                             </td>
                             <td className="px-6 py-4">
-
+45
                             </td>
                             <td className="px-6 py-4">
-
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+78
                             </td>
                         </tr>
-                        <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                        <tr className="h-[72px]
+                                px-6
+                                py-4
+                                justify-center
+                                items-start
+                                gap-[10px]
+                                self-stretch
+                                text-gray/500
+                                not-italic
+                                font-normal
+                                text-sm">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
+89
                             </th>
                             <td className="px-6 py-4">
-
+90
                             </td>
                             <td className="px-6 py-4">
-
+786
                             </td>
                             <td className="px-6 py-4">
-
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+678978
                             </td>
                         </tr>
-                        <tr className="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                        <tr className="h-[72px]
+                                px-6
+                                py-4
+                                justify-center
+                                items-start
+                                gap-[10px]
+                                self-stretch
+                                text-gray/500
+                                not-italic
+                                font-normal
+                                text-sm">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
+567
                             </th>
                             <td className="px-6 py-4">
-
+234
                             </td>
                             <td className="px-6 py-4">
-
+897
                             </td>
                             <td className="px-6 py-4">
-
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+56768
                             </td>
                         </tr>
-                        <tr>
+                        <tr className="h-[72px]
+                                px-6
+                                py-4
+                                justify-center
+                                items-start
+                                gap-[10px]
+                                self-stretch
+                                text-gray/500
+                                not-italic
+                                font-normal
+                                text-sm">
                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-
+457656
                             </th>
                             <td className="px-6 py-4">
-
+5678
                             </td>
                             <td className="px-6 py-4">
-
+56785679
                             </td>
                             <td className="px-6 py-4">
-
-                            </td>
-                            <td className="px-6 py-4">
-                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+789789
                             </td>
                         </tr>
                     </tbody>
