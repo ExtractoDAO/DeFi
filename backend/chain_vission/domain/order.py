@@ -2,36 +2,66 @@ from chain_vission import adapter_app, logger
 from typing import List, Optional
 import strawberry
 
+from enum import Enum
+
+
+@strawberry.enum
+class OrderStatus(Enum):
+    PENDING = 0
+    CONFIRMED = 1
+    CANCELED = 2
+
 
 @strawberry.type
 class Order:
     """
     type Contract {
-        investor: Str!
-        contract: Str!
-        hash: Str!
-        kg: Decimal!
+        id: Str!
+        investor: Str
+        future: Str!
+        amount: Decimal!
+        commodityAmount: Decimal!
+        way: Str!
+        status: Int
     }
     """
 
+    id: str
     investor: str
-    contract: str
-    hash: str
-    kg: float
+    future: str
+    amount: float
+    commodityAmount: float
+    way: str # sell | buy
+    status: OrderStatus
 
     @staticmethod
     def from_dict(order: dict) -> Optional["Order"]:
         if order:
             return Order(
+                id=order["id"],
                 investor=order["investor"],
-                contract=order["contract"],
-                hash=order["hash"],
-                kg=order["kg"],
+                future=order["future"],
+                amount=order["amount"],
+                commodityAmount=order["commodityAmount"],
+                way=order["way"],
+                status=OrderStatus(order["status"]).value
             )
 
-        message = f"Expected dict with: investor, contract, hash and kg, but got {list(order.keys())}"
+        message = f"Expected dict with: investor, future, amount and commodityAmount, but got {list(order.keys())}"
         logger.warn(message)
         return None
+
+    @property
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "investor": self.investor,
+            "future": self.future,
+            "amount": self.amount,
+            "commodityAmount": self.commodityAmount,
+            "way": self.way,
+            "status": self.status
+        }
 
 
 def get_all_orders() -> List[Order]:

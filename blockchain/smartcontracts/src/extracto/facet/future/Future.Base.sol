@@ -19,4 +19,27 @@ abstract contract FBase is FAuth {
     function _burn() internal {
         burn = true;
     }
+
+    function sellOrder(uint256 amount) internal returns (bytes32 id) {
+        bytes memory payload = abi.encodeWithSignature("sellOrder(address,uint256)", investor, amount);
+        (bool ok, bytes memory data) = address(extracto).call(payload);
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        } else {
+            id = abi.decode(data, (bytes32));
+            orderId = id;
+        }
+    }
+
+    function cancellOrder() internal {
+        bytes memory payload = abi.encodeWithSignature("cancelOrder(bytes32)", orderId);
+        (bool ok, bytes memory data) = address(extracto).call(payload);
+        if (!ok) {
+            assembly {
+                revert(add(data, 32), mload(data))
+            }
+        }
+    }
 }
