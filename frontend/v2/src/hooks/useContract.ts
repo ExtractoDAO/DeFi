@@ -9,15 +9,13 @@ import useDeployedContractInfo from "./useDeployedContractInfo"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 import { getParsedEthersError } from "@/utils/utilsContract"
-
-import { getBlockNumber, useConnectionStatus } from "@thirdweb-dev/react"
+import { ExtractAbiEventNames } from "abitype"
 
 const useContract = <TContractName extends ContractName>(
-    contractName: TContractName,
-    contractAddress?: string
+    contractName: TContractName
 ) => {
-    const connectStatus = useConnectionStatus()
-    const { data: contractData } = useDeployedContractInfo(contractName)
+    const { data: contractData, isLoading } =
+        useDeployedContractInfo(contractName)
     const [hash, setHash] = useState("")
     const [contract, setContract] = useState<ethers.Contract>()
 
@@ -28,7 +26,7 @@ const useContract = <TContractName extends ContractName>(
 
             setContract(
                 new ethers.Contract(
-                    "0x6D544390Eb535d61e196c87d6B9c80dCD8628Acd",
+                    contractData.address,
                     contractData.abi,
                     signer
                 )
@@ -42,7 +40,7 @@ const useContract = <TContractName extends ContractName>(
         >
     ): Promise<ethers.ContractTransaction | any | undefined> => {
         try {
-            if (!contract || connectStatus !== "connected") return
+            if (!contract) return
             const response = await contract[functionName]()
             return response
         } catch (error) {
@@ -71,13 +69,13 @@ const useContract = <TContractName extends ContractName>(
     }
 
     const decodeContractDeployedData = async (
-        tx: ethers.ContractTransaction
+        event: ExtractAbiEventNames<ContractAbi<typeof contractName>>
     ): Promise<any> => {
         try {
             if (!contractData) return
 
             const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const fragment = contract?.interface.getEvent("FutureCreated")
+            const fragment = contract?.interface.getEvent(event)
             const emptyIface = new ethers.utils.Interface([])
 
             if (!fragment) return
@@ -117,7 +115,10 @@ const useContract = <TContractName extends ContractName>(
         write,
         hash,
         contractAddress: contractData?.address,
-        decodeContractDeployedData
+        decodeContractDeployedData,
+        isLoading,
+        contractData,
+        contract
     }
 }
 

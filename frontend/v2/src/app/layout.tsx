@@ -12,6 +12,7 @@ import Layout from "@/components/layout"
 import { theme } from "@/utils/theme"
 
 import { ThirdwebProvider } from "@/providers/Thirdweb"
+import { Providers } from "@/providers/dex"
 
 export const metadata = {
     title: "ExtractoDAO",
@@ -28,24 +29,26 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark">
             <body className={`${inter.className} bg-slate/50 dark:bg-gray/900`}>
-                <ThirdwebProvider
-                    activeChain="localhost"
-                    clientId="f05daca94bc43cf8e5d93fe257fd68e8"
-                >
-                    <Layout>{children}</Layout>
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="colored"
-                    />
-                </ThirdwebProvider>
+                <Providers>
+                    <ThirdwebProvider
+                        activeChain="localhost"
+                        clientId="f05daca94bc43cf8e5d93fe257fd68e8"
+                    >
+                        <Layout>{children}</Layout>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="colored"
+                        />
+                    </ThirdwebProvider>
+                </Providers>
             </body>
         </html>
     )

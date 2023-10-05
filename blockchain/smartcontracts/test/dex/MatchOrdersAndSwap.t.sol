@@ -54,5 +54,8 @@ contract MatchOrdersSwap is DexBaseSetup {
         assertEq(h.buyOrders().length, 0);
         assertEq(usdc.balanceOf(investor1), amount * 2);
         assertEq(usdc.balanceOf(investor2), 0);
+        /* JOEL
+            Get event `MatchOrder`
+        */
     }
 }

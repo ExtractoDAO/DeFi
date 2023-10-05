@@ -3,32 +3,33 @@ pragma solidity ^0.8.18;
 
 import {DexStorageLib} from "../../diamond/libraries/Lib.Dex.sol";
 import {Auth} from "../commodity/Commodity.Auth.sol";
+import "../../../utils/math/UD60x18.sol";
 
 abstract contract Utils is Auth {
+    event MatchOrder(
+        address oldInvestor, address newInvestor, address future, uint256 indexed amount, uint256 commodityAmount
+    );
+    event CancelOrder(bytes32 id, uint256 indexed amount, uint256 commodityAmount, DexStorageLib.OrderType side);
+    event SellOrder(bytes32 id, address indexed future, uint256 amount, uint256 commodityAmount);
+    event BuyOrder(bytes32 id, uint256 indexed amount, uint256 commodityAmount);
+
     constructor() Auth() {}
 
-    function matchOrder(DexStorageLib.Order memory order) internal view returns (bool result, uint256 index) {
+    function matchOrder(uint256 amount, uint256 commodityAmount, DexStorageLib.OrderType typed)
+        internal
+        view
+        returns (bool result, uint256 index)
+    {
         DexStorageLib.Storage storage lib = DexStorageLib.getDexStorage();
 
-        // match price by bucket
+        DexStorageLib.Order[] memory orders = lib.orderBookMatch[amount][commodityAmount];
 
-        for (index = 0; index < lib.orderBook.length; index++) {
-            DexStorageLib.Order memory orderProposal = lib.orderBook[index];
-
-            if (orderProposal.typed == order.typed) {
-                continue;
-            } else {
-                result = true;
-                result = result && order.amount == orderProposal.amount;
-                result = result && order.commodityAmount == orderProposal.commodityAmount;
-                if (result) {
-                    return (result, index);
-                } else {
-                    continue;
-                }
+        for (uint256 i = 0; i < orders.length; i++) {
+            if (orders[i].typed == typed) {
+                return (true, i);
             }
         }
-        index = 0;
+        return (false, 0);
     }
 
     function filterOrdersByType(DexStorageLib.OrderType typed) internal view returns (DexStorageLib.Order[] memory) {
@@ -64,12 +65,12 @@ abstract contract Utils is Auth {
         address investor,
         DexStorageLib.OrderType typed,
         uint256 randNonce
-    ) internal pure returns (DexStorageLib.Order memory buy) {
-        // TODO: validate data;
+    ) internal pure returns (DexStorageLib.Order memory order) {
+        validateAmounts(commodityAmount, amount);
 
         bytes32 id =
             keccak256(abi.encodePacked(commodityAmount, tokenAddress, future, investor, amount, typed, randNonce));
 
-        buy = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
+        order = DexStorageLib.Order(commodityAmount, amount, tokenAddress, future, investor, typed, id);
     }
 }

@@ -11,7 +11,7 @@ const useDrawer = () => {
     useEffect(() => {
         async function getData() {
             const { data } = await backend.graphql.contracts()
-            if (data?.items.length) {
+            if (data?.items) {
                 setDrawer(data.items)
             }
         }

@@ -1,10 +1,12 @@
+import { IOrder } from "@/hooks/useExchange"
 import classNames from "classnames"
 
 interface TableOrderBookProps {
     side: "buy" | "sell"
+    orders: IOrder[]
 }
 
-const TableOrderBook = ({ side }: TableOrderBookProps) => {
+const TableOrderBook = ({ side, orders }: TableOrderBookProps) => {
     return (
         <table className="w-full shadow-md">
             <thead>
@@ -56,7 +58,10 @@ const TableOrderBook = ({ side }: TableOrderBookProps) => {
                 </tr>
             </thead>
             <tbody>
-                {new Array(10).fill("").map((e, i) => {
+                {orders.map((e, i) => {
+                    const price = e.price / 10 ** 18
+                    const amount = e.amount / 10 ** 18
+
                     return (
                         <tr key={i}>
                             <td
@@ -67,7 +72,7 @@ const TableOrderBook = ({ side }: TableOrderBookProps) => {
                                     "text-green/500": side === "buy"
                                 })}
                             >
-                                19967.98
+                                {price}
                             </td>
                             <td
                                 className="
@@ -81,7 +86,7 @@ const TableOrderBook = ({ side }: TableOrderBookProps) => {
                                 dark:bg-deep-gray/100
                             "
                             >
-                                0.10016
+                                {amount}
                             </td>
                             <td
                                 className="
@@ -95,7 +100,7 @@ const TableOrderBook = ({ side }: TableOrderBookProps) => {
                                 dark:bg-deep-gray/100
                             "
                             >
-                                0.58
+                                {(amount * price).toFixed(2)}
                             </td>
                         </tr>
                     )
