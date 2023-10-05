@@ -37,5 +37,9 @@ contract BuyOrders is DexBaseSetup {
         assertEq(bids[0].investor, investor, "investor dont match");
         assertEq(bids[0].future, address(0x0), "future dont match");
         assertEq(bids[0].amount, amount, "amount dont match");
+
+        /* JOEL
+            Get event `BuyOrder`
+        */
     }
 }

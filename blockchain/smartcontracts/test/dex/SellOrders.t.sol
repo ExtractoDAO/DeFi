@@ -38,5 +38,24 @@ contract SellOrders is DexBaseSetup {
         assertEq(asks[0].amount, amount + 1 * 10e18, "amount dont match");
         assertEq(asks[0].investor, investor, "investor dont match");
         assertEq(asks[0].future, _future, "future dont match");
+        /* JOEL
+            Get event `SellOrder`
+        */
     }
+
+    /* JOEL
+    # Scenary: Placing the same Sell Order twice
+        - Give: that the a investor sell contract
+        - When: see the order book
+        - AND: he sell same contract
+        - Then: should get a error `FutureAlreadyListed`
+    */
+
+    /* JOEL
+    # Scenary: Self Trading Order
+        - Give: that the a investor sell contract
+        - When: see the order book
+        - AND: put a new buy order to match with self sell order
+        - Then: should get a error `SelfTradingError`
+    */
 }

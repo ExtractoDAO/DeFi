@@ -49,6 +49,9 @@ contract CancelOrders is DexBaseSetup {
 
         // 2 Validation
         assertEq(h.sellOrders().length, 0);
+        /* JOEL
+            Get event `CancelOrder`
+        */
     }
 
     /*

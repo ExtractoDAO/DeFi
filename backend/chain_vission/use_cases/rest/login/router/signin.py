@@ -18,7 +18,7 @@ from siwe import (
 
 
 def expiration_time():
-    exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+    exp = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
     return int(exp.timestamp())
 
 
