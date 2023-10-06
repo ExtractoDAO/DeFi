@@ -7,13 +7,13 @@ import { ContractName } from "@/utils/contract"
 import useDeployedContractInfo from "./useDeployedContractInfo"
 import { useDexContext } from "@/context"
 import { toast } from "react-toastify"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import useFuture from "./useFuture"
 
 interface IBuyOrder {
     tokenAddress: string
     commodityAmount: number
-    amount: number
+    amount: BigNumber
     randNonce: number
 }
 
@@ -22,13 +22,6 @@ export interface IOrder {
     price: number
     amount: number
     tokenAddress?: string
-}
-
-interface IOrderPayload {
-    id: string
-    amount: number
-    commodityAmount: number
-    future: string
 }
 
 const useExchange = () => {
@@ -113,8 +106,8 @@ const useExchange = () => {
         await write(
             "buyOrder",
             tokenAddress,
-            commodityAmount.toString(),
-            amount.toString(),
+            commodityAmount,
+            amount,
             randNonce,
             {
                 gasLimit: 10000000
@@ -125,7 +118,7 @@ const useExchange = () => {
                 console.log("DECODED: ", response)
 
                 setModal("")
-                fetchOrders()
+                await fetchOrders()
             })
             .catch((e) => {
                 toast(e, {
@@ -139,17 +132,19 @@ const useExchange = () => {
         amount
     }: {
         address: string
-        amount: string
+        amount: number
     }) => {
+        console.log(amount.toString())
         await futureWrite(address, "sell", amount.toString(), {
             gasLimit: 10000000
         })
-            .then(async () => {
-                const response = await decodeContractDeployedData("BuyOrder")
-                console.log("DECODED 0: ", response)
+            .then(async (res) => {
+                console.log("RESPOSTA: ", res)
+                // const response = await decodeContractDeployedData("SellOrder")
+                // console.log("DECODED 0: ", response)
 
                 setModal("")
-                fetchOrders()
+                await fetchOrders()
             })
             .catch((e) => {
                 toast(e, {
@@ -173,7 +168,7 @@ const useExchange = () => {
     async function handleApprove(price: string) {
         setModal("approving")
         const decimals = await readToken("decimals")
-        const formattedValue = ethers.utils.parseUnits(price, Number(decimals))
+        const formattedValue = toFixed(Number(price) * 10e18)
 
         if (!contractData?.address || !formattedValue) return
         try {
@@ -192,19 +187,43 @@ const useExchange = () => {
         if (!contractData) return
 
         const decimals = await readToken("decimals")
+        const formattedPrice = toFixed(price * 10e18)
+
+        console.log(formattedPrice)
 
         await placeBuyOrder({
             tokenAddress: contractData?.address,
-            amount: price * 10 ** decimals,
-            commodityAmount: commodityAmount * 10 ** 18,
+            amount: formattedPrice,
+            commodityAmount: commodityAmount,
             randNonce: Math.floor(Math.random() * 4096) + 1
         })
     }
 
+    function toFixed(x: any) {
+        if (Math.abs(x) < 1.0) {
+            var e = parseInt(x.toString().split("e-")[1])
+            if (e) {
+                x *= Math.pow(10, e - 1)
+                x = "0." + new Array(e).join("0") + x.toString().substring(2)
+            }
+        } else {
+            var e = parseInt(x.toString().split("+")[1])
+            if (e > 20) {
+                e -= 20
+                x /= Math.pow(10, e)
+                x += new Array(e + 1).join("0")
+            }
+        }
+        return x
+    }
+
     const handlePlaceSellOrder = async (address: string, price: number) => {
+        const formattedValue = ethers.utils.parseUnits(price.toString(), 18)
+        console.log("AQUIII ", toFixed(price * 10e18))
+
         await placeSellOrder({
             address,
-            amount: (price * 10 ** 18).toString()
+            amount: toFixed(price * 10e18)
         })
     }
 
