@@ -9,7 +9,7 @@ import {MockToken} from "../../../../test/MockToken.t.sol";
 abstract contract Data is Script {
     bytes32 controllerPrivateKey =
         hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    address diamond = 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9;
+    address diamond = 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707;
 
     Commodity commodity = Commodity(diamond);
     MockToken usdc = MockToken(0x5FbDB2315678afecb367f032d93F642f64180aa3);
