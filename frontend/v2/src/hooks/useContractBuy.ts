@@ -100,13 +100,13 @@ const useContractBuy = () => {
         }
     }
 
+    const multiplyBy1e18 = (value: number) =>
+        ethers.utils.parseEther(value.toString())
+
     async function handleDeploy() {
         setModal("loading")
         const decimals = await readToken("decimals")
-        const formattedValue = ethers.utils.parseUnits(
-            usdValue,
-            Number(decimals)
-        )
+        const formattedValue = multiplyBy1e18(Number(usdValue))
 
         try {
             const kilos = await read("getTotalSupplyKG")

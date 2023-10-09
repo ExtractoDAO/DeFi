@@ -12,7 +12,7 @@ import useFuture from "./useFuture"
 
 interface IBuyOrder {
     tokenAddress: string
-    commodityAmount: number
+    commodityAmount: BigNumber
     amount: BigNumber
     randNonce: number
 }
@@ -43,6 +43,9 @@ const useExchange = () => {
     const [tokenName, setTokenName] = useState("")
     const [modal, setModal] = useState("")
     const [userContractList, setUserContractList] = useState([])
+
+    const multiplyBy1e18 = (value: number) =>
+        ethers.utils.parseEther(value.toString())
 
     const { data: contractData } = useDeployedContractInfo(
         tokenName as ContractName
@@ -106,8 +109,8 @@ const useExchange = () => {
         await write(
             "buyOrder",
             tokenAddress,
-            commodityAmount,
-            amount,
+            commodityAmount.toString(),
+            amount.toString(),
             randNonce,
             {
                 gasLimit: 10000000
@@ -132,7 +135,7 @@ const useExchange = () => {
         amount
     }: {
         address: string
-        amount: number
+        amount: BigNumber
     }) => {
         console.log(amount.toString())
         await futureWrite(address, "sell", amount.toString(), {
@@ -167,8 +170,9 @@ const useExchange = () => {
 
     async function handleApprove(price: string) {
         setModal("approving")
+
         const decimals = await readToken("decimals")
-        const formattedValue = toFixed(Number(price) * 10e18)
+        const formattedValue = ethers.utils.parseUnits(price, decimals)
 
         if (!contractData?.address || !formattedValue) return
         try {
@@ -186,44 +190,24 @@ const useExchange = () => {
     ) => {
         if (!contractData) return
 
-        const decimals = await readToken("decimals")
-        const formattedPrice = toFixed(price * 10e18)
-
-        console.log(formattedPrice)
+        const formattedPrice = ethers.utils.parseUnits(price.toString(), 18)
+        const formattedAmount = ethers.utils.parseUnits(
+            commodityAmount.toString(),
+            20
+        )
 
         await placeBuyOrder({
             tokenAddress: contractData?.address,
             amount: formattedPrice,
-            commodityAmount: commodityAmount,
+            commodityAmount: formattedAmount,
             randNonce: Math.floor(Math.random() * 4096) + 1
         })
     }
 
-    function toFixed(x: any) {
-        if (Math.abs(x) < 1.0) {
-            var e = parseInt(x.toString().split("e-")[1])
-            if (e) {
-                x *= Math.pow(10, e - 1)
-                x = "0." + new Array(e).join("0") + x.toString().substring(2)
-            }
-        } else {
-            var e = parseInt(x.toString().split("+")[1])
-            if (e > 20) {
-                e -= 20
-                x /= Math.pow(10, e)
-                x += new Array(e + 1).join("0")
-            }
-        }
-        return x
-    }
-
     const handlePlaceSellOrder = async (address: string, price: number) => {
-        const formattedValue = ethers.utils.parseUnits(price.toString(), 18)
-        console.log("AQUIII ", toFixed(price * 10e18))
-
         await placeSellOrder({
             address,
-            amount: toFixed(price * 10e18)
+            amount: ethers.utils.parseUnits(price.toString(), 18)
         })
     }
 

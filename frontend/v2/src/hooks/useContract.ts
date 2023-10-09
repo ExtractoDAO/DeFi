@@ -53,6 +53,7 @@ const useContract = <TContractName extends ContractName>(
         functionName: FunctionNamesWithInputs<ContractAbi<typeof contractName>>,
         ...args: any[]
     ): Promise<ethers.ContractTransaction | undefined> => {
+        console.log("TESTE: ", args)
         try {
             if (!contract) return
 
