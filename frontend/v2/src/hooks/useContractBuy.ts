@@ -61,7 +61,7 @@ const useContractBuy = () => {
             if (connectionStatus !== "connected") {
                 return
             }
-            const res = await read("getBuyPrice")
+            const res = await read("getSellPrice")
             setPrice(Number(res) / 10 ** 18)
         }
 
@@ -109,6 +109,9 @@ const useContractBuy = () => {
         )
 
         try {
+            const kilos = await read("getTotalSupplyKG")
+            console.log(Number(kilos))
+
             const response = await write(
                 "createFuture",
                 tokenAddress,
@@ -127,7 +130,7 @@ const useContractBuy = () => {
                 owner: string
                 amount: BigNumber
                 locktime: BigNumber
-            } = await decodeContractDeployedData(response)
+            } = await decodeContractDeployedData("FutureCreated")
 
             const block = await getCurrentBlock()
 

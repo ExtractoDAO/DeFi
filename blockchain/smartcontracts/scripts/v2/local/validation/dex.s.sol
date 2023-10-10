@@ -13,7 +13,7 @@ abstract contract Data is Script {
         hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
     bytes32 guessPrivatekey =
         hex"59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
-    address diamond = 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9;
+    address diamond = 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707;
 
     Commodity commodity = Commodity(diamond);
     Dex dex = Dex(diamond);
@@ -111,7 +111,7 @@ contract OrderBook is Helper {
         vm.startBroadcast(bytes2uint(controllerPrivateKey));
 
         // vender contrato
-        sellOrder(0xd8058efe0198ae9dD7D563e1b4938Dcbc86A1F81, 1500 * 10e18);
+        sellOrder(0x61c36a8d610163660E21a8b7359e1Cac0C9133e1, 1500 * 10e18);
 
         // transferir saldo de A->B
         transfer(0x70997970C51812dc3A010C7d01b50e0d17dc79C8, 1500 * 10e18);

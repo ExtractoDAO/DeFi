@@ -37,7 +37,7 @@ with open(TRANSACTIONS_PATH) as deployed_contracts:
     transactions.append({
         "transactionType":"CREATE",
         "contractName": "Future",
-        "contractAddress": "0xd8058efe0198ae9dD7D563e1b4938Dcbc86A1F81"
+        "contractAddress": "0x61c36a8d610163660E21a8b7359e1Cac0C9133e1"
     })
     contracts: List[Contract] = []
 

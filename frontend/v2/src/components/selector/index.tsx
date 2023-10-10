@@ -38,6 +38,7 @@ function Select({ options, onChange, value, placeholder, label }: ISelect) {
                         text-slate/400
                         text-left
                         relative
+                        truncate
                     "
                     >
                         {!!value
@@ -71,7 +72,7 @@ function Select({ options, onChange, value, placeholder, label }: ISelect) {
                                     <button
                                         onClick={() => onChange(e.value)}
                                         className={classNames({
-                                            "text-slate/400 mb-1 text-left pt-2":
+                                            "text-slate/400 mb-1 text-left pt-2 truncate":
                                                 true,
                                             "border-b border-slate/100 dark:border-slate/600 pb-2":
                                                 i < options.length - 1

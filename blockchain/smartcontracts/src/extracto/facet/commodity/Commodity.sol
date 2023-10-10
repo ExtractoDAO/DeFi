@@ -121,7 +121,6 @@ contract Commodity is Math {
 
         uint256 amount = calculateSellAmountYielded(commodityAmount);
 
-        // TODO: update to ProxyCOW
         lib.cow.pay(investor, amount);
 
         emit TokensMinted(amount, investor);
