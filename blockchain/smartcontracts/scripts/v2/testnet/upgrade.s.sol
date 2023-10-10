@@ -4,12 +4,12 @@ pragma solidity ^0.8.18;
 import "../../../lib/forge-std/src/Script.sol";
 import {Facet, Action} from "../../../src/extracto/diamond/interfaces/Types.sol";
 import {Diamond} from "../../../src/extracto/diamond/Diamond.sol";
-import {CommodityV201} from "../../../src/extracto/facet/commodity/v2.0.1/Commodity.sol";
+import {CommodityV201} from "../../../src/extracto/facet/commodity/v2.0.1/v2.0.1.Commodity.sol";
 
 abstract contract Data is Script {
-    bytes32 controllerPrivateKey =
-        hex"ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-    address diamond = address(0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9);
+    bytes32 privateKey = vm.envBytes32("MUMBAI_PRIVATE_KEY");
+    address controller = vm.addr(bytes2uint(privateKey));
+    address diamond = address(0xB0932Eee7D34B435429e37B76d4c548dbc42daa7);
 
     CommodityV201 newContract;
     Action operation;
@@ -34,11 +34,6 @@ abstract contract Helper is Data {
         selectors = new bytes4[](1);
 
         selectors[0] = newContract.createFuture.selector;
-    }
-
-    function getInitPaylaod() public view returns (bytes memory init) {
-        string memory initFunction = "init(address,uint256)";
-        init = abi.encodeWithSignature(initFunction, address(1), 100);
     }
 
     function diamondCut(
