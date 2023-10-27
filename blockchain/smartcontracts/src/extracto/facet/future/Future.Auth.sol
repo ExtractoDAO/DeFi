@@ -8,6 +8,7 @@ error ZeroAddress(address investor);
 error BurnContract(address future);
 error Locktime(uint256 locktime);
 error Unauthorized();
+error Unvaliable();
 
 abstract contract FAuth is FStorage {
     /*//////////////////////////////////////////////////////////////
@@ -15,9 +16,12 @@ abstract contract FAuth is FStorage {
     //////////////////////////////////////////////////////////////*/
     bool private locked = false;
 
-    constructor(uint256 _kg, address _investor, address _dao, uint256 _locktime)
-        FStorage(_kg, _investor, _dao, _locktime)
-    {}
+    constructor(
+        uint256 _kg,
+        address _investor,
+        address _dao,
+        uint256 _locktime
+    ) FStorage(_kg, _investor, _dao, _locktime) {}
 
     /*//////////////////////////////////////////////////////////////
                                MODIFIERS
@@ -59,6 +63,16 @@ abstract contract FAuth is FStorage {
         zeroAddr(msg.sender);
         if (msg.sender != dao) {
             revert Unauthorized();
+        }
+    }
+
+    function onlyAvaliable() internal view {
+        if (burned == true) {
+            Unvaliable();
+        }
+
+        if (block.number >= getLockTime) {
+            Unvaliable();
         }
     }
 }

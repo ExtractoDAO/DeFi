@@ -25,15 +25,16 @@ contract Future is FBase {
         timeUnlocked();
 
         _burn();
+        cancellOrder();
 
         emit Withdraw(getKg, investor);
 
-        cancellOrder();
         extracto.mintToken(getKg, investor);
     }
 
     function sell(uint256 amount) external returns (bytes32) {
         onlyInvestor();
+        onlyAvaliable();
 
         return sellOrder(amount);
     }
