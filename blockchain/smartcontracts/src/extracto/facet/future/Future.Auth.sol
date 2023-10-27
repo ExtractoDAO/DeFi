@@ -67,12 +67,12 @@ abstract contract FAuth is FStorage {
     }
 
     function onlyAvaliable() internal view {
-        if (burned == true) {
-            Unvaliable();
+        if (burn == true) {
+            revert Unvaliable();
         }
 
         if (block.number >= getLockTime) {
-            Unvaliable();
+            revert Unvaliable();
         }
     }
 }
