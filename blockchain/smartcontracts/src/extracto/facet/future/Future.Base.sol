@@ -36,12 +36,13 @@ abstract contract FBase is FAuth {
     function cancellOrder() internal {
         if (orderId == bytes32(0)) {
             return;
-        }
-        bytes memory payload = abi.encodeWithSignature("cancelOrder(bytes32)", orderId);
-        (bool ok, bytes memory data) = address(extracto).call(payload);
-        if (!ok) {
-            assembly {
-                revert(add(data, 32), mload(data))
+        } else {
+            bytes memory payload = abi.encodeWithSignature("cancelOrder(bytes32)", orderId);
+            (bool ok, bytes memory data) = address(extracto).call(payload);
+            if (!ok) {
+                assembly {
+                    revert(add(data, 32), mload(data))
+                }
             }
         }
     }
