@@ -77,10 +77,12 @@ contract Commodity is Math {
         nonReentrant
         returns (address future, uint256 kg)
     {
+        address investor = msg.sender;
+        validateAllowance(tokenAddress, investor, address(this), amount);
         minimumAmount(amount, tokenAddress);
         onlyStableCoins(tokenAddress);
         onlyKgSupply(amount);
-        zeroAddr(msg.sender);
+        zeroAddr(investor);
         onlyActive();
 
         CommodityStorageLib.Storage storage lib = CommodityStorageLib.getCommodityStorage();
@@ -88,16 +90,16 @@ contract Commodity is Math {
         calculateNewSupply(amount);
         kg = calculateBuyKg(amount, lib.allowedTokens[tokenAddress].decimals);
 
-        Future futureContract = new Future(kg, msg.sender, lib.locktime);
+        Future futureContract = new Future(kg, investor, lib.locktime);
         future = address(futureContract);
 
-        lib.contractsByInvestor[msg.sender].push(CommodityStorageLib.Contract(msg.sender, future, kg, false));
-        lib.contracts[future] = CommodityStorageLib.Contract(msg.sender, future, kg, false);
+        lib.contractsByInvestor[investor].push(CommodityStorageLib.Contract(investor, future, kg, false));
+        lib.contracts[future] = CommodityStorageLib.Contract(investor, future, kg, false);
         lib.drawer.push(future);
 
         validatePayment(tokenAddress, amount);
 
-        emit FutureCreated(future, msg.sender, kg, lib.locktime);
+        emit FutureCreated(future, investor, kg, lib.locktime);
     }
 
     /**
